@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from epyk.core.css import Defaults as Defaults_css
 from epyk.core.css.themes import ThemeBlue
+from epyk_studio.lang import get_lang
 
 
 class Vitrine(object):
@@ -161,7 +161,7 @@ class Vitrine(object):
     """
     return self.context.rptObj.ui.media.youtube(link, width=width, height=height, htmlCode=htmlCode, profile=profile, options=options)
 
-  def clients(self, logos, title="Client we have worked with...", content='', width=(100, '%'), height=("auto", ''), align="center", options=None,
+  def clients(self, logos, title=None, content='', width=(100, '%'), height=("auto", ''), align="center", options=None,
                profile=False):
     """
     Description:
@@ -178,13 +178,15 @@ class Vitrine(object):
     :param options:
     :param profile:
     """
+    options = options or {}
+    title = title or get_lang(options.get('lang')).CLIENTS_LABEL
     banner = self.context.rptObj.ui.banners.sponsor(logos, title, content, width=width, height=height, align=align,
                                                            options=options, profile=profile)
     banner.title.style.css.color = self.context.rptObj.theme.colors[0]
     banner.style.css.background = self.context.rptObj.theme.colors[6]
     return banner
 
-  def sponsors(self, logos, title="Sponsors", content='', width=(100, '%'), height=("auto", ''), align="center", options=None,
+  def sponsors(self, logos, title=None, content='', width=(100, '%'), height=("auto", ''), align="center", options=None,
                profile=False):
     """
     Description:
@@ -201,6 +203,8 @@ class Vitrine(object):
     :param options:
     :param profile:
     """
+    options = options or {}
+    title = title or get_lang(options.get('lang')).SPONSORS
     banner = self.context.rptObj.ui.banners.sponsor(logos, title, content, width=width, height=height, align=align,
                                                            options=options, profile=profile)
     banner.style.css.background = self.context.rptObj.theme.colors[2]
@@ -227,7 +231,19 @@ class Vitrine(object):
                                                       options=dfl_options, profile=profile)
     return img
 
-  def price(self, value, title, items, align="center", width=(300, 'px'), currency="£"):
+  def price(self, value, title, items, align="center", width=(300, 'px'), currency=None, options=None):
+    """
+
+    :param value:
+    :param title:
+    :param items:
+    :param align:
+    :param width:
+    :param currency:
+    :param options:
+    """
+    options = options or {}
+    currency = currency or get_lang(options.get('lang')).currency(options.get('country'))
     p = self.context.rptObj.ui.vignets.price(value=value, title=title, items=items, align=align, width=width, currency=currency)
     return p
 
@@ -297,8 +313,20 @@ class Vitrine(object):
   def carousel(self):
     pass
 
-  def subscribe(self, value="", placeholder="Enter email address", button="Subscribe", width=(100, '%'),
-                height=(None, 'px'), options=None, profile=False):
+  def subscribe(self, value="", placeholder=None, button=None, width=(100, '%'), height=(None, 'px'), options=None, profile=False):
+    """
+
+    :param value:
+    :param placeholder:
+    :param button:
+    :param width:
+    :param height:
+    :param options:
+    :param profile:
+    """
+    options = options or {}
+    placeholder = placeholder or get_lang(options.get('lang')).PLACEHOLDER_EMAIL
+    button = button or get_lang(options.get('lang')).BUTTON_SUBSCRIBE
     s = self.context.rptObj.ui.forms.subscribe(value=value, placeholder=placeholder, button=button, width=width,
                                                       height=height, options=options, profile=profile)
     return s

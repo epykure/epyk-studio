@@ -3,9 +3,10 @@
 
 import os
 import datetime
+import locale
 
-from epyk.core.css import Defaults as Defaults_css
 from epyk.core.css.themes import ThemeDark
+from epyk_studio.lang import get_lang
 
 
 class News(object):
@@ -166,6 +167,7 @@ class News(object):
     :param profile:
     """
     html_records = []
+    options = options or {}
     for rec in records:
       if not hasattr(rec[0], 'options'):
         name = self.context.rptObj.ui.text(rec[0])
@@ -191,7 +193,7 @@ class News(object):
                options=options, profile=profile)
     for row in table:
       row.style.css.border_bottom = "1px solid %s" % self.context.rptObj.theme.colors[3]
-    table.set_header(["Symbol", 'Last Price', 'Change', '% Change'])
+    table.set_header(get_lang(options.get("lang")).RATES_HEADER)
     return table
 
   def share(self, facebook=True, messenger=True, twitter=True, mail=True):
@@ -234,7 +236,15 @@ class News(object):
     ----------
     :param date:
     :param icon:
+    :param align:
+    :param width:
+    :param height:
+    :param options:
+    :param profile:
     """
+    options = options or {}
+    country = get_lang(options.get("lang")).country(options.get("country"))
+    locale.setlocale(locale.LC_TIME, '%s_%s' % (country, country.upper()))
     date_time_obj = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S.%f')
     current = datetime.datetime.now()
     delta_time = current - date_time_obj
@@ -244,19 +254,30 @@ class News(object):
     component.add(icon)
     if delta_time.days == 0:
       if date_time_obj.day != current.day:
-        component.add(self.context.rptObj.ui.text("Yesterday"))
+        text = self.context.rptObj.ui.text(get_lang(options.get("lang")).LABEL_YESTERDAY)
+        component.add(text)
+        elapsed_time = self.context.rptObj.py.dates.elapsed(delta_time, with_time=True)
+        tooltip_value = []
+        for lbl in ['hours', 'minutes', 'seconds']:
+          if elapsed_time.get(lbl, 0) > 0:
+            tooltip_value.append("%s %s" % (elapsed_time[lbl], get_lang(options.get("lang")).LABEL_TIME[lbl]))
+        text.tooltip(" ".join(tooltip_value))
       else:
-        if delta_time.seconds > 3600:
-          hours = int(delta_time.seconds / 3600)
-          minutes = int((delta_time.seconds - hours * 3600)/ 60)
-          seconds = delta_time.seconds - hours * 3600 - minutes * 60
-          component.add(self.context.rptObj.ui.text("%s h %s min %s s" % (hours, minutes, seconds)))
-        elif delta_time.seconds > 60:
-          minutes = int(delta_time.seconds / 60)
-          seconds = delta_time.seconds - minutes * 60
-          component.add(self.context.rptObj.ui.text("%s min %s s" % (minutes, seconds)))
+        elapsed_time = self.context.rptObj.py.dates.elapsed(delta_time, with_time=True)
+        tooltip_value = []
+        for lbl in ['hours', 'minutes', 'seconds']:
+          if elapsed_time.get(lbl, 0) > 0:
+            tooltip_value.append("%s %s" % (elapsed_time[lbl], get_lang(options.get("lang")).LABEL_TIME_SHORT[lbl]))
+        component.add(self.context.rptObj.ui.text(" ".join(tooltip_value)))
     else:
-      component.add(self.context.rptObj.ui.text(date_time_obj.strftime("%d %B %Y")))
+      text = self.context.rptObj.ui.text(self.context.rptObj.py.encode_html(date_time_obj.strftime("%d %B %Y")))
+      elapsed_time = self.context.rptObj.py.dates.elapsed(delta_time)
+      tooltip_value = []
+      for lbl in ['years', 'months', 'days']:
+        if elapsed_time.get(lbl, 0) > 0:
+          tooltip_value.append("%s %s" % (elapsed_time[lbl], get_lang(options.get("lang")).LABEL_TIME[lbl]))
+      text.tooltip(" ".join(tooltip_value))
+      component.add(text)
     return component
 
   def tags(self, tags, align="left", width=(300, 'px'), height=("auto", ''), options=None, profile=None):
@@ -295,7 +316,7 @@ class News(object):
 
     """
     return self.context.rptObj.ui.div("&nbsp;").css({"border-left": '1px solid %s' % self.context.rptObj.theme.greys[5],
-                                                          "margin": '5px 0', "display": 'inline-block', 'width': 'auto'})
+                                                     "margin": '5px 0', "display": 'inline-block', 'width': 'auto'})
 
   def delimiter(self):
     """

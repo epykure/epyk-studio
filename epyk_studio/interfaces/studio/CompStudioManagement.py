@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from epyk.core.css import Defaults as Defaults_css
+from epyk_studio.lang import get_lang
 
 
 class Management(object):

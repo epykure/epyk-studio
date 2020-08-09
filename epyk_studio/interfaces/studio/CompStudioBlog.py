@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import locale
 
 from epyk.core.css import Defaults_css
 from epyk.core.css.themes import ThemeBlue
+from epyk_studio.lang import get_lang
 
 
 class Blog(object):
@@ -321,6 +323,9 @@ class Blog(object):
     :param options:
     :param profile:
     """
+    options = options or {}
+    country = get_lang(options.get("lang")).country(options.get("country"))
+    locale.setlocale(locale.LC_TIME, '%s_%s' % (country, country.upper()))
     date_time_obj = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S.%f')
     current = datetime.datetime.now()
     delta_time = current - date_time_obj
@@ -331,35 +336,29 @@ class Blog(object):
     component.add(icon)
     if delta_time.days == 0:
       if date_time_obj.day != current.day:
-        component.add(self.context.rptObj.ui.text("Yesterday"))
+        text = self.context.rptObj.ui.text(get_lang(options.get("lang")).LABEL_YESTERDAY)
+        component.add(text)
+        elapsed_time = self.context.rptObj.py.dates.elapsed(delta_time, with_time=True)
+        tooltip_value = []
+        for lbl in ['hours', 'minutes', 'seconds']:
+          if elapsed_time.get(lbl, 0) > 0:
+            tooltip_value.append("%s %s" % (elapsed_time[lbl], get_lang(options.get("lang")).LABEL_TIME[lbl]))
+        text.tooltip(" ".join(tooltip_value))
       else:
-        if delta_time.seconds > 3600:
-          hours = int(delta_time.seconds / 3600)
-          minutes = int((delta_time.seconds - hours * 3600) / 60)
-          seconds = delta_time.seconds - hours * 3600 - minutes * 60
-          component.add(self.context.rptObj.ui.text("%s h %s min %s s" % (hours, minutes, seconds)))
-        elif delta_time.seconds > 60:
-          minutes = int(delta_time.seconds / 60)
-          seconds = delta_time.seconds - minutes * 60
-          component.add(self.context.rptObj.ui.text("%s min %s s" % (minutes, seconds)))
+        elapsed_time = self.context.rptObj.py.dates.elapsed(delta_time, with_time=True)
+        tooltip_value = []
+        for lbl in ['hours', 'minutes', 'seconds']:
+          if elapsed_time.get(lbl, 0) > 0:
+            tooltip_value.append("%s %s" % (elapsed_time[lbl], get_lang(options.get("lang")).LABEL_TIME_SHORT[lbl]))
+        component.add(self.context.rptObj.ui.text(" ".join(tooltip_value)))
     else:
-      text = self.context.rptObj.ui.text(date_time_obj.strftime("%d %B %Y"))
-      delta_time = current - date_time_obj
-      year = delta_time.days // 365
-      months = (delta_time.days - year * 365) // 12
-      days = delta_time.days - year * 365 - months * 12
-      if year:
-        if months:
-          text.tooltip("%s years %s months %s days" % (year, months, days))
-        else:
-          text.tooltip("%s years %s days" % (year, days))
-      elif months:
-        if days:
-          text.tooltip("%s months %s days" % (months, days))
-        else:
-          text.tooltip("%s days" % days)
-      else:
-        text.tooltip("%s days" % days)
+      text = self.context.rptObj.ui.text(self.context.rptObj.py.encode_html(date_time_obj.strftime("%d %B %Y")))
+      elapsed_time = self.context.rptObj.py.dates.elapsed(delta_time)
+      tooltip_value = []
+      for lbl in ['years', 'months', 'days']:
+        if elapsed_time.get(lbl, 0) > 0:
+          tooltip_value.append("%s %s" % (elapsed_time[lbl], get_lang(options.get("lang")).LABEL_TIME[lbl]))
+      text.tooltip(" ".join(tooltip_value))
       component.add(text)
     return component
 
@@ -380,10 +379,12 @@ class Blog(object):
     :param profile:
     """
     component = self.context.rptObj.ui.div(align=align, width=width, height=height, options=options, profile=profile)
+    options = options or {}
+    lang_obj = get_lang(options.get('lang'))
     if date is not None:
-      component.add(self.context.rptObj.ui.text("The %s, by&nbsp;" % date))
+      component.add(self.context.rptObj.ui.text(lang_obj.BY_WITH_NAME % date))
     else:
-      component.add(self.context.rptObj.ui.text("by&nbsp;"))
+      component.add(self.context.rptObj.ui.text(lang_obj.BY))
     component.name = self.context.rptObj.ui.link(name, url)
     component.name.style.css.color = self.context.rptObj.theme.colors[6]
     component.add(component.name)

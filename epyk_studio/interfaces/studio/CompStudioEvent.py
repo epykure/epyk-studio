@@ -1,11 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import locale
 import datetime
 
 from epyk.core import html
 from epyk.core.css import Defaults_css
 from epyk.core.css.themes import ThemeRed
+from epyk_studio.lang import get_lang
 
 
 class Event(object):
@@ -132,7 +134,7 @@ class Event(object):
     grid.add(row)
     return grid
 
-  def clients(self, logos, title="Client we have worked with...", content='', width=(100, '%'), height=("auto", ''), align="center", options=None,
+  def clients(self, logos, title=None, content='', width=(100, '%'), height=("auto", ''), align="center", options=None,
                profile=False):
     """
     Description:
@@ -149,13 +151,15 @@ class Event(object):
     :param options:
     :param profile:
     """
+    options = options or {}
+    title = title or get_lang(options.get('lang')).CLIENTS_LABEL
     banner = self.context.rptObj.ui.banners.sponsor(logos, title, content, width=width, height=height, align=align,
                                                            options=options, profile=profile)
     banner.title.style.css.color = self.context.rptObj.theme.colors[0]
     banner.style.css.background = self.context.rptObj.theme.colors[6]
     return banner
 
-  def sponsors(self, logos, title="Sponsors", content='', width=(100, '%'), height=("auto", ''), align="center", options=None,
+  def sponsors(self, logos, title=None, content='', width=(100, '%'), height=("auto", ''), align="center", options=None,
                profile=False):
     """
     Description:
@@ -172,6 +176,8 @@ class Event(object):
     :param options:
     :param profile:
     """
+    options = options or {}
+    title = title or get_lang(options.get('lang')).SPONSORS
     banner = self.context.rptObj.ui.banners.sponsor(logos, title, content, width=width, height=height, align=align,
                                                            options=options, profile=profile)
     banner.style.css.background = self.context.rptObj.theme.colors[2]
@@ -198,7 +204,7 @@ class Event(object):
                                                       options=dfl_options, profile=profile)
     return img
 
-  def comment(self, avatar, placeholder="Let a comment", width=(100, '%'), height=(None, 'px'), options=None, profile=None):
+  def comment(self, avatar, placeholder=None, width=(100, '%'), height=(None, 'px'), options=None, profile=None):
     """
     Description:
     ------------
@@ -212,6 +218,8 @@ class Event(object):
     :param options:
     :param profile:
     """
+    options = options or {}
+    placeholder = placeholder or get_lang(options.get('lang')).PLACEHOLDER_COMMENT
     container = self.context.rptObj.ui.div(width=width, height=height, options=options, profile=profile)
     if not hasattr(avatar, 'options'):
       avatar = self.avatar(avatar)
@@ -567,7 +575,15 @@ class Wedding(Event):
     ----------
     :param date:
     :param icon:
+    :param align:
+    :param width:
+    :param height:
+    :param options:
+    :param profile:
     """
+    options = options or {}
+    country = get_lang(options.get("lang")).country(options.get("country"))
+    locale.setlocale(locale.LC_TIME, '%s_%s' % (country, country.upper()))
     date_time_obj = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S.%f')
     current = datetime.datetime.now()
     delta_time = current - date_time_obj
@@ -578,35 +594,29 @@ class Wedding(Event):
     component.add(icon)
     if delta_time.days == 0:
       if date_time_obj.day != current.day:
-        component.add(self.context.rptObj.ui.text("Yesterday"))
+        text = self.context.rptObj.ui.text(get_lang(options.get("lang")).LABEL_YESTERDAY)
+        component.add(text)
+        elapsed_time = self.context.rptObj.py.dates.elapsed(delta_time, with_time=True)
+        tooltip_value = []
+        for lbl in ['hours', 'minutes', 'seconds']:
+          if elapsed_time.get(lbl, 0) > 0:
+            tooltip_value.append("%s %s" % (elapsed_time[lbl], get_lang(options.get("lang")).LABEL_TIME[lbl]))
+        text.tooltip(" ".join(tooltip_value))
       else:
-        if delta_time.seconds > 3600:
-          hours = int(delta_time.seconds / 3600)
-          minutes = int((delta_time.seconds - hours * 3600)/ 60)
-          seconds = delta_time.seconds - hours * 3600 - minutes * 60
-          component.add(self.context.rptObj.ui.text("%s h %s min %s s" % (hours, minutes, seconds)))
-        elif delta_time.seconds > 60:
-          minutes = int(delta_time.seconds / 60)
-          seconds = delta_time.seconds - minutes * 60
-          component.add(self.context.rptObj.ui.text("%s min %s s" % (minutes, seconds)))
+        elapsed_time = self.context.rptObj.py.dates.elapsed(delta_time, with_time=True)
+        tooltip_value = []
+        for lbl in ['hours', 'minutes', 'seconds']:
+          if elapsed_time.get(lbl, 0) > 0:
+            tooltip_value.append("%s %s" % (elapsed_time[lbl], get_lang(options.get("lang")).LABEL_TIME_SHORT[lbl]))
+        component.add(self.context.rptObj.ui.text(" ".join(tooltip_value)))
     else:
-      text = self.context.rptObj.ui.text(date_time_obj.strftime("%d %B %Y"))
-      delta_time = current - date_time_obj
-      year = delta_time.days // 365
-      months = (delta_time.days - year * 365) // 12
-      days = delta_time.days - year * 365 - months * 12
-      if year:
-        if months:
-          text.tooltip("%s years %s months %s days" % (year, months, days))
-        else:
-          text.tooltip("%s years %s days" % (year, days))
-      elif months:
-        if days:
-          text.tooltip("%s months %s days" % (months, days))
-        else:
-          text.tooltip("%s days" % days)
-      else:
-        text.tooltip("%s days" % days)
+      text = self.context.rptObj.ui.text(self.context.rptObj.py.encode_html(date_time_obj.strftime("%d %B %Y")))
+      elapsed_time = self.context.rptObj.py.dates.elapsed(delta_time)
+      tooltip_value = []
+      for lbl in ['years', 'months', 'days']:
+        if elapsed_time.get(lbl, 0) > 0:
+          tooltip_value.append("%s %s" % (elapsed_time[lbl], get_lang(options.get("lang")).LABEL_TIME[lbl]))
+      text.tooltip(" ".join(tooltip_value))
       component.add(text)
     return component
 
