@@ -52,15 +52,82 @@ class Vitrine(object):
     return button
 
   def vignet(self, title, content="", image=None, render="row", align="center", width=(90, '%'), height=(None, "px"), options=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param title:
+    :param content:
+    :param image:
+    :param render:
+    :param align:
+    :param width:
+    :param height:
+    :param options:
+    """
     v = self.context.rptObj.ui.vignets.image(title=title, content=content, image=image, render=render, align=align,
                                                      width=width, height=height, options=options)
     return v
 
+  def cover(self, url, components=None, width=(100, "%"), height=(300, "px"), size="cover", margin=0, align="center", position="middle"):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param url:
+    :param components:
+    :param width:
+    :param height:
+    :param size:
+    :param margin:
+    :param align:
+    :param position:
+    """
+    b = self.context.rptObj.ui.images.wallpaper(url=url, width=width, height=height, size=size, margin=margin, align=align, position=position)
+    if components is not None:
+      pass
+    return b
+
   def background(self, url, width=(90, "%"), height=(450, "px"), size="contain", margin=0, align="center", position="middle"):
-    b = self.context.rptObj.ui.images.background()
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param url:
+    :param width:
+    :param height:
+    :param size:
+    :param margin:
+    :param align:
+    :param position:
+    """
+    b = self.context.rptObj.ui.images.background(url=url, width=width, height=height, size=size, margin=margin, align=align,
+                                                 position=position)
     return b
 
   def image(self, image, text=None, title=None, url=None, path=None, width=(200, "px"), height=(200, "px"), options=None, profile=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param image:
+    :param text:
+    :param title:
+    :param url:
+    :param path:
+    :param width:
+    :param height:
+    :param options:
+    :param profile:
+    """
     if text is None and title is None:
       return self.context.rptObj.ui.img(image, path=path, width=width, height=height, options=options, profile=profile)
 
@@ -233,7 +300,11 @@ class Vitrine(object):
 
   def price(self, value, title, items, align="center", width=(300, 'px'), currency=None, options=None):
     """
+    Description:
+    ------------
 
+    Attributes:
+    ----------
     :param value:
     :param title:
     :param items:
