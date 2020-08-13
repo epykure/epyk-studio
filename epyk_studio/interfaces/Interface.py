@@ -14,9 +14,12 @@ from epyk_studio.interfaces.studio import CompStudioQuiz
 
 from epyk.interfaces.components import CompLayouts
 from epyk.core.css import Defaults as Defaults_css
+from epyk.core.css import themes
+from epyk_studio.lang import get_lang, REGISTERED_LANGS
 
 
 class Studio(CompLayouts.Layouts):
+
   def __init__(self, rptObj):
     self.rptObj = rptObj
 
@@ -111,6 +114,118 @@ class Studio(CompLayouts.Layouts):
     component.add(component.text)
     return component
 
+  def nav(self, logo=None, title=None, width=(100, '%'), height=(40, 'px'), options=None, profile=False):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param logo:
+    :param title:
+    :param width:
+    :param height:
+    :param options:
+    :param profile:
+    """
+    bar = self.rptObj.ui.navigation.bar(logo=logo, title=title, width=width, height=height, options=options, profile=profile)
+    return bar
+
+  def row(self, components=None, position='middle', width=(100, '%'), height=(None, 'px'), align=None, helper=None, options=None, profile=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param components:
+    :param position:
+    :param width:
+    :param height:
+    :param align:
+    :param helper:
+    :param options:
+    :param profile:
+    """
+    row = self.rptObj.ui.layouts.row(components, position=position, width=width, height=height, align=align, helper=helper,
+                                     options=options, profile=profile)
+    return row
+
+  def col(self, components=None, position='middle', width=(100, '%'), height=(None, 'px'), align=None, helper=None, options=None, profile=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param components:
+    :param position:
+    :param width:
+    :param height:
+    :param align:
+    :param helper:
+    :param options:
+    :param profile:
+    """
+    col = self.rptObj.ui.layouts.col(components, position=position, width=width, height=height, align=align, helper=helper,
+                                     options=options, profile=profile)
+    return col
+
+  def grid(self, rows=None, width=(100, '%'), height=(None, 'px'), align=None, position=None, options=None, profile=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param rows:
+    :param width:
+    :param height:
+    :param align:
+    :param position:
+    :param options:
+    :param profile:
+    """
+    grid = self.rptObj.ui.layouts.grid(rows, position=position, width=width, height=height, align=align, options=options, profile=profile)
+    return grid
+
+  def table(self, components=None, width=(100, '%'), height=(None, 'px'), helper=None, options=None, profile=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param components:
+    :param width:
+    :param height:
+    :param helper:
+    :param options:
+    :param profile:
+    """
+    table = self.rptObj.ui.layouts.table(components=components, width=width, height=height, helper=helper, options=options, profile=profile)
+    return table
+
+  def container(self, component=None, max_width=(900, 'px'), align="center", profile=None, options=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param component:
+    :param max_width:
+    :param align:
+    :param profile:
+    :param options:
+    """
+    container = self.rptObj.ui.div(component, profile=profile, options=options)
+    container.style.css.max_width = max_width[0]
+    container.style.css.text_align = align
+    if align == 'center':
+      container.style.css.margin = "0 auto"
+    return container
+
   def banner(self, data, background=True, width=(100, '%'), align="center", height=(None, 'px'), options=None, profile=False):
     """
     Description:
@@ -168,6 +283,174 @@ class Studio(CompLayouts.Layouts):
     """
     background = self.rptObj.ui.images.background(url, width=width, height=height, size=size, margin=margin, align=align, position=position)
     return background
+
+  def button(self, text, icon=None, border=False, background=True, width=('auto', ''), align="center", height=(None, 'px'),
+             options=None, profile=False):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param text:
+    :param icon:
+    :param border:
+    :param background:
+    :param width:
+    :param align:
+    :param height:
+    :param options:
+    :param profile:
+    """
+    button = self.rptObj.ui.button(text, icon=icon, width=width, align=align, height=height,
+                                                  options=options, profile=profile)
+    button.style.clear()
+    button.style.add_classes.div.no_focus_outline()
+    button.style.css.padding = "0 10px"
+    button.style.css.display = "inline-block"
+    button.style.css.color = self.rptObj.theme.greys[-1]
+    button.style.css.background = self.rptObj.theme.greys[0]
+    button.style.css.border_radius = 4
+    if border:
+      button.style.css.border = '1px solid %s' % self.rptObj.theme.greys[4]
+    if background:
+      button.style.hover({"background": self.rptObj.theme.colors[6], "color": self.rptObj.theme.greys[0]})
+    else:
+      button.style.hover({"color": self.rptObj.theme.greys[0]})
+    return button
+
+  def carousel(self, components, selected=0, width=('100', '%'), height=(None, 'px'), left="fas fa-chevron-left", right="fas fa-chevron-right", options=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param components:
+    :param selected:
+    :param width:
+    :param height:
+    :param left:
+    :param right:
+    :param options:
+    """
+    container = self.rptObj.ui.div(width=width, height=height)
+    container.left = self.rptObj.ui.icons.awesome(left)
+    container.left.icon.style.css.font_factor(0)
+    container.left.icon.style.css.color = self.rptObj.theme.colors[5]
+    container.add(container.left)
+
+    container.box = self.rptObj.ui.div(width=(None, '%'), height=height)
+    container.box.style.css.width = "calc(100% - 50px)"
+    container.box.style.css.display = 'inline-block'
+    for i, component in enumerate(components):
+      if not hasattr(component, 'options'):
+        component = self.rptObj.ui.text(component, width=(100, '%'))
+        component.style.css.text_align = "center"
+        if i != selected:
+          component.style.css.display = False
+      container.box.add(component)
+    container.add(container.box)
+    container.right = self.rptObj.ui.icons.awesome(right)
+    container.right.icon.style.css.font_factor(0)
+    container.right.icon.style.css.color = self.rptObj.theme.colors[5]
+    container.add(container.right)
+    return container
+
+  def clients(self, logos, title=None, content='', width=(100, '%'), height=("auto", ''), align="center", options=None,
+               profile=False):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param logos:
+    :param title:
+    :param content:
+    :param width:
+    :param height:
+    :param align:
+    :param options:
+    :param profile:
+    """
+    options = options or {}
+    title = title or get_lang(options.get('lang')).CLIENTS_LABEL
+    banner = self.rptObj.ui.banners.sponsor(logos, title, content, width=width, height=height, align=align,
+                                                           options=options, profile=profile)
+    banner.title.style.css.color = self.rptObj.theme.colors[0]
+    banner.style.css.background = self.rptObj.theme.colors[6]
+    return banner
+
+  def sponsors(self, logos, title=None, content='', width=(100, '%'), height=("auto", ''), align="center", options=None,
+               profile=False):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param logos:
+    :param title:
+    :param content:
+    :param width:
+    :param height:
+    :param align:
+    :param options:
+    :param profile:
+    """
+    options = options or {}
+    title = title or get_lang(options.get('lang')).SPONSORS
+    banner = self.rptObj.ui.banners.sponsor(logos, title, content, width=width, height=height, align=align,
+                                                           options=options, profile=profile)
+    banner.style.css.background = self.rptObj.theme.colors[2]
+    return banner
+
+  def langs(self, selected=None, width=(45, 'px'), height=(None, "%"), options=None, profile=None):
+    """
+    Description:
+    ------------
+    Display a dropdown list with all the various langs
+
+    Attributes:
+    ----------
+    :param selected: String. The selected value
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile:
+    """
+    dftl_options = {'empty_selected': False, 'button-bg': False}
+    if options is not None:
+      dftl_options.update(options)
+    dftl_options["width"] = width[0]
+    select = self.rptObj.ui.select(REGISTERED_LANGS, width=width, selected=selected or REGISTERED_LANGS[0]['value'], options=dftl_options, htmlCode="lang", height=height, profile=profile)
+    return select
+
+  def themes(self, selected=None, width=(45, 'px'), height=(None, "%"), options=None, profile=None):
+    """
+    Description:
+    ------------
+    Display a dropdown list with all the various themes
+
+    Attributes:
+    ----------
+    :param selected: String. The selected value
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile:
+    """
+    values = themes.REGISTERED_THEMES
+    dftl_options = {'empty_selected': False, 'button-bg': False}
+    if options is not None:
+      dftl_options.update(options)
+    dftl_options["width"] = width[0]
+    select = self.rptObj.ui.select(values, width=width, selected=selected or values[0]['value'], options=dftl_options, height=height, htmlCode="theme", profile=profile)
+    mod_name, class_name = select.options.selected.split(".")
+    theme = getattr(getattr(themes, mod_name), class_name)
+    self.rptObj.theme = theme()
+    return select
 
   @property
   def shop(self):

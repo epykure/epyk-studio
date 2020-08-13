@@ -108,81 +108,6 @@ class Event(object):
     hr.hr.style.css.border_width = size
     return hr
 
-  def mosaic(self, pictures, columns=6, width=(None, '%'), height=('auto', ''), options=None, profile=None):
-    """
-    Description:
-    ------------
-
-    Attributes:
-    ----------
-    :param pictures:
-    :param columns:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
-    """
-    grid = self.context.rptObj.ui.grid(width=width, height=height, options=options, profile=profile)
-    row = self.context.rptObj.ui.row()
-    for i, picture in enumerate(pictures):
-      if i % columns == 0:
-        grid.add(row)
-        row = self.context.rptObj.ui.row()
-      if not hasattr(picture, 'options'):
-        picture = self.context.rptObj.ui.img(picture)
-      row.add(picture)
-    grid.add(row)
-    return grid
-
-  def clients(self, logos, title=None, content='', width=(100, '%'), height=("auto", ''), align="center", options=None,
-               profile=False):
-    """
-    Description:
-    ------------
-
-    Attributes:
-    ----------
-    :param logos:
-    :param title:
-    :param content:
-    :param width:
-    :param height:
-    :param align:
-    :param options:
-    :param profile:
-    """
-    options = options or {}
-    title = title or get_lang(options.get('lang')).CLIENTS_LABEL
-    banner = self.context.rptObj.ui.banners.sponsor(logos, title, content, width=width, height=height, align=align,
-                                                           options=options, profile=profile)
-    banner.title.style.css.color = self.context.rptObj.theme.colors[0]
-    banner.style.css.background = self.context.rptObj.theme.colors[6]
-    return banner
-
-  def sponsors(self, logos, title=None, content='', width=(100, '%'), height=("auto", ''), align="center", options=None,
-               profile=False):
-    """
-    Description:
-    ------------
-
-    Attributes:
-    ----------
-    :param logos:
-    :param title:
-    :param content:
-    :param width:
-    :param height:
-    :param align:
-    :param options:
-    :param profile:
-    """
-    options = options or {}
-    title = title or get_lang(options.get('lang')).SPONSORS
-    banner = self.context.rptObj.ui.banners.sponsor(logos, title, content, width=width, height=height, align=align,
-                                                           options=options, profile=profile)
-    banner.style.css.background = self.context.rptObj.theme.colors[2]
-    return banner
-
   def avatar(self, image=None, size=80, text=None, htmlCode=None, profile=None, options=None):
     """
     Description:
@@ -259,45 +184,6 @@ class Event(object):
     container.name.style.css.margin_left = 5
     container.add(container.name)
     container.style.css.text_align = align
-    return container
-
-  def carousel(self, components, selected=0, width=('100', '%'), height=(None, 'px'), left="fas fa-chevron-left", right="fas fa-chevron-right", options=None):
-    """
-    Description:
-    ------------
-
-    Attributes:
-    ----------
-    :param components:
-    :param selected:
-    :param width:
-    :param height:
-    :param left:
-    :param right:
-    :param options:
-    """
-    container = self.context.rptObj.ui.div(width=width, height=height)
-    container.left = self.context.rptObj.ui.icons.awesome(left)
-    container.left.icon.style.css.font_factor(0)
-    container.left.icon.style.css.color = self.context.rptObj.theme.colors[5]
-    container.add(container.left)
-
-    container.box = self.context.rptObj.ui.div(width=(None, '%'), height=height)
-    container.box.style.css.width = "calc(100% - 50px)"
-    container.box.style.css.display = 'inline-block'
-    for i, component in enumerate(components):
-      if not hasattr(component, 'options'):
-        component = self.context.rptObj.ui.text(component, width=(100, '%'))
-        component.style.css.text_align = "center"
-        if i != selected:
-          component.style.css.display = False
-      container.box.add(component)
-    container.add(container.box)
-
-    container.right = self.context.rptObj.ui.icons.awesome(right)
-    container.right.icon.style.css.font_factor(0)
-    container.right.icon.style.css.color = self.context.rptObj.theme.colors[5]
-    container.add(container.right)
     return container
 
   def flip(self, heads, tails, orientation='v', width=(300, 'px'), height=(200, 'px')):

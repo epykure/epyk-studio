@@ -407,6 +407,7 @@ class Gallery(Blog):
     :param options:
     :param profile:
     """
+    options = options or {}
     grid = self.context.rptObj.ui.grid(width=width, height=height, options=options, profile=profile)
     row = self.context.rptObj.ui.row()
     for i, picture in enumerate(pictures):
@@ -415,6 +416,8 @@ class Gallery(Blog):
         row = self.context.rptObj.ui.row()
       if not hasattr(picture, 'options'):
         picture = self.context.rptObj.ui.img(picture)
+        if options.get('zoom', False):
+          picture.style.effects.zoom()
       row.add(picture)
     grid.add(row)
     return grid

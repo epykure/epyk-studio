@@ -18,39 +18,6 @@ class Vitrine(object):
     """
     self.context.rptObj.theme = ThemeBlue.BlueGrey()
 
-  def button(self, text, icon=None, border=False, background=True, width=('auto', ''), align="center", height=(None, 'px'),
-             options=None, profile=False):
-    """
-    Description:
-    ------------
-
-    Attributes:
-    ----------
-    :param text:
-    :param icon:
-    :param border:
-    :param background:
-    :param width:
-    :param align:
-    :param height:
-    :param options:
-    :param profile:
-    """
-    button = self.context.rptObj.ui.button(text, icon=icon, width=width, align=align, height=height,
-                                                  options=options, profile=profile)
-    button.style.clear()
-    button.style.css.padding = "0 10px"
-    button.style.css.display = "inline-block"
-    button.style.css.background = self.context.rptObj.theme.greys[0]
-    button.style.css.border_radius = 4
-    if border:
-      button.style.css.border = '1px solid %s' % self.context.rptObj.theme.greys[4]
-    if background:
-      button.style.hover({"background": self.context.rptObj.theme.colors[6], "color": self.context.rptObj.theme.greys[0]})
-    else:
-      button.style.hover({"color": self.context.rptObj.theme.colors[6]})
-    return button
-
   def vignet(self, title, content="", image=None, render="row", align="center", width=(90, '%'), height=(None, "px"), options=None):
     """
     Description:
@@ -228,55 +195,6 @@ class Vitrine(object):
     """
     return self.context.rptObj.ui.media.youtube(link, width=width, height=height, htmlCode=htmlCode, profile=profile, options=options)
 
-  def clients(self, logos, title=None, content='', width=(100, '%'), height=("auto", ''), align="center", options=None,
-               profile=False):
-    """
-    Description:
-    ------------
-
-    Attributes:
-    ----------
-    :param logos:
-    :param title:
-    :param content:
-    :param width:
-    :param height:
-    :param align:
-    :param options:
-    :param profile:
-    """
-    options = options or {}
-    title = title or get_lang(options.get('lang')).CLIENTS_LABEL
-    banner = self.context.rptObj.ui.banners.sponsor(logos, title, content, width=width, height=height, align=align,
-                                                           options=options, profile=profile)
-    banner.title.style.css.color = self.context.rptObj.theme.colors[0]
-    banner.style.css.background = self.context.rptObj.theme.colors[6]
-    return banner
-
-  def sponsors(self, logos, title=None, content='', width=(100, '%'), height=("auto", ''), align="center", options=None,
-               profile=False):
-    """
-    Description:
-    ------------
-
-    Attributes:
-    ----------
-    :param logos:
-    :param title:
-    :param content:
-    :param width:
-    :param height:
-    :param align:
-    :param options:
-    :param profile:
-    """
-    options = options or {}
-    title = title or get_lang(options.get('lang')).SPONSORS
-    banner = self.context.rptObj.ui.banners.sponsor(logos, title, content, width=width, height=height, align=align,
-                                                           options=options, profile=profile)
-    banner.style.css.background = self.context.rptObj.theme.colors[2]
-    return banner
-
   def avatar(self, image=None, size=80, text=None, htmlCode=None, profile=None, options=None):
     """
     Description:
@@ -357,7 +275,7 @@ class Vitrine(object):
     return c
 
   def disclaimer(self, copyright=None, links=None, width=(100, '%'), height=("auto", ''), align="center", options=None, profile=False):
-    d = self.context.rptObj.ui.navigation.disclaimer(copyright=copyright, links=links, width=width, height=height,
+    d = self.context.rptObj.ui.banners.disclaimer(copyright=copyright, links=links or [], width=width, height=height,
                                                             align=align, options=options, profile=profile)
     return d
 
@@ -381,11 +299,10 @@ class Vitrine(object):
                                                     width=width, options=options, profile=profile)
     return n
 
-  def carousel(self):
-    pass
-
   def subscribe(self, value="", placeholder=None, button=None, width=(100, '%'), height=(None, 'px'), options=None, profile=False):
     """
+    Description:
+    ------------
 
     :param value:
     :param placeholder:

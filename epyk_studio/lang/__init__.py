@@ -5,6 +5,12 @@ from epyk_studio.lang import eng
 from epyk_studio.lang import fr
 
 
+REGISTERED_LANGS = [
+  {"value": 'eng', 'name': 'eng'},
+  {"value": 'fr', 'name': 'fr'},
+]
+
+
 def get_lang(lang="uk"):
   """
   Description:
