@@ -416,8 +416,13 @@ class Gallery(Blog):
         row = self.context.rptObj.ui.row()
       if not hasattr(picture, 'options'):
         picture = self.context.rptObj.ui.img(picture)
+        picture.style.css.margin = 5
         if options.get('zoom', False):
           picture.style.effects.zoom()
       row.add(picture)
-    grid.add(row)
+
+    if len(row):
+      for c in row:
+        c.set_size(12 // columns)
+      grid.add(row)
     return grid

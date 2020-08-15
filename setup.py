@@ -16,9 +16,9 @@ def install_required():
 setuptools.setup(
     name="epyk_studio",
     author="epykure",
-    version="0.0.1",
+    version="0.0.2",
     author_email="smith.pyotr@gmail.com",
-    description="A simple way to create rich interactive websites and dashboards compatible with modern web frameworks",
+    description="A simple way to create rich interactive websites from Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/epykure/epyk-studio",
