@@ -216,7 +216,7 @@ class Vitrine(object):
                                                       options=dfl_options, profile=profile)
     return img
 
-  def price(self, value, title, items, align="center", width=(300, 'px'), currency=None, options=None):
+  def price(self, value, title, items, url=None, align="center", width=(300, 'px'), currency=None, options=None):
     """
     Description:
     ------------
@@ -233,7 +233,7 @@ class Vitrine(object):
     """
     options = options or {}
     currency = currency or get_lang(options.get('lang')).currency(options.get('country'))
-    p = self.context.rptObj.ui.vignets.price(value=value, title=title, items=items, align=align, width=width, currency=currency)
+    p = self.context.rptObj.ui.vignets.price(value=value, title=title, items=items, url=url, align=align, width=width, currency=currency)
     return p
 
   def quote(self, text, author, job=None, align="left", width=(100, '%'), height=("auto", ''), options=None, profile=None):

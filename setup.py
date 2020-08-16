@@ -27,6 +27,9 @@ setuptools.setup(
         "Code": "https://github.com/epykure/epyk-ui",
         "Issue tracker": "https://github.com/epykure/epyk-ui/issues"
     },
+    entry_points={"console_scripts": [
+      "epyk_studio = epyk.core.cli.cli_pages:main", # For common quick page transformation
+    ]},
     packages=setuptools.find_packages(),
     install_requires=install_required(),
     python_requires=">=2.7",
