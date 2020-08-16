@@ -44,7 +44,7 @@ def new_parsers(subparser):
   """
   subparser.set_defaults(func=new)
   subparser.add_argument('-p', '--path', help='''The path where the new environment will be created: -p /foo/bar''')
-  subparser.add_argument('-n', '--name', default='NewEnv', help='''The name of the new environment: -n MyEnv''')
+  subparser.add_argument('-n', '--name', help='''The name of the new environment: -n MyEnv''')
 
 
 def new(args):
@@ -92,7 +92,6 @@ def new_template(subparser):
   ----------
   :param subparser: subparser
   """
-  subparser.set_defaults(func=new)
   subparser.add_argument('-p', '--path', help='''The path where the new environment will be created: -p /foo/bar''')
   subparser.add_argument('-n', '--name', help='''The name of the new environment: -n MyEnv''')
 
@@ -386,6 +385,8 @@ def main():
   subparser.required = True
   for func, parser_init in parser_map.items():
     new_parser = subparser.add_parser(func, help=parser_init[1])
+    if func != 'new':
+      new_parser.set_defaults(func=globals()[func])
     parser_init[0](new_parser)
   args = arg_parser.parse_args(sys.argv[1:])
   return args.func(args)

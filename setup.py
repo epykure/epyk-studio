@@ -16,19 +16,20 @@ def install_required():
 setuptools.setup(
     name="epyk_studio",
     author="epykure",
-    version="0.0.3",
+    version="0.0.8",
     author_email="smith.pyotr@gmail.com",
     description="A simple way to create rich interactive websites from Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/epykure/epyk-studio",
     project_urls={
-        "Documentation": "http://www.epyk.io",
-        "Code": "https://github.com/epykure/epyk-ui",
-        "Issue tracker": "https://github.com/epykure/epyk-ui/issues"
+        "Documentation": "http://www.epyk-studio.com",
+        "Code": "https://github.com/epykure/epyk-studio",
+        "Issue tracker": "https://github.com/epykure/epyk-studio/issues"
     },
+    package_data={'epyk_studio': [os.path.join('static', 'images', '*')]},
     entry_points={"console_scripts": [
-      "epyk_studio = epyk.core.cli.cli_pages:main", # For common quick page transformation
+      "epyk_studio = epyk_studio.core.cli.cli_pages:main", # For common quick page transformation
     ]},
     packages=setuptools.find_packages(),
     install_requires=install_required(),
