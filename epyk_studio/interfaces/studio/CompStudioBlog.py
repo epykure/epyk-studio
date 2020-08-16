@@ -426,3 +426,7 @@ class Gallery(Blog):
         c.set_size(12 // columns)
       grid.add(row)
     return grid
+
+  def carousel(self, images, path=None, selected=0, width=(100, "%"), height=(300, "px"), options=None, profile=None):
+    c = self.context.rptObj.ui.images.carousel(images, path, selected, width, height, options, profile)
+    return c

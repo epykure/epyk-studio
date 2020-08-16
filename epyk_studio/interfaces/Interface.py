@@ -12,16 +12,18 @@ from epyk_studio.interfaces.studio import CompStudioVitrine
 from epyk_studio.interfaces.studio import CompStudioEvent
 from epyk_studio.interfaces.studio import CompStudioQuiz
 
-from epyk.interfaces.components import CompLayouts
+from epyk.interfaces import Interface
 from epyk.core.css import Defaults as Defaults_css
+from epyk.core.html import Defaults as Defaults_html
 from epyk.core.css import themes
 from epyk_studio.lang import get_lang, REGISTERED_LANGS
+from epyk.core.js.primitives import JsObjects
 
 
-class Studio(CompLayouts.Layouts):
+class Studio(Interface.Components):
 
   def __init__(self, rptObj):
-    self.rptObj = rptObj
+    super(Studio, self).__init__(rptObj)
 
   def locked(self, component, day, month, year, hour=0, minute=0, second=0, options=None):
     """
@@ -319,7 +321,7 @@ class Studio(CompLayouts.Layouts):
       button.style.hover({"color": self.rptObj.theme.greys[0]})
     return button
 
-  def carousel(self, components, selected=0, width=('100', '%'), height=(None, 'px'), left="fas fa-chevron-left", right="fas fa-chevron-right", options=None):
+  def carousel(self, components=None, selected=0, width=('100', '%'), height=(None, 'px'), left="fas fa-angle-left", right="fas fa-angle-right", options=None, profile=False):
     """
     Description:
     ------------
@@ -333,29 +335,20 @@ class Studio(CompLayouts.Layouts):
     :param left:
     :param right:
     :param options:
+    :param profile:
     """
-    container = self.rptObj.ui.div(width=width, height=height)
-    container.left = self.rptObj.ui.icons.awesome(left)
-    container.left.icon.style.css.font_factor(0)
-    container.left.icon.style.css.color = self.rptObj.theme.colors[5]
-    container.add(container.left)
-
-    container.box = self.rptObj.ui.div(width=(None, '%'), height=height)
-    container.box.style.css.width = "calc(100% - 50px)"
-    container.box.style.css.display = 'inline-block'
-    for i, component in enumerate(components):
-      if not hasattr(component, 'options'):
-        component = self.rptObj.ui.text(component, width=(100, '%'))
-        component.style.css.text_align = "center"
-        if i != selected:
-          component.style.css.display = False
-      container.box.add(component)
-    container.add(container.box)
-    container.right = self.rptObj.ui.icons.awesome(right)
-    container.right.icon.style.css.font_factor(0)
-    container.right.icon.style.css.color = self.rptObj.theme.colors[5]
-    container.add(container.right)
-    return container
+    dfl_options = {"arrows-right": right, "arrows-left": left, 'points': False, 'arrows': True, 'inifity': True}
+    if options is not None:
+      dfl_options.update(options)
+    c = self.rptObj.ui.images.carousel(components, None, selected, width, height, dfl_options, profile)
+    c.next.style.css.margin_top = -Defaults_html.LINE_HEIGHT
+    c.previous.style.css.margin_top = -Defaults_html.LINE_HEIGHT
+    c.container.style.css.margin = "auto 45px"
+    c.container.style.css.width = "calc(100% - 90px)"
+    if 'timer' in dfl_options:
+      self.rptObj.body.onReady([c.next.dom.events.trigger("click", withFocus=False, options={"timer": dfl_options['timer']})])
+      c.clear_timer = JsObjects.JsVoid("clearInterval(window['%s_timer'])" % c.next.htmlCode)
+    return c
 
   def clients(self, logos, title=None, content='', width=(100, '%'), height=("auto", ''), align="center", options=None,
                profile=False):

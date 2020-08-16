@@ -381,28 +381,6 @@ class News(object):
     component.add(link)
     return component
 
-  def live(self, icon="fas fa-circle"):
-    """
-    Description:
-    ------------
-
-    Attributes:
-    ----------
-
-    """
-    live = self.context.rptObj.ui.icons.awesome(icon)
-    live.style.css.color = self.context.rptObj.theme.danger[1]
-    live.style.css.border = "1px solid %s" % self.context.rptObj.theme.danger[1]
-    live.style.css.border_radius = "50px"
-    live.style.css.padding = "2px"
-    live.style.css.margin = 0
-    live.icon.style.css.font_factor(2)
-    live.icon.style.css.margin_right = 0
-    live.icon.style.css.margin = 0
-    live.icon.style.css.padding_bottom = "2px"
-    live.icon.style.effects.blink(2)
-    return live
-
   def button(self, text="", icon=None, width=(None, "%"), height=(None, "px"), align="left", htmlCode=None,
              tooltip=None, profile=None, options=None):
     """

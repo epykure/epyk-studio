@@ -1,22 +1,21 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from epyk.interfaces.components import CompFields
+from epyk.interfaces.graphs import CompChartsPlotly
+
 from epyk.core.css import Defaults as Defaults_css
 from epyk_studio.lang import get_lang
 
 
-class Management(object):
+class Management(CompFields.Fields, CompFields.Timelines, CompChartsPlotly.Plotly):
 
   def __init__(self, context):
+    super(Management, self).__init__(context)
     self.context = context
+    self.parent = self
 
   def inputs(self):
-    pass
-
-  def bar(self):
-    pass
-
-  def pie(self):
     pass
 
   def process(self, fill=None, border=None, width=(30, "px"), height=(30, "px")):
