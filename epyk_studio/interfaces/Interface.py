@@ -7,7 +7,6 @@ from epyk_studio.interfaces.studio import CompStudioBlog
 from epyk_studio.interfaces.studio import CompStudioShopping
 from epyk_studio.interfaces.studio import CompStudioNews
 from epyk_studio.interfaces.studio import CompStudioDashboard
-from epyk_studio.interfaces.studio import CompStudioManagement
 from epyk_studio.interfaces.studio import CompStudioVitrine
 from epyk_studio.interfaces.studio import CompStudioEvent
 from epyk_studio.interfaces.studio import CompStudioQuiz
@@ -566,14 +565,6 @@ class Studio(Interface.Components):
     ------------
     """
     return CompStudioEvent.Event(self)
-
-  @property
-  def management(self):
-    """
-    Description:
-    ------------
-    """
-    return CompStudioManagement.Management(self)
 
   @property
   def quiz(self):
