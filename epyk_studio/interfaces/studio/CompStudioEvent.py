@@ -191,10 +191,14 @@ class Event(object):
     Description:
     ------------
 
-    filp = page.ui.studio.wedding.flip("Front Side", "Back Side", height=(100, "px"))
-    filp.heads.style.css.color = 'red'
+    Usage::
 
-    https://www.w3schools.com/howto/howto_css_flip_box.asp
+      filp = page.ui.studio.wedding.flip("Front Side", "Back Side", height=(100, "px"))
+      filp.heads.style.css.color = 'red'
+
+    Related Pages:
+
+      https://www.w3schools.com/howto/howto_css_flip_box.asp
 
     Attributes:
     ----------

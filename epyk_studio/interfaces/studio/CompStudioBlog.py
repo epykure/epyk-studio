@@ -168,19 +168,31 @@ class Blog(object):
     :param profile:
     """
     component = self.context.rptObj.ui.div(align=align, width=width, height=height, options=options, profile=profile)
+    component.style.padding_left = 30
+    component.style.padding_right = 30
     component.style.css.margin_bottom = 5
     quote = self.context.rptObj.ui.pictos.quote()
+    quote.style.css.margin_left = - 30
     quote.style.css.margin_bottom = -20
+    quote.style.css.margin_top = 0
     component.add(quote)
-    component.text = self.context.rptObj.ui.text("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%s" % self.context.rptObj.py.encode_html(text))
-    component.add(component.text)
+    component.text = self.context.rptObj.ui.text(self.context.rptObj.py.encode_html(text))#.css({"margin-left": '30px'})
+    component.text.style.css.font_factor(10)
+    component.text.style.css.display = 'block'
+    component.text.style.css.font_style = 'italic'
     component.author = self.context.rptObj.ui.text(self.context.rptObj.py.encode_html(author))
     component.author.style.css.bold()
-    if job is not None:
+    if job:
       component.job = self.context.rptObj.ui.text(self.context.rptObj.py.encode_html(job))
-      component.add(self.context.rptObj.ui.div([component.author, self.context.rptObj.ui.text(",&nbsp;"), component.job], align="right"))
+      component.add(self.context.rptObj.ui.div([component.text, component.author, self.context.rptObj.ui.text(",&nbsp;"), component.job], width=("auto", ''), align="right"))
     else:
-      component.add(self.context.rptObj.ui.div([component.author], align="right"))
+      component.add(self.context.rptObj.ui.div([component.text, component.author], width=("auto", ''), align="right"))
+    component[-1].style.css.padding_bottom = 10
+    component[-1].style.css.border_bottom = "1px solid %s" % self.context.rptObj.theme.greys[6]
+    if align == "center":
+      component.style.css.margin_left = "auto"
+      component.style.css.margin_right = "auto"
+      component.style.css.display = "block"
     return component
 
   def button(self, text, icon=None, border=True, background=True, width=(100, '%'), align="center", height=(None, 'px'), options=None, profile=False):
@@ -207,7 +219,7 @@ class Blog(object):
     button.style.hover({"color": self.context.rptObj.theme.colors[-1]})
     return button
 
-  def picture(self, image, label=None, width=(300, 'px'), align="center", height=(None, 'px'), options=None, profile=False):
+  def picture(self, image, label=None, path=None, width=(300, 'px'), align="center", height=(None, 'px'), options=None, profile=False):
     """
     Description:
     ------------
@@ -216,6 +228,7 @@ class Blog(object):
     ----------
     :param image:
     :param label:
+    :param path:
     :param align:
     :param width: Optional. A tuple with the integer for the component width and its unit
     :param height: Optional. A tuple with the integer for the component height and its unit
@@ -223,13 +236,13 @@ class Blog(object):
     :param profile:
     """
     if label is None:
-      img = self.context.rptObj.ui.img(image, width=width, height=height, align=align, options=options, profile=profile)
+      img = self.context.rptObj.ui.img(image, path=path, width=width, height=height, align=align, options=options, profile=profile)
       img.style.css.margin_top = 5
       img.style.css.margin_bottom = 5
       return img
 
     component = self.context.rptObj.ui.div(align=align, width=width, height=height, options=options, profile=profile)
-    component.image = self.context.rptObj.ui.img(image, width=width, height=height, options=options, profile=profile)
+    component.image = self.context.rptObj.ui.img(image, path=path, width=width, height=height, options=options, profile=profile)
     component.style.css.position = "relative"
     component.add(component.image)
     if not hasattr(label, 'options'):
@@ -243,10 +256,11 @@ class Blog(object):
     else:
       component.label = label
     component.add(component.label)
-    component.style.css.margin_top = 5
-    component.style.css.margin_bottom = 5
+    component.style.css.margin_top = 10
+    component.style.css.margin_bottom = 10
     if align == 'center':
-      component.style.css.margin = "auto"
+      component.style.css.margin_left = "auto"
+      component.style.css.margin_right = "auto"
       component.style.css.display = "block"
     return component
 
@@ -393,7 +407,7 @@ class Blog(object):
 
 class Gallery(Blog):
 
-  def mosaic(self, pictures, columns=6, width=(None, '%'), height=('auto', ''), options=None, profile=None):
+  def mosaic(self, pictures, columns=6, path=None, width=(None, '%'), height=('auto', ''), options=None, profile=None):
     """
     Description:
     ------------
@@ -402,6 +416,7 @@ class Gallery(Blog):
     ----------
     :param pictures:
     :param columns:
+    :param path:
     :param width: Optional. A tuple with the integer for the component width and its unit
     :param height: Optional. A tuple with the integer for the component height and its unit
     :param options:
@@ -409,15 +424,19 @@ class Gallery(Blog):
     """
     options = options or {}
     grid = self.context.rptObj.ui.grid(width=width, height=height, options=options, profile=profile)
+    grid.style.css.margin_top = 20
+    grid.style.css.overflow = 'hidden'
+    grid.style.css.margin_bottom = 20
     row = self.context.rptObj.ui.row()
     for i, picture in enumerate(pictures):
       if i % columns == 0:
         grid.add(row)
         row = self.context.rptObj.ui.row()
       if not hasattr(picture, 'options'):
-        picture = self.context.rptObj.ui.img(picture)
+        picture = self.context.rptObj.ui.img(picture, path=path)
+        picture.style.css.max_height = 200
         picture.style.css.margin = 5
-        if options.get('zoom', False):
+        if options.get('zoom', True):
           picture.style.effects.zoom()
       row.add(picture)
 
@@ -428,5 +447,273 @@ class Gallery(Blog):
     return grid
 
   def carousel(self, images, path=None, selected=0, width=(100, "%"), height=(300, "px"), options=None, profile=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param images:
+    :param path:
+    :param selected:
+    :param width:
+    :param height:
+    :param options:
+    :param profile:
+    """
     c = self.context.rptObj.ui.images.carousel(images, path, selected, width, height, options, profile)
     return c
+
+  def pagination(self, count, selected=1, width=(100, '%'), height=(None, 'px'), options=None, profile=False):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param count:
+    :param selected:
+    :param width:
+    :param height:
+    :param options:
+    :param profile:
+    """
+    p = self.context.rptObj.ui.navigation.indices(count, selected=selected, width=width, height=height,
+                                                  options=options, profile=profile)
+    p.style.css.text_align = "center"
+    return p
+
+  def heroes(self, url, path=None, width=(100, "%"), height=(500, "px"), align="center", options=None, profile=None):
+    """
+
+    https://www.w3schools.com/cssref/pr_background-image.asp
+
+    :param url:
+    :param path:
+    :param width:
+    :param height:
+    :param align:
+    :param options:
+    :param profile:
+    """
+    options = options or {}
+    img = self.context.rptObj.ui.div(width=width, height=height, align=align, options=options, profile=profile)
+    if path is not None:
+      img.style.css.background_image = "url(%s/%s)" % (path.replace("\\", "/"), url)
+    else:
+      img.style.css.background_image = "url(%s)" % url
+    img.style.css.background_position = "center center"
+    img.style.css.background_repeat = "no-repeat"
+    img.style.css.background_size = "cover"
+    if options.get("fixed", True):
+      img.style.css.background_attachment = "fixed"
+    img.style.css.position = "relative"
+    return img
+
+  def fixed(self, url, path=None, width=(100, "%"), height=(300, "px"), align="center", options=None, profile=None):
+    """
+
+    :param url:
+    :param path:
+    :param width:
+    :param height:
+    :param align:
+    :param options:
+    :param profile:
+    """
+    options = options or {}
+    img = self.context.rptObj.ui.div(width=width, height=height, align=align, options=options, profile=profile)
+    if path is not None:
+      img.style.css.background_image = "url(%s/%s)" % (path.replace("\\", "/"), url)
+    else:
+      img.style.css.background_image = "url(%s)" % url
+    img.style.css.background_position = "center center"
+    img.style.css.background_repeat = "no-repeat"
+    img.style.css.background_size = "cover"
+    if options.get("fixed", True):
+      img.style.css.background_attachment = "fixed"
+    return img
+
+  def image(self, url, path=None, width=(100, "%"), height=(300, "px"), align="center", options=None, profile=None):
+    """
+    Description:
+    ------------
+    Set a background as an image.
+    This is wrapping the image.background base component
+
+    Attributes:
+    ----------
+    :param url:
+    :param width:
+    :param height:
+    :param align:
+    :param options:
+    :param profile:
+    """
+    img = self.context.rptObj.ui.images.img(url, path=path, width=width, height=height, align=align, options=options, profile=profile)
+    return img
+
+  def link(self, img, url="#", path=None, width=(100, "%"), height=(None, "px"), align="center", options=None, profile=None):
+    """
+    Description:
+    ------------
+    Set a background as an image.
+    This is wrapping the image.background base component
+
+    Attributes:
+    ----------
+    :param url:
+    :param width:
+    :param height:
+    :param align:
+    :param options:
+    :param profile:
+    """
+    img = self.context.rptObj.ui.images.img(img, path=path, width=width, height=height, align=align, options=options, profile=profile)
+    img.style.effects.reduce()
+    img.style.css.cursor = "pointer"
+    img.goto(url)
+    return img
+
+  def overlay(self, img, text=None, path=None, width=(100, "%"), height=(None, "px"), align="center", options=None, profile=None):
+    """
+    Description:
+    ------------
+
+    https://www.w3schools.com/howto/howto_css_image_overlay_slide.asp
+
+    Attributes:
+    ----------
+    :param img:
+    :param text:
+    :param path:
+    :param width:
+    :param height:
+    :param align:
+    :param options:
+    :param profile:
+    """
+    options = options or {}
+    container = self.context.rptObj.ui.div(width=width, height=height, align=align, options=options, profile=profile)
+    container.style.css.position = "relative"
+    container.style.css.box_sizing = "border-box"
+    container.img = self.context.rptObj.ui.images.img(img, path=path, width=(100, "%"), height=(None, "px"), align="center", options=options, profile=profile)
+    container.img.style.css.display = "block"
+    container.img.style.css.width = "100%"
+    container.add(container.img)
+    container.attr['class'].clear()
+    container.attr['class'].add("container_overlay")
+    container.overlay = self.context.rptObj.ui.div(width=width, height=height, align=align, options=options, profile=profile)
+    if text is not None:
+      if hasattr(text, 'options'):
+        container.text = text
+      else:
+        container.text = self.context.rptObj.ui.div(text, width=(100, "%"), height=height, align=align, options=options, profile=profile)
+
+      if options.get("direction") is None:
+        container.overlay.attr['class'].clear()
+        container.overlay.attr['class'].add("test_overlay_title")
+        container.overlay.style.css.opacity = 0
+        container.overlay.style.css.position = "absolute"
+        container.overlay.style.css.bottom = 0
+        container.overlay.style.css.color = self.context.rptObj.theme.greys[0]
+        container.overlay.style.css.background = "rgba(0, 0, 0, 0.5)"
+        self.context.rptObj.css.customText(".container_overlay:hover .test_overlay_title {opacity: 1 !IMPORTANT;}")
+      elif options.get("direction") == 'top':
+        container.overlay.attr['class'].clear()
+        container.overlay.attr['class'].add("test_overlay_top")
+        container.overlay.style.css.position = "absolute"
+        container.overlay.style.css.width = "100%"
+        container.overlay.style.css.height = 0
+        container.overlay.style.css.transition = ".5s ease"
+        container.overlay.style.css.overflow = "hidden"
+        container.overlay.style.css.bottom = 0
+        container.overlay.style.css.right = 0
+        container.overlay.style.css.left = 0
+        container.overlay.style.css.color = self.context.rptObj.theme.greys[0]
+        container.overlay.style.css.background = "rgba(0, 0, 0, 0.5)"
+        self.context.rptObj.css.customText(".container_overlay:hover .test_overlay_top {height: 100% !IMPORTANT;}")
+      elif options.get("direction") == 'bottom':
+        container.overlay.attr['class'].clear()
+        container.overlay.attr['class'].add("test_overlay_bottom")
+        container.overlay.style.css.position = "absolute"
+        container.overlay.style.css.width = "100%"
+        container.overlay.style.css.height = 0
+        container.overlay.style.css.transition = ".5s ease"
+        container.overlay.style.css.overflow = "hidden"
+        container.overlay.style.css.bottom = "100%"
+        container.overlay.style.css.right = 0
+        container.overlay.style.css.left = 0
+        container.overlay.style.css.color = self.context.rptObj.theme.greys[0]
+        container.overlay.style.css.background = "rgba(0, 0, 0, 0.5)"
+        self.context.rptObj.css.customText(".container_overlay:hover .test_overlay_bottom {height: 100% !IMPORTANT; bottom: 0 !IMPORTANT}")
+      elif options.get("direction") == 'right':
+        container.overlay.attr['class'].clear()
+        container.overlay.attr['class'].add("test_overlay_right")
+        container.overlay.style.css.position = "absolute"
+        container.overlay.style.css.width = 0
+        container.overlay.style.css.height = "100%"
+        container.overlay.style.css.transition = ".5s ease"
+        container.overlay.style.css.overflow = "hidden"
+        container.overlay.style.css.bottom = 0
+        container.overlay.style.css.right = 0
+        container.overlay.style.css.left = "100%"
+        container.overlay.style.css.color = self.context.rptObj.theme.greys[0]
+        container.overlay.style.css.background = "rgba(0, 0, 0, 0.5)"
+        self.context.rptObj.css.customText(".container_overlay:hover .test_overlay_right {width: 100% !IMPORTANT; left: 0 !IMPORTANT}")
+      elif options.get("direction") == 'left':
+        container.overlay.attr['class'].clear()
+        container.overlay.attr['class'].add("test_overlay_left")
+        container.overlay.style.css.position = "absolute"
+        container.overlay.style.css.width = 0
+        container.overlay.style.css.height = "100%"
+        container.overlay.style.css.transition = ".5s ease"
+        container.overlay.style.css.overflow = "hidden"
+        container.overlay.style.css.bottom = 0
+        container.overlay.style.css.right = "100%"
+        container.overlay.style.css.left = 0
+        container.overlay.style.css.color = self.context.rptObj.theme.greys[0]
+        container.overlay.style.css.background = "rgba(0, 0, 0, 0.5)"
+        self.context.rptObj.css.customText(".container_overlay:hover .test_overlay_left {width: 100% !IMPORTANT; right: 0 !IMPORTANT}")
+      container.style.css.cursor = 'pointer'
+      container.overlay.add(container.text)
+    container.add(container.overlay)
+    return container
+
+  def wallpaper(self, url, width=(100, "%"), height=(300, "px"), size="cover", margin=0, align="center", position="middle"):
+    """
+    Description:
+    ------------
+    Set a background as an image.
+    This is wrapping the image.background base component
+
+    Attributes:
+    ----------
+    :param url:
+    :param width:
+    :param height:
+    :param size:
+    :param margin:
+    :param align:
+    :param position:
+    """
+    background = self.context.rptObj.ui.images.wallpaper(url, width=width, height=height, size=size, margin=margin, align=align, position=position)
+    return background
+
+  def animated(self, image=None, text="", title="", url=None, path=None, width=(200, "px"), height=(200, "px"),
+               options=None, profile=None):
+    """
+
+    :param image:
+    :param text:
+    :param title:
+    :param url:
+    :param path:
+    :param width:
+    :param height:
+    :param options:
+    :param profile:
+    """
+    a = self.context.rptObj.ui.images.animated(image, text=text, title=title, url=url, path=path, width=width,
+                                               height=height, options=options, profile=profile)
+    return a

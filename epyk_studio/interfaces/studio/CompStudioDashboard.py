@@ -20,6 +20,11 @@ class Dashboard(CompFields.Fields, CompFields.Timelines, CompChartsPlotly.Plotly
 
   def process(self, fill=None, border=None, width=(30, "px"), height=(30, "px")):
     """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
 
     https://uxwing.com/business-management-icon/
 
@@ -35,6 +40,11 @@ class Dashboard(CompFields.Fields, CompFields.Timelines, CompChartsPlotly.Plotly
 
   def schedule(self, fill=None, border=None, width=(30, "px"), height=(30, "px")):
     """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
 
     https://uxwing.com/daily-schedule-icon/
 
