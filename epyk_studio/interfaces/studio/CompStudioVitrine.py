@@ -195,7 +195,7 @@ class Vitrine(object):
     """
     return self.context.rptObj.ui.media.youtube(link, width=width, height=height, htmlCode=htmlCode, profile=profile, options=options)
 
-  def avatar(self, image=None, size=80, text=None, htmlCode=None, profile=None, options=None):
+  def avatar(self, image="", path=None, size=80, text=None, htmlCode=None, profile=None, options=None):
     """
     Description:
     ------------
@@ -212,7 +212,7 @@ class Vitrine(object):
     dfl_options = {"status": False}
     if options is not None:
       dfl_options.update(options)
-    img = self.context.rptObj.ui.images.avatar(image=image, text=text, width=(size, 'px'), height=(size, 'px'), htmlCode=htmlCode,
+    img = self.context.rptObj.ui.images.avatar(image=image, path=path, text=text, width=(size, 'px'), height=(size, 'px'), htmlCode=htmlCode,
                                                       options=dfl_options, profile=profile)
     return img
 
