@@ -3,7 +3,6 @@
 
 import datetime
 
-from epyk.core.css import Defaults_css
 from epyk.core.css.themes import ThemeRed
 from epyk_studio.lang import get_lang
 
@@ -379,9 +378,6 @@ class Quiz(object):
       button.style.css.display = "block"
       container.add(button)
     return container
-
-  def rafale(self, image, icon="far fa-image", width=(100, '%'), height=("auto", ''), options=None, profile=None):
-    pass
 
   def chrono(self, component, time=60, flag=None, icon="fas fa-stopwatch-20", width=(100, '%'), height=("auto", ''), options=None, profile=None):
     """
@@ -823,3 +819,61 @@ class Quiz(object):
     table[-1][-1].style.css.border_bottom = "2px dashed %s" % self.context.rptObj.theme.success[1]
     table.set_header(["Challenge", 'Score', 'Time', 'Date', 'Ranking'], css={"padding": '5px 20px'})
     return table
+
+  def checks(self, question, answers, htmlCode=None, options=None, profile=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param question:
+    :param answers:
+    :param htmlCode:
+    :param options:
+    :param profile:
+    """
+    container = self.context.rptObj.ui.div(htmlCode=htmlCode)
+    container.style.css.border = "2px solid %s" % self.context.rptObj.theme.greys[3]
+    container.style.css.padding = 10
+    container.style.css.margin = 5
+    options = options or {"position": 'after'}
+    container.question = self.context.rptObj.ui.text(question, width=(None, 'px'))
+    container.question.style.css.font_factor(5)
+    container.add(container.question)
+    for a in answers:
+      if isinstance(a, dict):
+        container.add(self.context.rptObj.ui.fields.checkbox(a.get('value', False), a['text'], width=(100, '%'), options=options))
+      else:
+        container.add(self.context.rptObj.ui.fields.checkbox(False, a, width=(100, '%'), options=options))
+    container.submit = self.context.rptObj.ui.button("Submit", align="center")
+    container.add(container.submit)
+    return container
+
+  def yesno(self, question, labels=None, htmlCode=None, options=None, profile=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param question:
+    :param labels:
+    :param htmlCode:
+    :param options:
+    :param profile:
+    """
+    container = self.context.rptObj.ui.div(htmlCode=htmlCode)
+    container.style.css.border = "2px solid %s" % self.context.rptObj.theme.greys[3]
+    container.style.css.padding = 10
+    container.style.css.margin = 5
+    options = options or {}
+    container.question = self.context.rptObj.ui.text(question, width=(None, 'px'))
+    container.question.style.css.font_factor(5)
+    container.add(container.question)
+    labels = labels or get_lang(options.get("lang")).LABEL_YESNO
+    container.add(self.context.rptObj.ui.inputs.radio(False, labels[0], group_name=container.htmlCode))
+    container.add(self.context.rptObj.ui.inputs.radio(False, labels[1], group_name=container.htmlCode))
+    container.submit = self.context.rptObj.ui.button("Submit", align="center")
+    container.add(container.submit)
+    return container

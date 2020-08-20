@@ -25,6 +25,9 @@ LABEL_TIME_SHORT = {
 RATES_HEADER = ["Symbol", 'Last Price', 'Change', '% Change']
 
 
+LABEL_YESNO = ["Vrai", "Faux"]
+
+
 def country(cty='fr'):
   return "fr"
 
