@@ -404,14 +404,46 @@ class Blog(object):
     component.add(component.name)
     return component
 
-  def typeWriter(self, text):
+  def typeWriter(self, text, width=('auto', ""), height=(None, "px"), align="center", htmlCode=None, profile=None, options=None):
     """
+    Description:
+    ------------
+
     https://www.w3schools.com/howto/howto_js_typewriter.asp
 
+    Attributes:
+    ----------
     :param text:
+    :param width:
+    :param height:
+    :param align:
+    :param htmlCode:
+    :param profile:
+    :param options:
     """
-    t = self.context.rptObj.ui.text(text)
+    t = self.context.rptObj.ui.text(text, width=width, height=height, align=align, htmlCode=htmlCode, profile=profile, options=options)
     t.write()
+    return t
+
+  def sliding(self, text, width=('auto', ""), height=(None, "px"), align="center", htmlCode=None, profile=None, options=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param text:
+    :param width:
+    :param height:
+    :param align:
+    :param htmlCode:
+    :param profile:
+    :param options:
+    """
+    t = self.context.rptObj.ui.text(text, width=width, height=height, align=align, htmlCode=htmlCode, profile=profile, options=options)
+    t.style.effects.sliding()
+    t.style.hover({"animation-play-state": 'paused', "-webkit-animation-play-state": 'paused',
+                   '-moz-animation-play-state': 'paused', '-o-animation-play-state': 'paused'})
     return t
 
 
