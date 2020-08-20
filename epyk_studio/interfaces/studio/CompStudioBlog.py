@@ -404,6 +404,16 @@ class Blog(object):
     component.add(component.name)
     return component
 
+  def typeWriter(self, text):
+    """
+    https://www.w3schools.com/howto/howto_js_typewriter.asp
+
+    :param text:
+    """
+    t = self.context.rptObj.ui.text(text)
+    t.write()
+    return t
+
 
 class Gallery(Blog):
 
