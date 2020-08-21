@@ -207,6 +207,39 @@ class Studio(Interface.Components):
     table = self.rptObj.ui.layouts.table(components=components, width=width, height=height, helper=helper, options=options, profile=profile)
     return table
 
+  def sliding(self, htmlObjs, title, color=None, align="center", width=(100, "%"), height=(None, "px"), htmlCode=None, helper=None, options=None, profile=False):
+    """
+
+    :param htmlObjs:
+    :param title:
+    :param color:
+    :param align:
+    :param width:
+    :param height:
+    :param htmlCode:
+    :param helper:
+    :param options:
+    :param profile:
+    """
+    panel = self.rptObj.ui.panels.sliding(htmlObjs, title, color=color, align=align, width=width, height=height,
+                                          htmlCode=htmlCode, helper=helper, options=options, profile=profile)
+    return panel
+
+  def tabs(self, color=None, width=(100, '%'), height=(None, 'px'), htmlCode=None, helper=None, options=None,
+           profile=False):
+    """
+
+    :param color:
+    :param width:
+    :param height:
+    :param htmlCode:
+    :param helper:
+    :param options:
+    :param profile:
+    """
+    panel = self.rptObj.ui.panels.tabs(color=color, width=width, height=height, htmlCode=htmlCode, helper=helper, options=options, profile=profile)
+    return panel
+
   def container(self, component=None, max_width=(900, 'px'), align="center", profile=None, options=None):
     """
     Description:

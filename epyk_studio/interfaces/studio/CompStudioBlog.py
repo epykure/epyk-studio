@@ -255,6 +255,7 @@ class Blog(object):
       component.label.style.css.bottom = 35
     else:
       component.label = label
+      component.label.style.css.position = "absolute"
     component.add(component.label)
     component.style.css.margin_top = 10
     component.style.css.margin_bottom = 10
