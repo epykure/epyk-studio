@@ -304,6 +304,7 @@ class Quiz(object):
     for l in text:
       if l == " ":
         crypt_text.append(l)
+        continue
 
       if l.upper() in proposals:
         crypt_text.append(l)
