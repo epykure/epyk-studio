@@ -410,7 +410,9 @@ class Blog(object):
     Description:
     ------------
 
-    https://www.w3schools.com/howto/howto_js_typewriter.asp
+    Related Pages:
+
+      https://www.w3schools.com/howto/howto_js_typewriter.asp
 
     Attributes:
     ----------
@@ -431,6 +433,10 @@ class Blog(object):
     Description:
     ------------
 
+    Related Pages:
+
+      https://nosmoking.developpez.com/demos/css/css-marque-rtl.html
+
     Attributes:
     ----------
     :param text:
@@ -443,6 +449,7 @@ class Blog(object):
     """
     t = self.context.rptObj.ui.text(text, width=width, height=height, align=align, htmlCode=htmlCode, profile=profile, options=options)
     t.style.effects.sliding()
+    self.context.rptObj.body.style.css.overflow_x = "hidden"
     t.style.hover({"animation-play-state": 'paused', "-webkit-animation-play-state": 'paused',
                    '-moz-animation-play-state': 'paused', '-o-animation-play-state': 'paused'})
     return t
@@ -471,6 +478,7 @@ class Gallery(Blog):
     grid.style.css.overflow = 'hidden'
     grid.style.css.margin_bottom = 20
     row = self.context.rptObj.ui.row()
+    grid.pictures = []
     for i, picture in enumerate(pictures):
       if i % columns == 0:
         grid.add(row)
@@ -479,6 +487,7 @@ class Gallery(Blog):
         picture = self.context.rptObj.ui.img(picture, path=path)
         picture.style.css.max_height = 200
         picture.style.css.margin = 5
+        grid.pictures.append(picture)
         if options.get('zoom', True):
           picture.style.effects.zoom()
       row.add(picture)
@@ -528,9 +537,15 @@ class Gallery(Blog):
 
   def heroes(self, url, path=None, width=(100, "%"), height=(500, "px"), align="center", options=None, profile=None):
     """
+    Description:
+    ------------
 
-    https://www.w3schools.com/cssref/pr_background-image.asp
+    Related Pages:
 
+      https://www.w3schools.com/cssref/pr_background-image.asp
+
+    Attributes:
+    ----------
     :param url:
     :param path:
     :param width:
@@ -555,7 +570,11 @@ class Gallery(Blog):
 
   def fixed(self, url, path=None, width=(100, "%"), height=(300, "px"), align="center", options=None, profile=None):
     """
+    Description:
+    ------------
 
+    Attributes:
+    ----------
     :param url:
     :param path:
     :param width:
@@ -623,7 +642,9 @@ class Gallery(Blog):
     Description:
     ------------
 
-    https://www.w3schools.com/howto/howto_css_image_overlay_slide.asp
+    Related Pages:
+
+      https://www.w3schools.com/howto/howto_css_image_overlay_slide.asp
 
     Attributes:
     ----------
@@ -746,7 +767,11 @@ class Gallery(Blog):
   def animated(self, image=None, text="", title="", url=None, path=None, width=(200, "px"), height=(200, "px"),
                options=None, profile=None):
     """
+    Description:
+    ------------
 
+    Attributes:
+    ----------
     :param image:
     :param text:
     :param title:

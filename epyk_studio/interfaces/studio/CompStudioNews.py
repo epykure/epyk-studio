@@ -468,9 +468,15 @@ class News(object):
 
   def increase(self, fill=None, border=None, width=(30, "px"), height=(30, "px")):
     """
+    Description:
+    ------------
 
-    https://uxwing.com/check-list-icon/
+    Related Pages:
 
+      https://uxwing.com/check-list-icon/
+
+    Attributes:
+    ----------
     :param fill:
     :param border:
     :param width:
@@ -483,9 +489,15 @@ class News(object):
 
   def decrease(self, fill=None, border=None, width=(30, "px"), height=(30, "px")):
     """
+    Description:
+    ------------
 
-    https://uxwing.com/check-list-icon/
+    Related Pages:
 
+      https://uxwing.com/check-list-icon/
+
+    Attributes:
+    ----------
     :param fill:
     :param border:
     :param width:
