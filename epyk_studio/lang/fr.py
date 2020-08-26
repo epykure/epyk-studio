@@ -11,6 +11,7 @@ SPONSORS = "Partenaires"
 
 PLACEHOLDER_EMAIL = "Enter email address"
 PLACEHOLDER_COMMENT = "Let a comment"
+PLACEHOLDER_SEARCH = "Rechercher..."
 
 BUTTON_SUBSCRIBE = "Subscribe"
 

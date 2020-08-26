@@ -13,6 +13,7 @@ CLIENTS_LABEL = "Client we have worked with..."
 
 PLACEHOLDER_EMAIL = "Enter email address"
 PLACEHOLDER_COMMENT = "Let a comment"
+PLACEHOLDER_SEARCH = "Search..."
 
 BUTTON_SUBSCRIBE = "Subscribe"
 

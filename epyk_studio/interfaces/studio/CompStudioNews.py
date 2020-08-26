@@ -436,11 +436,13 @@ class News(object):
       svg.circle(10, 10 + sum(frgs[0:i]), 5, fill=rec.get("fill", self.context.rptObj.theme.greys[0]),
                  stroke=color or self.context.rptObj.theme.danger[1])
       svg.text(rec["time"], 20, 15 + sum(frgs[0:i])).css({"font-weight": 'bold'})
-      svg.text(rec["text"], 55, 15 + sum(frgs[0:i]))
+      svg.text(rec["text"], 65, 15 + sum(frgs[0:i]))
     return svg
 
-  def search(self, text='', placeholder='Search..', color=None, height=(None, "px"), htmlCode=None,
+  def search(self, text='', placeholder=None, color=None, height=(None, "px"), htmlCode=None,
              tooltip='', extensible=True, options=None, profile=None):
+    options = options or {}
+    placeholder = placeholder or get_lang(options.get('lang')).PLACEHOLDER_SEARCH
     s = self.context.rptObj.ui.inputs.search(text=text, placeholder=placeholder, color=color, height=height,
          htmlCode=htmlCode, tooltip=tooltip, extensible=extensible, options=options, profile=profile)
     return s

@@ -491,6 +491,7 @@ class Gallery(Blog):
         if options.get('zoom', True):
           picture.style.effects.zoom()
       row.add(picture)
+      picture.parent = row[-1]
 
     if len(row):
       for c in row:

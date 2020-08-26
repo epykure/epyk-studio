@@ -60,7 +60,7 @@ class Event(object):
     container.style.css.padding = "0 5px"
     return container
 
-  def search(self, text="", placeholder='search', icon="fas fa-search", width=(100, "%"), height=(None, "px"),
+  def search(self, text="", placeholder=None, icon="fas fa-search", width=(100, "%"), height=(None, "px"),
              htmlCode=None, options=None, attrs=None, profile=None):
     """
     Description:
@@ -78,6 +78,8 @@ class Event(object):
     :param attrs:
     :param profile:
     """
+    options = options or {}
+    placeholder = placeholder or get_lang(options.get('lang')).PLACEHOLDER_SEARCH
     container = self.context.rptObj.ui.div(width=width, height=height, options=options, profile=profile)
     container.style.css.position = "relative"
     container.input = self.context.rptObj.ui.inputs.d_search(text, placeholder, width, height, htmlCode, options, attrs, profile)
@@ -88,6 +90,7 @@ class Event(object):
     container.icon = self.context.rptObj.ui.icons.awesome(icon)
     container.icon.icon.style.css.font_factor(0)
     container.icon.style.css.position = "absolute"
+    container.icon.icon.style.css.vertical_align = "top"
     container.icon.style.css.left = 5
     container.icon.icon.style.css.color = self.context.rptObj.theme.colors[5]
     container.add(container.icon)

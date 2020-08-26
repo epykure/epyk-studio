@@ -114,7 +114,7 @@ class Shopping(object):
           div.price.style.css.font_size = Defaults_css.font(options.get("font_factor", 10))
           price_with_dec = self.context.rptObj.ui.tags.sup("%s00" % self.context.rptObj.py.encode_html(currency), width=(None, "px"))
           price_with_dec.style.css.font_size = Defaults_css.font(options.get("font_factor", 10)/2)
-        div.add(self.context.rptObj.ui.div([div.price, price_with_dec]))
+        div.add(self.context.rptObj.ui.div([div.price, price_with_dec], align=align))
         div.style.css.color = self.context.rptObj.theme.colors[5]
       else:
         div.price = price
@@ -503,6 +503,56 @@ class Shopping(object):
     container.down.style.css.display = 'block'
     container.down.style.css.margin = '0 auto'
     container.add(container.down)
+    return container
+
+  def bar(self, title, price, description=None, url=None, width=(None, ''), height=("auto", ''), options=None, profile=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param title:
+    :param price:
+    :param description:
+    :param url:
+    :param width:
+    :param height:
+    :param options:
+    :param profile:
+    """
+    options = options or {}
+    container = self.context.rptObj.ui.div([], align='left', width=width, height=height, options=options,
+                                           profile=profile)
+    if not hasattr(title, 'options'):
+      container.title = self.context.rptObj.ui.titles.title(title)
+      container.title.style.css.display = "inline-block"
+      container.title.style.css.margin_top = 0
+      container.title.style.css.font_size = Defaults_css.font(5)
+    else:
+      container.title = title
+    if url is not None:
+      container.style.css.cursor = "pointer"
+      container.click([self.context.rptObj.js.navigateTo(url)])
+    container.add(container.title)
+    if not hasattr(price, 'options'):
+      if not "font_factor" in options:
+        options["font_factor"] = 5
+      container.price = self.price(price, align='right', width=(None, 'px'), options=options)
+      container.price.style.css.position = "relative"
+      container.price.style.css.margin_top = -25
+      container.price.style.css.right = 0
+    else:
+      container.price = price
+    container.add(container.price)
+    if description is not None:
+      if not hasattr(description, 'options'):
+        container.description = self.context.rptObj.ui.text(description)
+        container.description.style.css.margin_bottom = 5
+        container.description.style.css.margin_top = 0
+      else:
+        container.description = description
+      container.add(container.description)
     return container
 
 
