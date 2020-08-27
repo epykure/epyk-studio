@@ -608,7 +608,7 @@ class Studio(Interface.Components):
     return CompStudioQuiz.Quiz(self)
 
   @property
-  def dashboards(self):
+  def dashboard(self):
     """
     Description:
     ------------
