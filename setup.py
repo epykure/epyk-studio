@@ -16,7 +16,7 @@ def install_required():
 setuptools.setup(
     name="epyk_studio",
     author="epykure",
-    version="0.1.0",
+    version="0.1.1",
     author_email="smith.pyotr@gmail.com",
     description="A simple way to create rich interactive websites from Python",
     long_description=long_description,

@@ -2,10 +2,10 @@
 
 Presentation
 ================================
-Epyk-studio is a module on top of Peyk-ui in order to facilitate the use of the various features available.
-As Peyk-ui is the transpiler to Javascript and web artifacts on few (around 200) components are available.
+Epyk-studio is a module on top of Epyk-ui in order to facilitate the use of the various features available.
+As Epyk-ui is the transpiler to Javascript and web artifacts on few (around 200) components are available.
 
-Epyk-studio will facilitate the use of components by using pre defined styles accortding to the type of websites.
+Epyk-studio will facilitate the use of components by using pre defined styles according to the type of websites.
 Epyk-studio will provide some helpers and shortcut to design:
 
 - blog pages
