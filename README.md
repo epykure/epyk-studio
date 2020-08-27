@@ -54,44 +54,44 @@ Usage
 ======
 
 The idea of this module is to never leave Python until the end of the product.
-By using this module there is no need to more to Javascript or even worst to start learning TypeScript to create safe and modern webpages.
+By using this module there is no need to move to Javascript or even worst to start learning TypeScript to create safe and modern webpages.
 
 This will allow you to make the bridge between Python and Javascript and then to reuse both rich ecosystems.
-Eveyrhing which is close to Javascript will be using the Javascript naming conventions.
+Everyrhing which is close to Javascript will be using the Javascript naming conventions.
 
-Epyk studio can be use for any kind of project from personal ones to professional ones when dashoards are needed.
-Thanks to this module and its design it will be easy to change layouts and to swtich the display according to your audience (without changing code or technology).
+Epyk studio can be used for any kind of project from personal ones to professional ones when dashboards are needed.
+Thanks to this module and its design it will be easy to change layouts and to switch the display according to your audience (without changing code or technology).
 
 For example Epyk Studio can be used in the below cases:
 
-For generating dashboards (for time management, data monitoring, machine learning algorithms...)
+To generate dashboards (for time management, data monitoring, machine learning algorithms...)
 
 <div align="center" >
     <img width=600 src="https://github.com/epykure/epyk-studio/blob/master/static/dashboards.PNG?raw=true">
 </div>
 
 
-For generating restaurants website (for restaurant, hotel websites)
+To generate restaurants website (for restaurant, hotel websites)
 
 <div align="center" >
     <img width=600 src="https://github.com/epykure/epyk-studio/blob/master/static/foods.PNG?raw=true">
 </div>
 
 
-For generating shopping websites (for e commernce websites)
+To generate shopping websites (for e-commerce websites)
 
 <div align="center" >
     <img width=600 src="https://github.com/epykure/epyk-studio/blob/master/static/shops.PNG?raw=true">
 </div>
 
-For generating slides (for dynamic and rich presentations)
+To generate slides (for dynamic and rich presentations)
 
 <div align="center" >
     <img width=600 src="https://github.com/epykure/epyk-studio/blob/master/static/slides.PNG?raw=true">
 </div>
 
 
-For teaching Python
+To teach Python
 
 <div align="center" >
     <img width=600 src="https://github.com/epykure/epyk-studio/blob/master/static/teaching.PNG?raw=true">
@@ -104,10 +104,10 @@ Next features
 
 The Epyk Studio team will be working on 
 
-1. building a online portail to start prototyping directly from the browser.
-2. integration of Native application feature for the migration to apps
+1. building a online portal to start prototyping directly from the browser.
+2. integrating of Native application features for the migration to apps
 3. building the community
-3. creation of tutorials and examples
+3. creating of tutorials and examples
 
 As this is a collaborative project, do not hesitate to let us know about your interest and also to share your feedback.
 
