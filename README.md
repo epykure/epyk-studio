@@ -28,6 +28,8 @@ Install Epyk
 
 > pip install epyk_studio
 
+Create a web page
+
 ```py
 from epyk_studio.core.Page import Report#
 
@@ -44,7 +46,9 @@ page.ui.title("Dataset")
 
 t1 = page.studio.dashboard.table(dataset.to_dict('records'))
 ```
+Transpile your reports
 
+> python epyk_studio transpile
 
 Usage
 ======
@@ -60,27 +64,27 @@ Thanks to this module and its design it will be easy to change layouts and to sw
 
 For example Epyk Studio can be used in the below cases:
 
-For generating dashboards
+For generating dashboards (for time management, data monitoring, machine learning algorithms...)
 
 <div align="center" >
     <img width=600 src="https://github.com/epykure/epyk-studio/blob/master/static/dashboards.PNG?raw=true">
 </div>
 
 
-For generating restaurants website
+For generating restaurants website (for restaurant, hotel websites)
 
 <div align="center" >
     <img width=600 src="https://github.com/epykure/epyk-studio/blob/master/static/foods.PNG?raw=true">
 </div>
 
 
-For generating shopping websites
+For generating shopping websites (for e commernce websites)
 
 <div align="center" >
     <img width=600 src="https://github.com/epykure/epyk-studio/blob/master/static/shops.PNG?raw=true">
 </div>
 
-For generating slides
+For generating slides (for dynamic and rich presentations)
 
 <div align="center" >
     <img width=600 src="https://github.com/epykure/epyk-studio/blob/master/static/slides.PNG?raw=true">
@@ -105,4 +109,6 @@ The Epyk Studio team will be working on
 3. building the community
 3. creation of tutorials and examples
 
-As this is a collaborative project, do not hesitate to let us know about your interest and also to share your feedbacks.
+As this is a collaborative project, do not hesitate to let us know about your interest and also to share your feedback.
+
+You can also have a look at the main templates and examples repository [here](https://github.com/epykure/epyk-templates)
