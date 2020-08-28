@@ -57,39 +57,67 @@ The idea of this module is to never leave Python until the end of the product.
 By using this module there is no need to move to Javascript or even worst to start learning TypeScript to create safe and modern webpages.
 
 This will allow you to make the bridge between Python and Javascript and then to reuse both rich ecosystems.
-Everyrhing which is close to Javascript will be using the Javascript naming conventions.
+Everything which is close to Javascript will be using the Javascript naming conventions.
 
 Epyk studio can be used for any kind of project from personal ones to professional ones when dashboards are needed.
 Thanks to this module and its design it will be easy to change layouts and to switch the display according to your audience (without changing code or technology).
 
+<b><i>
+In the below examples, assets are coming from existing websites. This is only to illustrate some features available in the 
+package.
+</i>
+</b>
+
 For example Epyk Studio can be used in the below cases:
 
-To generate dashboards (for time management, data monitoring, machine learning algorithms...)
+To generate **dashboards** (for time management, data monitoring, machine learning algorithms...)
 
 <div align="center" >
     <img width=600 src="https://github.com/epykure/epyk-studio/blob/master/static/dashboards.PNG?raw=true">
 </div>
 
+Examples:
 
-To generate restaurants website (for restaurant, hotel websites)
+[management.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/management.py)
+[news.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/news.py)
+
+
+To generate **modern website** (for restaurant, hotel or a specific private event)
 
 <div align="center" >
     <img width=600 src="https://github.com/epykure/epyk-studio/blob/master/static/foods.PNG?raw=true">
 </div>
 
+Examples:
 
-To generate shopping websites (for e-commerce websites)
+[travel.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/travel.py)
+[management.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/hotel.py)
+[wedding.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/wedding.py)
+
+
+To generate **shopping websites** (for e-commerce websites)
 
 <div align="center" >
     <img width=600 src="https://github.com/epykure/epyk-studio/blob/master/static/shops.PNG?raw=true">
 </div>
 
-To generate slides (for dynamic and rich presentations)
+Examples:
+
+[shop.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/shop.py)
+[vitrin.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/vitrin.py)
+
+
+To generate **slides** (for dynamic and rich presentations)
 
 <div align="center" >
     <img width=600 src="https://github.com/epykure/epyk-studio/blob/master/static/slides.PNG?raw=true">
 </div>
 
+Examples:
+
+[europython](https://github.com/epykure/epyk-templates/blob/master/slides/20200725_sprint_europython.py)
+[blog.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/blog.py)
+[gallery.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/gallery.py)
 
 To teach Python
 
@@ -97,7 +125,17 @@ To teach Python
     <img width=600 src="https://github.com/epykure/epyk-studio/blob/master/static/teaching.PNG?raw=true">
 </div>
 
-This can also work with Jupyter and JupyterLab
+Examples:
+
+[learning.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/learning.py)
+[image_processing.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/image_processing.py)
+
+
+<h2 style="text-align:center">
+A simple and afficient way to prototype and share your work !
+</h2>
+
+This can also work with Jupyter and JupyterLab more details [here](https://github.com/epykure/epyk-templates-notebooks)
 
 Next features
 ==================
