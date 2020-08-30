@@ -3,6 +3,7 @@
 
 import datetime
 import locale
+import os
 
 from epyk.core.css import Defaults_css
 from epyk.core.css.themes import ThemeBlue
@@ -457,7 +458,7 @@ class Blog(object):
 
 class Gallery(Blog):
 
-  def mosaic(self, pictures, columns=6, path=None, width=(None, '%'), height=('auto', ''), options=None, profile=None):
+  def mosaic(self, pictures=None, columns=6, path=None, width=(None, '%'), height=('auto', ''), options=None, profile=None):
     """
     Description:
     ------------
@@ -472,13 +473,20 @@ class Gallery(Blog):
     :param options:
     :param profile:
     """
-    options = options or {}
+    options = options or {"extensions": ['jpg']}
     grid = self.context.rptObj.ui.grid(width=width, height=height, options=options, profile=profile)
     grid.style.css.margin_top = 20
     grid.style.css.overflow = 'hidden'
     grid.style.css.margin_bottom = 20
     row = self.context.rptObj.ui.row()
     grid.pictures = []
+    if path is not None and pictures is None:
+      pictures = []
+      for img in os.listdir(path):
+        ext_img = img.split(".")[-1]
+        if ext_img.lower() in options["extensions"]:
+          pictures.append(img)
+    pictures = pictures or []
     for i, picture in enumerate(pictures):
       if i % columns == 0:
         grid.add(row)
@@ -499,7 +507,7 @@ class Gallery(Blog):
       grid.add(row)
     return grid
 
-  def carousel(self, images, path=None, selected=0, width=(100, "%"), height=(300, "px"), options=None, profile=None):
+  def carousel(self, images=None, path=None, selected=0, width=(100, "%"), height=(300, "px"), options=None, profile=None):
     """
     Description:
     ------------
@@ -514,6 +522,13 @@ class Gallery(Blog):
     :param options:
     :param profile:
     """
+    if path is not None and images is None:
+      pictures = []
+      for img in os.listdir(path):
+        ext_img = img.split(".")[-1]
+        if ext_img.lower() in options["extensions"]:
+          pictures.append(img)
+    images = images or []
     c = self.context.rptObj.ui.images.carousel(images, path, selected, width, height, options, profile)
     return c
 
