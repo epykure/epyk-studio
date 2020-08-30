@@ -74,12 +74,14 @@ To generate **dashboards** (for time management, data monitoring, machine learni
 
 <div align="center" >
     <img width=600 src="https://github.com/epykure/epyk-studio/blob/master/static/dashboards.PNG?raw=true">
+    <img width=600 src="https://github.com/epykure/epyk-studio/blob/master/static/tracking.PNG?raw=true">
 </div>
 
 Examples:
 
 [management.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/management.py)
 [news.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/news.py)
+[tracking.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/tracking.py)
 
 
 To generate **modern website** (for restaurant, hotel or a specific private event)

@@ -616,6 +616,14 @@ class Studio(Interface.Components):
     return CompStudioDashboard.Dashboard(self)
 
   @property
+  def calendar(self):
+    """
+    Description:
+    ------------
+    """
+    return CompStudioDashboard.Calendar(self)
+
+  @property
   def news(self):
     """
     Description:
