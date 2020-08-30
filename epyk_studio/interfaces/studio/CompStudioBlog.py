@@ -458,7 +458,8 @@ class Blog(object):
 
 class Gallery(Blog):
 
-  def mosaic(self, pictures=None, columns=6, path=None, width=(None, '%'), height=('auto', ''), options=None, profile=None):
+  def mosaic(self, pictures=None, columns=6, path=None, width=(None, '%'), height=('auto', ''), options=None,
+             profile=None):
     """
     Description:
     ------------
@@ -474,8 +475,10 @@ class Gallery(Blog):
     :param options: Dictionary. Optional. Specific Python options available for this component
     :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
-    options = options or {"extensions": ['jpg']}
-    grid = self.context.rptObj.ui.grid(width=width, height=height, options=options, profile=profile)
+    dflt_options = {"extensions": ['jpg']}
+    if options is not None:
+      dflt_options.update(options)
+    grid = self.context.rptObj.ui.grid(width=width, height=height, options=dflt_options, profile=profile)
     grid.style.css.margin_top = 20
     grid.style.css.overflow = 'hidden'
     grid.style.css.margin_bottom = 20
@@ -485,8 +488,10 @@ class Gallery(Blog):
       pictures = []
       for img in os.listdir(path):
         ext_img = img.split(".")[-1]
-        if ext_img.lower() in options["extensions"]:
+        if ext_img.lower() in dflt_options["extensions"]:
           pictures.append(img)
+      if 'static' in dflt_options:
+        path = dflt_options['static']
     pictures = pictures or []
     for i, picture in enumerate(pictures):
       if i % columns == 0:
@@ -497,11 +502,20 @@ class Gallery(Blog):
         picture.style.css.max_height = 200
         picture.style.css.margin = 5
         grid.pictures.append(picture)
-        if options.get('zoom', True):
+        if dflt_options.get('zoom', True):
           picture.style.effects.zoom()
       row.add(picture)
       picture.parent = row[-1]
-
+    if dflt_options.get('focus', True):
+      pic = self.context.rptObj.studio.blog.picture("", path=path, align="center")
+      pic.style.css.width = "calc(80% - 20px)"
+      pic.style.css.border_radius = 20
+      p = self.context.rptObj.ui.layouts.popup([pic])
+      p.options.top = 0
+      for i, r in enumerate(grid.pictures):
+        r.click([
+          pic.build(r.dom.content),
+          p.dom.show()])
     if len(row):
       for c in row:
         c.set_size(12 // columns)

@@ -5,6 +5,7 @@ import argparse
 import inspect
 
 from epyk.core.cli import utils
+from epyk.core.html import Defaults
 
 
 def __write_page(path, name, template):
@@ -393,12 +394,14 @@ def transpile(args):
   report_path = utils.get_report_path(project_path, raise_error=False)
   sys.path.append(report_path)
   ui_setting_path = os.path.join(report_path, '..', 'ui_settings.py')
-  install_modules, split_files, view_folder, settings = False, False, 'views', None
+  install_modules, split_files, view_folder, settings = False, False, '../views', None
   if os.path.exists(ui_setting_path):
+    sys.path.append(os.path.join(report_path, '..'))
     settings = __import__('ui_settings')
     install_modules = settings.INSTALL_MODULES
     split_files = settings.SPLIT_FILES
-    view_folder = settings.VIEWS_FOLDER
+    if settings.PACKAGE_PATH is not None:
+      Defaults.SERVER_PATH = settings.PACKAGE_PATH
   views = []
   if args.name is None:
     for v in os.listdir(report_path):
@@ -408,7 +411,7 @@ def transpile(args):
     views = [args.name]
   for f in views:
     try:
-      print("Transpilling files: %s" % f)
+      print("Transpiling files: %s" % f)
       mod = __import__(f, fromlist=['object'])
       page = utils.get_page(mod)
       if settings is not None:
