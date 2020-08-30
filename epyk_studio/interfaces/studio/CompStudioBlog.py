@@ -462,16 +462,17 @@ class Gallery(Blog):
     """
     Description:
     ------------
+    Mosaic of pictures
 
     Attributes:
     ----------
-    :param pictures:
-    :param columns:
-    :param path:
-    :param width: Optional. A tuple with the integer for the component width and its unit
-    :param height: Optional. A tuple with the integer for the component height and its unit
-    :param options:
-    :param profile:
+    :param pictures: List. Optional. The list with the pictures
+    :param columns: Integer. Optional. The number of column for the mosaic component
+    :param path: String. Optional. The path for the picture
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     options = options or {"extensions": ['jpg']}
     grid = self.context.rptObj.ui.grid(width=width, height=height, options=options, profile=profile)
@@ -514,20 +515,21 @@ class Gallery(Blog):
 
     Attributes:
     ----------
-    :param images:
-    :param path:
+    :param images: List. Optional. The list with the pictures
+    :param path: String. Optional. The path for the picture
     :param selected:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
+    options = options or {"extensions": ['jpg']}
     if path is not None and images is None:
-      pictures = []
+      images = []
       for img in os.listdir(path):
         ext_img = img.split(".")[-1]
         if ext_img.lower() in options["extensions"]:
-          pictures.append(img)
+          images.append({"image": img, 'title': ''})
     images = images or []
     c = self.context.rptObj.ui.images.carousel(images, path, selected, width, height, options, profile)
     return c
