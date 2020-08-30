@@ -498,7 +498,9 @@ class Gallery(Blog):
         grid.add(row)
         row = self.context.rptObj.ui.row()
       if not hasattr(picture, 'options'):
-        picture = self.context.rptObj.ui.img(picture, path=path)
+        picture = self.context.rptObj.ui.img(picture, path=path, htmlCode="%s_%s" % (grid.htmlCode, i))
+        picture.attr["data-next"] = "%s_%s" % (grid.htmlCode, min(i + 1, len(pictures) - 1))
+        picture.attr["data-previous"] = "%s_%s" % (grid.htmlCode, max(i - 1, 0))
         picture.style.css.max_height = 200
         picture.style.css.margin = 5
         grid.pictures.append(picture)
@@ -507,14 +509,50 @@ class Gallery(Blog):
       row.add(picture)
       picture.parent = row[-1]
     if dflt_options.get('focus', True):
-      pic = self.context.rptObj.studio.blog.picture("", path=path, align="center")
-      pic.style.css.width = "calc(80% - 20px)"
-      pic.style.css.border_radius = 20
-      p = self.context.rptObj.ui.layouts.popup([pic])
+      grid.image = self.context.rptObj.studio.blog.picture("", path=path, align="center")
+      grid.image.style.css.width = "calc(80% - 20px)"
+      grid.image.style.css.max_height = 450
+      grid.image.style.css.border_radius = 20
+      if options.get('arrows', True):
+        self.next = self.context.rptObj.ui.icon(options.get("arrows-right", "fas fa-chevron-right")).css(
+          {"position": 'absolute', 'background': 'white', 'cursor': 'pointer',
+           "font-size": '35px', "padding": '8px', "right": '10px', 'top': '50%'})
+        self.next.options.managed = False
+        self.previous = self.context.rptObj.ui.icon(options.get("arrows-left", "fas fa-chevron-left")).css(
+          {"position": 'absolute', 'background': 'white', 'cursor': 'pointer',
+           "font-size": '35px', "padding": '8px', "left": '10px', 'top': '50%'})
+        self.previous.options.managed = False
+        self.next.click([
+          grid.image.build(
+            self.context.rptObj.js.getElementById(self.next.dom.getAttribute("value")).getAttribute("src")),
+          self.previous.dom.setAttribute("value", self.context.rptObj.js.getElementById(
+            self.next.dom.getAttribute("value")).getAttribute("data-previous")),
+          self.next.dom.setAttribute("value", self.context.rptObj.js.getElementById(
+            self.next.dom.getAttribute("value")).getAttribute("data-next"))
+        ])
+
+        self.previous.click([
+          grid.image.build(
+            self.context.rptObj.js.getElementById(self.previous.dom.getAttribute("value")).getAttribute("src")),
+          self.next.dom.setAttribute("value", self.context.rptObj.js.getElementById(
+            self.previous.dom.getAttribute("value")).getAttribute("data-next")),
+          self.previous.dom.setAttribute("value", self.context.rptObj.js.getElementById(
+            self.previous.dom.getAttribute("value")).getAttribute("data-previous"))
+        ])
+        p = self.context.rptObj.ui.layouts.popup([self.previous, grid.image, self.next])
+      else:
+        p = self.context.rptObj.ui.layouts.popup([grid.image])
+
+      if options.get("keyboard", True) and options.get('arrows', True):
+        self.context.rptObj.body.keyup.left([self.previous.dom.events.trigger("click")])
+        self.context.rptObj.body.keyup.right([self.next.dom.events.trigger("click")])
+
       p.options.top = 0
       for i, r in enumerate(grid.pictures):
         r.click([
-          pic.build(r.dom.content),
+          self.next.dom.setAttribute("value", r.dom.getAttribute("data-next")),
+          self.previous.dom.setAttribute("value", r.dom.getAttribute("data-previous")),
+          grid.image.build(r.dom.content),
           p.dom.show()])
     if len(row):
       for c in row:
