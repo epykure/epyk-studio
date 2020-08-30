@@ -2,27 +2,27 @@
 
 Presentation
 ================================
-Epyk-studio is a module on top of Epyk-ui in order to facilitate the use of the various features available.
-As Epyk-ui is the transpiler to Javascript and web artifacts on few (around 200) components are available.
+Epyk-studio is a module on top of Epyk-ui that has been created to facilitate the use of the various features available.
+Since Epyk-ui is the transpiler to Javascript and web artifacts, only a few components (around 200) are available.
 
-Epyk-studio will facilitate the use of components by using pre defined styles according to the type of websites.
-Epyk-studio will provide some helpers and shortcut to design:
+Epyk-studio will facilitate the use of components by using pre-defined styles according to the type of websites.
+Epyk-studio also provides some helpers and shortcuts to design:
 
 - blog pages
 - event pages
-- shops
+- shops pages
 - ad for app
-- picture / video gallery
+- pictures / videos gallery
 
 
-Those pages will generate proper HYML pages which can then be hosted in any company.
-There is no need to buy something specific to use Epyk and also to publish your work.
+Those pages will generate proper HYML pages which can then be hosted by any company.
+There is no need to buy something specific to use Epyk nor to publish your work.
 
 
 Quickstart
 ================================
 
-As Epyk-studio is still only available as a Python package to use it you would need to follow the below steps
+As Epyk-studio is still only available as a Python package, you would need to follow the below steps in order to use it:
 
 Install Epyk
 
@@ -54,7 +54,7 @@ Usage
 ======
 
 The idea of this module is to never leave Python until the end of the product.
-By using this module there is no need to move to Javascript or even worst to start learning TypeScript to create safe and modern webpages.
+By using this module there is no need to move to Javascript or even worse to start learning TypeScript to create safe and modern webpages.
 
 This will allow you to make the bridge between Python and Javascript and then to reuse both rich ecosystems.
 Everything which is close to Javascript will be using the Javascript naming conventions.
@@ -86,7 +86,7 @@ Examples:
 [tracking.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/tracking.py)
 
 
-To generate **modern website** (for restaurant, hotel or a specific private event)
+To generate **modern websites** (for a restaurant, hotel or a specific private event)
 
 <div align="center" >
     <img width=600 src="https://github.com/epykure/epyk-studio/blob/master/static/foods.PNG?raw=true">
@@ -137,21 +137,21 @@ Examples:
 
 
 <h2 style="text-align:center">
-A simple and afficient way to prototype and share your work !
+A simple and efficient way to prototype and share your work !
 </h2>
 
-This can also work with Jupyter and JupyterLab more details [here](https://github.com/epykure/epyk-templates-notebooks)
+This can also work with Jupyter and JupyterLab. More details [here](https://github.com/epykure/epyk-templates-notebooks).
 
 Next features
 ==================
 
-The Epyk Studio team will be working on 
+The Epyk Studio team will be working on:
 
-1. building a online portal to start prototyping directly from the browser.
-2. integrating of Native application features for the migration to apps
+1. building an online portal to start prototyping directly from the browser.
+2. integrating Native application features for the migration to apps
 3. building the community
-3. creating of tutorials and examples
+4. creating tutorials and examples
 
-As this is a collaborative project, do not hesitate to let us know about your interest and also to share your feedback.
+As this is a collaborative project, pleasde do not hesitate to let us know about your interest and also to share your feedback.
 
-You can also have a look at the main templates and examples repository [here](https://github.com/epykure/epyk-templates)
+You can also have a look at the main templates and examples repository [here](https://github.com/epykure/epyk-templates).
