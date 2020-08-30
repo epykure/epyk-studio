@@ -514,46 +514,46 @@ class Gallery(Blog):
       grid.image.style.css.max_height = 450
       grid.image.style.css.border_radius = 20
       if dflt_options.get('arrows', True):
-        self.next = self.context.rptObj.ui.icon(dflt_options.get("arrows-right", "fas fa-chevron-right")).css(
+        grid.next = self.context.rptObj.ui.icon(dflt_options.get("arrows-right", "fas fa-chevron-right")).css(
           {"position": 'absolute', 'background': 'white', 'cursor': 'pointer',
            "font-size": '35px', "padding": '8px', "right": '10px', 'top': '50%'})
-        self.next.options.managed = False
-        self.previous = self.context.rptObj.ui.icon(dflt_options.get("arrows-left", "fas fa-chevron-left")).css(
+        grid.next.options.managed = False
+        grid.previous = self.context.rptObj.ui.icon(dflt_options.get("arrows-left", "fas fa-chevron-left")).css(
           {"position": 'absolute', 'background': 'white', 'cursor': 'pointer',
            "font-size": '35px', "padding": '8px', "left": '10px', 'top': '50%'})
-        self.previous.options.managed = False
-        self.next.click([
+        grid.previous.options.managed = False
+        grid.next.click([
           grid.image.build(
-            self.context.rptObj.js.getElementById(self.next.dom.getAttribute("value")).getAttribute("src")),
-          self.previous.dom.setAttribute("value", self.context.rptObj.js.getElementById(
-            self.next.dom.getAttribute("value")).getAttribute("data-previous")),
-          self.next.dom.setAttribute("value", self.context.rptObj.js.getElementById(
-            self.next.dom.getAttribute("value")).getAttribute("data-next"))
+            self.context.rptObj.js.getElementById(grid.next.dom.getAttribute("value")).getAttribute("src")),
+          grid.previous.dom.setAttribute("value", self.context.rptObj.js.getElementById(
+            grid.next.dom.getAttribute("value")).getAttribute("data-previous")),
+          grid.next.dom.setAttribute("value", self.context.rptObj.js.getElementById(
+            grid.next.dom.getAttribute("value")).getAttribute("data-next"))
         ])
 
-        self.previous.click([
+        grid.previous.click([
           grid.image.build(
-            self.context.rptObj.js.getElementById(self.previous.dom.getAttribute("value")).getAttribute("src")),
-          self.next.dom.setAttribute("value", self.context.rptObj.js.getElementById(
-            self.previous.dom.getAttribute("value")).getAttribute("data-next")),
-          self.previous.dom.setAttribute("value", self.context.rptObj.js.getElementById(
-            self.previous.dom.getAttribute("value")).getAttribute("data-previous"))
+            self.context.rptObj.js.getElementById(grid.previous.dom.getAttribute("value")).getAttribute("src")),
+          grid.next.dom.setAttribute("value", self.context.rptObj.js.getElementById(
+            grid.previous.dom.getAttribute("value")).getAttribute("data-next")),
+          grid.previous.dom.setAttribute("value", self.context.rptObj.js.getElementById(
+            grid.previous.dom.getAttribute("value")).getAttribute("data-previous"))
         ])
-        p = self.context.rptObj.ui.layouts.popup([self.previous, grid.image, self.next])
+        grid.popup = self.context.rptObj.ui.layouts.popup([grid.previous, grid.image, grid.next])
       else:
-        p = self.context.rptObj.ui.layouts.popup([grid.image])
+        grid.popup = self.context.rptObj.ui.layouts.popup([grid.image])
 
       if dflt_options.get("keyboard", True) and dflt_options.get('arrows', True):
-        self.context.rptObj.body.keyup.left([self.previous.dom.events.trigger("click")])
-        self.context.rptObj.body.keyup.right([self.next.dom.events.trigger("click")])
+        self.context.rptObj.body.keyup.left([grid.previous.dom.events.trigger("click")])
+        self.context.rptObj.body.keyup.right([grid.next.dom.events.trigger("click")])
 
-      p.options.top = 0
+      grid.popup.options.top = 0
       for i, r in enumerate(grid.pictures):
         r.click([
-          self.next.dom.setAttribute("value", r.dom.getAttribute("data-next")),
-          self.previous.dom.setAttribute("value", r.dom.getAttribute("data-previous")),
+          grid.next.dom.setAttribute("value", r.dom.getAttribute("data-next")),
+          grid.previous.dom.setAttribute("value", r.dom.getAttribute("data-previous")),
           grid.image.build(r.dom.content),
-          p.dom.show()])
+          grid.popup.dom.show()])
     if len(row):
       for c in row:
         c.set_size(12 // columns)
