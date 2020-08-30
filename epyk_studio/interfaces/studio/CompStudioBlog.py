@@ -513,12 +513,12 @@ class Gallery(Blog):
       grid.image.style.css.width = "calc(80% - 20px)"
       grid.image.style.css.max_height = 450
       grid.image.style.css.border_radius = 20
-      if options.get('arrows', True):
-        self.next = self.context.rptObj.ui.icon(options.get("arrows-right", "fas fa-chevron-right")).css(
+      if dflt_options.get('arrows', True):
+        self.next = self.context.rptObj.ui.icon(dflt_options.get("arrows-right", "fas fa-chevron-right")).css(
           {"position": 'absolute', 'background': 'white', 'cursor': 'pointer',
            "font-size": '35px', "padding": '8px', "right": '10px', 'top': '50%'})
         self.next.options.managed = False
-        self.previous = self.context.rptObj.ui.icon(options.get("arrows-left", "fas fa-chevron-left")).css(
+        self.previous = self.context.rptObj.ui.icon(dflt_options.get("arrows-left", "fas fa-chevron-left")).css(
           {"position": 'absolute', 'background': 'white', 'cursor': 'pointer',
            "font-size": '35px', "padding": '8px', "left": '10px', 'top': '50%'})
         self.previous.options.managed = False
@@ -543,7 +543,7 @@ class Gallery(Blog):
       else:
         p = self.context.rptObj.ui.layouts.popup([grid.image])
 
-      if options.get("keyboard", True) and options.get('arrows', True):
+      if dflt_options.get("keyboard", True) and dflt_options.get('arrows', True):
         self.context.rptObj.body.keyup.left([self.previous.dom.events.trigger("click")])
         self.context.rptObj.body.keyup.right([self.next.dom.events.trigger("click")])
 
