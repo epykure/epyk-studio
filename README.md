@@ -95,7 +95,7 @@ To generate **modern website** (for restaurant, hotel or a specific private even
 Examples:
 
 [travel.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/travel.py)
-[management.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/hotel.py)
+[hotel.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/hotel.py)
 [wedding.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/wedding.py)
 
 
@@ -108,6 +108,7 @@ To generate **shopping websites** (for e-commerce websites)
 Examples:
 
 [shop.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/shop.py)
+[dance.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/dance.py)
 [vitrin.py](https://github.com/epykure/epyk-templates/blob/master/locals/studio/vitrin.py)
 
 
