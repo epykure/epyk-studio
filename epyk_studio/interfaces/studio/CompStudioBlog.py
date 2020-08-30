@@ -530,6 +530,10 @@ class Gallery(Blog):
         ext_img = img.split(".")[-1]
         if ext_img.lower() in options["extensions"]:
           images.append({"image": img, 'title': ''})
+      if len(images) > 5:
+        options['points'] = False
+        options['arrows'] = True
+        options['keyboard'] = True
     images = images or []
     c = self.context.rptObj.ui.images.carousel(images, path, selected, width, height, options, profile)
     return c
