@@ -74,6 +74,8 @@ To generate **dashboards** (for time management, data monitoring, machine learni
 
 <div align="center" >
     <img width=600 src="https://github.com/epykure/epyk-studio/blob/master/static/dashboards.PNG?raw=true">
+</div>
+<div align="center" >
     <img width=600 src="https://github.com/epykure/epyk-studio/blob/master/static/tracking.PNG?raw=true">
 </div>
 
