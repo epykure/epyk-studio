@@ -373,10 +373,11 @@ class Studio(Interface.Components):
     if options is not None:
       dfl_options.update(options)
     c = self.rptObj.ui.images.carousel(components, None, selected, width, height, dfl_options, profile)
-    c.next.style.css.margin_top = -Defaults_html.LINE_HEIGHT
-    c.previous.style.css.margin_top = -Defaults_html.LINE_HEIGHT
-    c.container.style.css.margin = "auto 45px"
-    c.container.style.css.width = "calc(100% - 90px)"
+    if dfl_options['arrows']:
+      c.next.style.css.margin_top = -Defaults_html.LINE_HEIGHT
+      c.previous.style.css.margin_top = -Defaults_html.LINE_HEIGHT
+      c.container.style.css.margin = "auto 45px"
+      c.container.style.css.width = "calc(100% - 90px)"
     if 'timer' in dfl_options:
       self.rptObj.body.onReady([c.next.dom.events.trigger("click", withFocus=False, options={"timer": dfl_options['timer']})])
       c.clear_timer = JsObjects.JsVoid("clearInterval(window['%s_timer'])" % c.next.htmlCode)
