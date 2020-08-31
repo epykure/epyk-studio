@@ -478,6 +478,45 @@ class Studio(Interface.Components):
     self.rptObj.theme = theme()
     return select
 
+  def footers(self, components=None, logo=None, width=(100, '%'), height=('auto', ''), options=None, profile=False):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param components:
+    :param width:
+    :param height:
+    :param options:
+    :param profile:
+    """
+    if logo is None:
+      logo = self.rptObj.ui.icons.epyk()
+    logo.style.css.width = "80px"
+    logo.style.css.height = "80px"
+    if components is None:
+      components = self.rptObj.ui.row([
+        self.rptObj.ui.col([
+          logo, self.rptObj.ui.banners.follow("Follow us")
+        ], position="top"),
+        self.rptObj.ui.col([
+          self.rptObj.ui.text("À Propos").css({"font-weight": 'bold'})
+        ], position="top"),
+        self.rptObj.ui.col([
+          self.rptObj.ui.text("Resources").css({"font-weight": 'bold'})
+        ], position="top"),
+        self.rptObj.ui.col([
+          self.rptObj.ui.text("News").css({"font-weight": 'bold'})
+        ], position="top")
+      ], position="top")
+      components.style.css.padding = 5
+    foot = self.rptObj.ui.navigation.footer(components, width, height, False, options, profile)
+    foot.style.css.background_color = self.rptObj.theme.greys[2]
+    disc = self.rptObj.ui.banners.disclaimer()
+    disc.style.css.background_color = self.rptObj.theme.greys[4]
+    return self.col([foot, disc])
+
   @property
   def shop(self):
     """

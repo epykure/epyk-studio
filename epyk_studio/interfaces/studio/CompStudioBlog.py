@@ -975,8 +975,11 @@ class Gallery(Blog):
     for f in os.listdir(path):
       folder_path = os.path.join(path, f)
       if not os.path.isfile(folder_path):
-        div = self.context.rptObj.ui.div(self.context.rptObj.py.encode_html(f), width=width)
-        div.style.css.padding = "5px 10px"
+        div = self.context.rptObj.ui.div(self.context.rptObj.py.encode_html(f))
+        div.style.css.padding = "5px 0 0 10px"
         div.style.add_classes.div.color_hover()
-        list.append(div)
+        hr = self.context.rptObj.ui.layouts.hr(background_color=self.context.rptObj.theme.greys[3])
+        hr.style.css.margin = "0 5px"
+        hr.style.css.width = "calc(100% - 10px)"
+        list.append(self.context.rptObj.ui.col([div, hr]))
     return self.context.rptObj.ui.list(list, width=width, height=height, options=options, profile=profile)
