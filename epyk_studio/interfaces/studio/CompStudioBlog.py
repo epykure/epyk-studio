@@ -8,6 +8,7 @@ import os
 from epyk.core.css import Defaults_css
 from epyk.core.css.themes import ThemeBlue
 from epyk_studio.lang import get_lang
+from epyk.core.html import Html
 
 
 class Blog(object):
@@ -902,6 +903,21 @@ class Gallery(Blog):
 
   def folders(self, path, columns=6, images=None, position="top", width=(None, '%'), height=('auto', ''), options=None,
               profile=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param path:
+    :param columns:
+    :param images:
+    :param position:
+    :param width:
+    :param height:
+    :param options:
+    :param profile:
+    """
     dflt_options = {"extensions": ['jpg']}
     if options is not None:
       dflt_options.update(options)
@@ -969,8 +985,20 @@ class Gallery(Blog):
     container[1].attr['class'].add("col-4")
     return container
 
-  def list(self, path, width=('auto', ''), height=('auto', ''), options=None, profile=None):
+  def list(self, path, urls=None, width=('auto', ''), height=('auto', ''), options=None, profile=None):
+    """
+    Description:
+    ------------
 
+    Attributes:
+    ----------
+    :param path:
+    :param urls:
+    :param width:
+    :param height:
+    :param options:
+    :param profile:
+    """
     list = []
     for f in os.listdir(path):
       folder_path = os.path.join(path, f)
@@ -978,6 +1006,11 @@ class Gallery(Blog):
         div = self.context.rptObj.ui.div(self.context.rptObj.py.encode_html(f))
         div.style.css.padding = "5px 0 0 10px"
         div.style.add_classes.div.color_hover()
+        if urls is not None and f in urls:
+          url = urls[f]
+        else:
+          url = "%s.html" % Html.cleanData(f)
+        div.click([self.context.rptObj.js.navigateTo(url)])
         hr = self.context.rptObj.ui.layouts.hr(background_color=self.context.rptObj.theme.greys[3])
         hr.style.css.margin = "0 5px"
         hr.style.css.width = "calc(100% - 10px)"
