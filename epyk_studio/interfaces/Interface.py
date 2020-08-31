@@ -519,6 +519,18 @@ class Studio(Interface.Components):
     col.style.css.padding_top = 20
     return col
 
+  def tags(self, items):
+    div = self.rptObj.ui.div()
+    for i in items:
+      if not hasattr(items, 'options'):
+        it = self.rptObj.ui.text(i)
+        it.style.css.font_weight = "bold"
+        it.style.css.padding = "0 2px"
+        div.add(it)
+      else:
+        div.add(i)
+    return div
+
   @property
   def shop(self):
     """

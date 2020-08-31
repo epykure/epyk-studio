@@ -528,6 +528,7 @@ class Shopping(object):
       container.title = self.context.rptObj.ui.titles.title(title)
       container.title.style.css.display = "inline-block"
       container.title.style.css.margin_top = 0
+      container.title.style.css.font_weight = 'bold'
       container.title.style.css.font_size = Defaults_css.font(5)
     else:
       container.title = title
@@ -540,6 +541,7 @@ class Shopping(object):
         options["font_factor"] = 5
       container.price = self.price(price, align='right', width=(None, 'px'), options=options)
       container.price.style.css.position = "relative"
+      container.price.style.css.font_weight = 'bold'
       container.price.style.css.margin_top = -25
       container.price.style.css.right = 0
     else:
@@ -554,6 +556,26 @@ class Shopping(object):
         container.description = description
       container.add(container.description)
     return container
+
+  def item(self, title, image, location="", limit="", date='N/A', tags=None, price=None, details=None, align="center", width=(200, 'px'), height=(None, "px"), options=None):
+    ool = self.context.rptObj.ui.col()
+    ool.add(self.context.rptObj.studio.shop.bar(title, price, details))
+    if location:
+      ool.add(self.context.rptObj.ui.div([self.context.rptObj.ui.icon("fas fa-map-marker-alt").css({"margin-right": '10px'}), self.context.rptObj.ui.text(location)]))
+    if limit:
+      ool.add(self.context.rptObj.ui.div([self.context.rptObj.ui.icon("fas fa-male").css({"margin-right": '15px'}), self.context.rptObj.ui.text(limit)]))
+    if tags:
+      ool.add(self.context.rptObj.studio.tags(tags))
+    ool.add(self.context.rptObj.ui.text("Prochaine session").css({"display": 'block', "margin-top": '5px', "color": self.context.rptObj.theme.greys[6]}))
+    ool.add(self.context.rptObj.ui.text(date).css({"display": 'block', 'font-weight': 'bold'}))
+    ool.add(self.context.rptObj.ui.button("Book this item", align="center").css({"margin": '15px auto 5px'}))
+    vim = self.context.rptObj.ui.vignets.image(content=ool, align=align, width=width, height=height, options=options, render='col')
+    # vim.image.style.css.border_radius = "20px 20px 0 0 "
+    vim.style.css.shadow_box()
+    vim.style.css.padding_top = 160
+    vim.style.css.background_url(image, size="100% 150px", background_position="top")
+    vim.style.css.margin_top = 10
+    return vim
 
 
 class Resto(object):
