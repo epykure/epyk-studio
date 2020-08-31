@@ -525,7 +525,7 @@ class Gallery(Blog):
         path = dflt_options['static']
     pictures = pictures or []
     for i, picture in enumerate(pictures):
-      if options.get("max") is not None and len(grid.pictures) > options.get("max"):
+      if dflt_options.get("max") is not None and len(grid.pictures) > dflt_options.get("max"):
         break
 
       if i % columns == 0:
