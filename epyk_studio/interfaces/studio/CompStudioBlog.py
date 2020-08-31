@@ -510,16 +510,22 @@ class Gallery(Blog):
       picture.parent = row[-1]
     if dflt_options.get('focus', True):
       grid.image = self.context.rptObj.studio.blog.picture("", path=path, align="center")
-      grid.image.style.css.width = "calc(80% - 20px)"
+      grid.image.style.css.width = "calc(90% - 20px)"
       grid.image.style.css.max_height = 450
       grid.image.style.css.border_radius = 20
+      grid.image.style.css.position = "absolute"
+      grid.image.style.css.margin = "auto"
+      grid.image.style.css.top = 0
+      grid.image.style.css.bottom = 0
+      grid.image.style.css.left = 0
+      grid.image.style.css.right = 0
       if dflt_options.get('arrows', True):
         grid.next = self.context.rptObj.ui.icon(dflt_options.get("arrows-right", "fas fa-chevron-right")).css(
-          {"position": 'absolute', 'background': 'white', 'cursor': 'pointer',
+          {"position": 'absolute', 'background': 'white', 'cursor': 'pointer', 'z-index': '1010',
            "font-size": '35px', "padding": '8px', "right": '10px', 'top': '50%'})
         grid.next.options.managed = False
         grid.previous = self.context.rptObj.ui.icon(dflt_options.get("arrows-left", "fas fa-chevron-left")).css(
-          {"position": 'absolute', 'background': 'white', 'cursor': 'pointer',
+          {"position": 'absolute', 'background': 'white', 'cursor': 'pointer',  'z-index': '1010',
            "font-size": '35px', "padding": '8px', "left": '10px', 'top': '50%'})
         grid.previous.options.managed = False
         grid.next.click([
