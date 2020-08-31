@@ -494,11 +494,14 @@ class Gallery(Blog):
         path = dflt_options['static']
     pictures = pictures or []
     for i, picture in enumerate(pictures):
+      if options.get("max") is not None and len(grid.pictures) > options.get("max"):
+        break
+
       if i % columns == 0:
         grid.add(row)
         row = self.context.rptObj.ui.row()
       if not hasattr(picture, 'options'):
-        picture = self.context.rptObj.ui.img(picture, path=path, htmlCode="%s_%s" % (grid.htmlCode, i))
+        picture = self.context.rptObj.ui.img(self.context.rptObj.py.encode_html(picture), path=self.context.rptObj.py.encode_html(path), htmlCode="%s_%s" % (grid.htmlCode, i))
         picture.attr["data-next"] = "%s_%s" % (grid.htmlCode, min(i + 1, len(pictures) - 1))
         picture.attr["data-previous"] = "%s_%s" % (grid.htmlCode, max(i - 1, 0))
         picture.style.css.max_height = 200
@@ -865,3 +868,66 @@ class Gallery(Blog):
     a = self.context.rptObj.ui.images.animated(image, text=text, title=title, url=url, path=path, width=width,
                                                height=height, options=options, profile=profile)
     return a
+
+  def folders(self, path, columns=6, images=None, position="top", width=(None, '%'), height=('auto', ''), options=None,
+              profile=None):
+    dflt_options = {"extensions": ['jpg']}
+    if options is not None:
+      dflt_options.update(options)
+    grid = self.context.rptObj.ui.grid(width=width, height=height, options=dflt_options, profile=profile)
+    pictures = []
+    for f in os.listdir(path):
+      folder_path = os.path.join(path, f)
+      if not os.path.isfile(folder_path):
+        for i in os.listdir(folder_path):
+          ext_img = i.split(".")[-1]
+          if ext_img.lower() in dflt_options["extensions"]:
+            pictures.append({"name": self.context.rptObj.py.encode_html(i), 'path': self.context.rptObj.py.encode_html(folder_path), 'title': self.context.rptObj.py.encode_html(f)})
+            if f in images:
+              pictures[-1].update(images[f])
+            break
+    grid.pictures = []
+    row = self.context.rptObj.ui.row(position=position)
+    viewer = self.context.rptObj.ui.img(pictures[0]["name"], path=pictures[0]["path"], width=(100, '%'), height=('auto', ''))
+    viewer.style.css.border = "1px solid %s" % self.context.rptObj.theme.greys[7]
+    for i, picture in enumerate(pictures):
+      if i % columns == 0:
+        grid.add(row)
+        row = self.context.rptObj.ui.row(position=position)
+      pic = self.context.rptObj.ui.img(picture["name"], path=picture["path"])
+      pic.style.css.cursor = "pointer"
+      pic.click([
+        viewer.build(pic.dom.content)
+      ])
+      pic.tooltip(picture["title"])
+      pic.style.css.max_height = 200
+      pic.style.css.margin = 5
+      pic.style.css.z_index = 0
+      grid.pictures.append(pic)
+      row.add(pic)
+      pic.parent = row[-1]
+
+    grid.style.css.margin_top = 20
+    grid.style.css.overflow = 'hidden'
+    grid.style.css.margin_bottom = 20
+    if len(row):
+      for c in row:
+        c.set_size(12 // columns)
+      grid.add(row)
+    row = self.context.rptObj.ui.row([grid, viewer])
+    row.options.autoSize = False
+    row[0].attr['class'].add("col-8")
+    row[1].attr['class'].add("col-4")
+    return row
+
+  def list(self, path, width=('auto', ''), height=('auto', ''), options=None, profile=None):
+
+    list = []
+    for f in os.listdir(path):
+      folder_path = os.path.join(path, f)
+      if not os.path.isfile(folder_path):
+        div = self.context.rptObj.ui.div(self.context.rptObj.py.encode_html(f), width=width)
+        div.style.css.padding = "5px 10px"
+        div.style.add_classes.div.color_hover()
+        list.append(div)
+    return self.context.rptObj.ui.list(list, width=width, height=height, options=options, profile=profile)
