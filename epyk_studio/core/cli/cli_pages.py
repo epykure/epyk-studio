@@ -3,6 +3,7 @@ import os
 import sys
 import argparse
 import inspect
+import traceback
 
 from epyk.core.cli import utils
 from epyk.core.html import Defaults
@@ -420,7 +421,9 @@ def transpile(args):
                                    options={"css_route": '/css', "js_route": '/js'})
       print(output)
     except Exception as err:
-      print(err)
+      traceback.print_exception(*sys.exc_info())
+      print("Error in the script %s" % f)
+
 
 
 def main():

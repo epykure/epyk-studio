@@ -515,7 +515,9 @@ class Studio(Interface.Components):
     foot.style.css.background_color = self.rptObj.theme.greys[2]
     disc = self.rptObj.ui.banners.disclaimer()
     disc.style.css.background_color = self.rptObj.theme.greys[4]
-    return self.col([foot, disc])
+    col = self.col([foot, disc])
+    col.style.css.padding_top = 20
+    return col
 
   @property
   def shop(self):
