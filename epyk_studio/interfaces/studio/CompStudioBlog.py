@@ -455,6 +455,37 @@ class Blog(object):
                    '-moz-animation-play-state': 'paused', '-o-animation-play-state': 'paused'})
     return t
 
+  def absolute(self, text, top=None, right=None, bottom=None, left=None, font_family=None, htmlCode=None, profile=None, options=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param text:
+    :param top:
+    :param right:
+    :param bottom:
+    :param left:
+    :param font_family:
+    :param htmlCode:
+    :param profile:
+    :param options:
+    """
+    text = self.context.rptObj.studio.text(text, htmlCode=htmlCode, profile=profile, options=options)
+    if right is not None:
+      text.style.css.right = right
+    if bottom is not None:
+      text.style.css.bottom = bottom
+    if top is not None:
+      text.style.css.top = top
+    if left is not None:
+      text.style.css.left = left
+    if font_family is not None:
+      text.style.css.font_family = font_family
+    text.style.css.position = "absolute"
+    return text
+
 
 class Gallery(Blog):
 
@@ -883,7 +914,7 @@ class Gallery(Blog):
           ext_img = i.split(".")[-1]
           if ext_img.lower() in dflt_options["extensions"]:
             pictures.append({"name": self.context.rptObj.py.encode_html(i), 'path': self.context.rptObj.py.encode_html(folder_path), 'title': self.context.rptObj.py.encode_html(f)})
-            if f in images:
+            if images is not None and f in images:
               pictures[-1].update(images[f])
             break
     grid.pictures = []
