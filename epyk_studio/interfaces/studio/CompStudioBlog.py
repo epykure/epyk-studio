@@ -914,11 +914,29 @@ class Gallery(Blog):
       for c in row:
         c.set_size(12 // columns)
       grid.add(row)
-    row = self.context.rptObj.ui.row([grid, viewer])
-    row.options.autoSize = False
-    row[0].attr['class'].add("col-8")
-    row[1].attr['class'].add("col-4")
-    return row
+
+    if len(grid.pictures) > 4 * columns:
+      grid.style.css.height = 300
+      text = self.context.rptObj.ui.text("See more", align="right")
+      text.click([
+        grid.dom.css({"height": 'auto'}),
+        text.dom.css({"display": 'none'}),
+      ])
+      col = self.context.rptObj.ui.div([grid, text])
+      col.options.managed = False
+      viewer.style.css.margin_top = 25
+      container = self.context.rptObj.ui.row([col, viewer], position="top")
+    else:
+      container = self.context.rptObj.ui.row([grid, viewer])
+    container.style.css.display = "flex"
+    container.style.css.align_items = "flex-start"
+    container.options.autoSize = False
+    container[1].style.css.top = 30
+    container[1].style.css.position = 'sticky'
+
+    container[0].attr['class'].add("col-8")
+    container[1].attr['class'].add("col-4")
+    return container
 
   def list(self, path, width=('auto', ''), height=('auto', ''), options=None, profile=None):
 
