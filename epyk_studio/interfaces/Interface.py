@@ -519,11 +519,23 @@ class Studio(Interface.Components):
     col.style.css.padding_top = 20
     return col
 
-  def tags(self, items):
-    div = self.rptObj.ui.div()
+  def tags(self, items, width=(100, '%'), height=('auto', ''), options=None, profile=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param items:
+    :param width:
+    :param height:
+    :param options:
+    :param profile:
+    """
+    div = self.rptObj.ui.div(width=width, height=height, options=options, profile=profile)
     for i in items:
       if not hasattr(items, 'options'):
-        it = self.rptObj.ui.text(i)
+        it = self.rptObj.ui.text(i, options=options, profile=profile)
         it.style.css.font_weight = "bold"
         it.style.css.padding = "0 2px"
         div.add(it)

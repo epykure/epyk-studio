@@ -23,14 +23,14 @@ class Shopping(object):
     Attributes:
     ----------
     :param text:
-    :param icon:
-    :param width:
-    :param height:
-    :param align:
-    :param htmlCode:
-    :param tooltip:
-    :param profile:
-    :param options:
+    :param icon: String. Optional. The component icon content from font-awesome references
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param htmlCode: String. Optional. An identifier for this component (on both Python and Javascript side)
+    :param tooltip: String. Optional. A string with the value of the tooltip
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     button = self.context.rptObj.ui.button(text, icon, width=width, height=height, options=options, tooltip=tooltip, profile=profile, align=align)
     button.style.clear()
@@ -53,11 +53,11 @@ class Shopping(object):
     :param image:
     :param rating:
     :param title:
-    :param align:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     div = self.context.rptObj.ui.div(width=width, height=height, options=options, profile=profile, align=align)
     if title is not None:
@@ -91,11 +91,11 @@ class Shopping(object):
     ----------
     :param price:
     :param currency:
-    :param align:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     options = options or {}
     div = self.context.rptObj.ui.div(width=width, height=height, options=options, profile=profile, align=align)
@@ -131,11 +131,11 @@ class Shopping(object):
     :param price:
     :param text:
     :param currency:
-    :param align:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     div = self.context.rptObj.ui.div(width=width, height=height, options=options, profile=profile, align=align)
     div.label = self.context.rptObj.ui.text(text)
@@ -169,11 +169,11 @@ class Shopping(object):
     ----------
     :param price:
     :param discount:
-    :param align:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     div = self.context.rptObj.ui.div(width=width, height=height, options=options, profile=profile, align=align)
     prev_price = self.price(price, width=("auto", ""), options={"font_factor": 2, "deleted": True})
@@ -202,8 +202,8 @@ class Shopping(object):
     :param text: String. The visible text.
     :param url: String. The link URL when click on the link
     :param height: Tuple. The component height
-    :param options: Dictionary. The component properties
-    :param profile: Boolean. The component profiling flag
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     html_link = self.context.rptObj.ui.link(text, url, height=height, options=options, profile=profile)
     html_link.style.css.color = self.context.rptObj.theme.greys[-1]
@@ -217,11 +217,11 @@ class Shopping(object):
     Attributes:
     ----------
     :param quantity:
-    :param align:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     div = self.context.rptObj.ui.div(width=width, height=height, options=options, profile=profile, align=align)
     div.plus = self.context.rptObj.ui.icon("fa fa-plus")
@@ -247,11 +247,11 @@ class Shopping(object):
     Attributes:
     ----------
     :param percent:
-    :param align:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     comp_discount = self.context.rptObj.ui.text("-%s%%" % percent, align=align, width=width, height=height, options=options, profile=profile)
     comp_discount.style.css.background_color = self.context.rptObj.theme.danger[1]
@@ -273,11 +273,11 @@ class Shopping(object):
     :param rating:
     :param customers:
     :param url:
-    :param align:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     options = options or {}
     container = self.context.rptObj.ui.div([])
@@ -296,12 +296,12 @@ class Shopping(object):
 
     Attributes:
     ----------
-    :param tags:
-    :param align:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param tags: List.
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     container = self.context.rptObj.ui.div([], align=align, width=width, height=height, options=options, profile=profile)
     for tag in tags:
@@ -326,11 +326,11 @@ class Shopping(object):
     ----------
     :param component:
     :param name:
-    :param align:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     label = self.context.rptObj.ui.text(name)
     label.style.css.background = self.context.rptObj.theme.colors[-1]
@@ -339,8 +339,8 @@ class Shopping(object):
     label.style.css.border_radius = "0 0 20px 0"
     container = self.context.rptObj.ui.div([label, self.context.rptObj.ui.div(component, align=align).css({'margin': '5px'})],
                 align="left", width=width, height=height, options=options, profile=profile)
-
     container.style.css.border = "1px solid %s" % self.context.rptObj.theme.colors[-1]
+    container.label = label
     return container
 
   def quality(self, votes, url=None, align="left", width=(300, 'px'), height=("auto", ''), options=None, profile=None):
@@ -353,11 +353,11 @@ class Shopping(object):
     ----------
     :param votes: Dictionary. Number of customer review per rating
     :param url: String. Url template for product link to those customer rating comments
-    :param align:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     vote_records = []
     dflt_options = {"unit": '%', "values": True, "background": self.context.rptObj.theme.colors[6], 'borders': True}
@@ -382,11 +382,11 @@ class Shopping(object):
     :param question:
     :param answers:
     :param url:
-    :param align:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     table = self.context.rptObj.ui.layouts.table(options={"header": False})
     if url is not None:
@@ -416,11 +416,11 @@ class Shopping(object):
     ----------
     :param pictures:
     :param selected:
-    :param align:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     container = self.context.rptObj.ui.div([], align=align, width=width, height=height, options=options, profile=profile)
     left_panel = self.context.rptObj.ui.div([], align=align, width=(50, 'px'), height=(100, "%"), options=options, profile=profile)
@@ -459,11 +459,11 @@ class Shopping(object):
     ----------
     :param flag:
     :param comment:
-    :param align:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     comp_availability = self.context.rptObj.ui.text("In Stock", align=align, width=width, height=height, options=options, profile=profile)
     if flag:
@@ -484,11 +484,11 @@ class Shopping(object):
     Attributes:
     ----------
     :param number:
-    :param align:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     container = self.context.rptObj.ui.div([], align=align, width=width, height=height, options=options,
                                                   profile=profile)
@@ -516,10 +516,10 @@ class Shopping(object):
     :param price:
     :param description:
     :param url:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     options = options or {}
     container = self.context.rptObj.ui.div([], align='left', width=width, height=height, options=options,
@@ -557,18 +557,39 @@ class Shopping(object):
       container.add(container.description)
     return container
 
-  def item(self, title, image, location="", limit="", date='N/A', tags=None, price=None, details=None, align="center", width=(200, 'px'), height=(None, "px"), options=None):
-    ool = self.context.rptObj.ui.col()
-    ool.add(self.context.rptObj.studio.shop.bar(title, price, details))
+  def item(self, title, image, location="", limit="", date='N/A', tags=None, price=None, details=None, align="center",
+           width=(200, 'px'), height=(None, "px"), options=None, profile=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param title:
+    :param image:
+    :param location:
+    :param limit:
+    :param date:
+    :param tags:
+    :param price:
+    :param details:
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
+    """
+    ool = self.context.rptObj.ui.col(profile=profile)
+    ool.add(self.context.rptObj.studio.shop.bar(title, price, details, profile=profile))
     if location:
-      ool.add(self.context.rptObj.ui.div([self.context.rptObj.ui.icon("fas fa-map-marker-alt").css({"margin-right": '10px'}), self.context.rptObj.ui.text(location)]))
+      ool.add(self.context.rptObj.ui.div([self.context.rptObj.ui.icon("fas fa-map-marker-alt", profile=profile).css({"margin-right": '10px'}), self.context.rptObj.ui.text(location)]))
     if limit:
-      ool.add(self.context.rptObj.ui.div([self.context.rptObj.ui.icon("fas fa-male").css({"margin-right": '15px'}), self.context.rptObj.ui.text(limit)]))
+      ool.add(self.context.rptObj.ui.div([self.context.rptObj.ui.icon("fas fa-male", profile=profile).css({"margin-right": '15px'}), self.context.rptObj.ui.text(limit)]))
     if tags:
-      ool.add(self.context.rptObj.studio.tags(tags))
-    ool.add(self.context.rptObj.ui.text("Prochaine session").css({"display": 'block', "margin-top": '5px', "color": self.context.rptObj.theme.greys[6]}))
-    ool.add(self.context.rptObj.ui.text(date).css({"display": 'block', 'font-weight': 'bold'}))
-    ool.add(self.context.rptObj.ui.button("Book this item", align="center").css({"margin": '15px auto 5px'}))
+      ool.add(self.context.rptObj.studio.tags(tags, profile=profile))
+    ool.add(self.context.rptObj.ui.text("Prochaine session", profile=profile).css({"display": 'block', "margin-top": '5px', "color": self.context.rptObj.theme.greys[6]}))
+    ool.add(self.context.rptObj.ui.text(date, profile=profile).css({"display": 'block', 'font-weight': 'bold'}))
+    ool.add(self.context.rptObj.ui.button("Book this item", align="center", profile=profile).css({"margin": '15px auto 5px'}))
     vim = self.context.rptObj.ui.vignets.image(content=ool, align=align, width=width, height=height, options=options, render='col')
     # vim.image.style.css.border_radius = "20px 20px 0 0 "
     vim.style.css.shadow_box()
@@ -578,7 +599,6 @@ class Shopping(object):
     return vim
 
 
-class Resto(object):
+class Resto(Shopping):
+  pass
 
-  def __init__(self, context):
-    self = context
