@@ -213,9 +213,9 @@ class Event(object):
     """
     flip_box = self.context.rptObj.ui.div(width=width, height=height)
     if orientation.lower() == 'v':
-      flip_box.style.add_classes.div.rorate_vertical()
+      flip_box.style.add_classes.div.rotate_vertical()
     else:
-      flip_box.style.add_classes.div.rorate_horizontal()
+      flip_box.style.add_classes.div.rotate_horizontal()
 
     flip_box.style.css.background_color = "transparent"
     flip_box.style.css.margin = "0 auto"

@@ -267,6 +267,23 @@ class Shopping(object):
     """
     Description:
     ------------
+    Add rating component for customers review
+
+    :tags: Review, Comment
+    :categories: studio
+
+    Usage::
+
+      page.studio.shop.rating(2, 85, "")
+
+    Underlying HTML Objects:
+
+      - :class:`epyk.core.html.HtmlOthers.Stars`
+      - :class:`epyk.core.html.HtmlLinks.ExternalLink`
+
+    Templates:
+
+      shop.py
 
     Attributes:
     ----------
@@ -600,5 +617,50 @@ class Shopping(object):
 
 
 class Resto(Shopping):
-  pass
+
+  def compostion(self, text, weight, percentage, background=None, width=(80, 'px'), height=(120, 'px'), options=None, profile=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param text:
+    :param weight:
+    :param percentage:
+    :param background:
+    :param width:
+    :param height:
+    :param options:
+    :param profile:
+    """
+    container = self.context.rptObj.ui.div(width=width, height=height, options=options, profile=profile)
+    container.style.css.display = "inline-block"
+    container.title = self.context.rptObj.ui.text(text, align="center")
+    container.title.style.css.font_factor(-3)
+    container.style.css.position = "relative"
+    container.add(container.title)
+    container.weight = self.context.rptObj.ui.text("%s %s" % (weight[0], weight[1]), align="center")
+    container.weight.style.css.font_factor(8)
+    container.weight.style.css.bold()
+    container.weight.style.css.padding_top = 10
+    container.add(container.weight)
+    if background is None:
+      if percentage < 10:
+        container.style.css.background = self.context.rptObj.theme.success[0]
+      elif percentage < 50:
+        container.style.css.background = self.context.rptObj.theme.warning[0]
+      else:
+        container.style.css.background = self.context.rptObj.theme.danger[0]
+    container.style.css.border_radius = 25
+    container.style.css.padding_top = 10
+    container.percentage = self.context.rptObj.ui.div("%s%%" % percentage, width=(50, 'px'))
+    container.percentage.style.css.position = "absolute"
+    container.percentage.style.css.text_align = "center"
+    container.percentage.style.css.bottom = 0
+    container.percentage.style.css.margin_left = 15
+    container.percentage.style.css.border_radius = "20px 20px 0 0"
+    container.add(container.percentage)
+    container.percentage.style.css.background = "white"
+    return container
 

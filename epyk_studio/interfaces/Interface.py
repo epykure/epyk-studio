@@ -21,8 +21,8 @@ from epyk.core.js.primitives import JsObjects
 
 class Studio(Interface.Components):
 
-  def __init__(self, rptObj):
-    super(Studio, self).__init__(rptObj)
+  def __init__(self, page=None):
+    super(Studio, self).__init__(page)
 
   def locked(self, component, day, month, year, hour=0, minute=0, second=0, options=None):
     """
