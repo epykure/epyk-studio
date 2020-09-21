@@ -10,6 +10,7 @@ from epyk_studio.lang import get_lang
 
 
 class News(object):
+
   def __init__(self, context):
     self.context = context
 
@@ -32,10 +33,12 @@ class News(object):
     :param url:
     :param image:
     :param category:
+    :param time:
     :param align:
-    :param width:
-    :param height:
-    :param options:
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     container = self.context.rptObj.ui.col(align=align, width=width, height=height, position="top")
     container.style.css.margin = "20px auto"
@@ -196,7 +199,7 @@ class News(object):
     table.set_header(get_lang(options.get("lang")).RATES_HEADER)
     return table
 
-  def share(self, facebook=True, messenger=True, twitter=True, mail=True):
+  def share(self, facebook=True, messenger=True, twitter=True, mail=True, options=None, profile=None):
     """
     Description:
     ------------
@@ -207,6 +210,8 @@ class News(object):
     :param messenger: Boolean. Flag to mention if the messenger shortcut need to be displayed
     :param twitter: Boolean. Flag to mention if the twitter shortcut need to be displayed
     :param mail: Boolean. Flag to mention if the mail shortcut need to be displayed
+    :param options:
+    :param profile:
     """
     component = self.context.rptObj.ui.div()
     if facebook:
@@ -306,7 +311,7 @@ class News(object):
       container.add(comp_tag)
     return container
 
-  def border(self):
+  def border(self, options=None, profile=No):
     """
     Description:
     ------------
@@ -318,13 +323,15 @@ class News(object):
     return self.context.rptObj.ui.div("&nbsp;").css({"border-left": '1px solid %s' % self.context.rptObj.theme.greys[5],
                                                      "margin": '5px 0', "display": 'inline-block', 'width': 'auto'})
 
-  def delimiter(self):
+  def delimiter(self, options=None, profile=None):
     """
     Description:
     ------------
 
     Attributes:
     ----------
+    :param options:
+    :param profile:
     """
     hr = self.context.rptObj.ui.layouts.hr()
     hr.style.css.padding = "10px 20%"
@@ -342,7 +349,7 @@ class News(object):
     :param width:
     :param height:
     :param options:
-    :param profile:
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     hr = self.context.rptObj.ui.layouts.hr()
     hr.style.css.padding = 0
@@ -370,7 +377,7 @@ class News(object):
     :param width:
     :param height:
     :param options:
-    :param profile:
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     component = self.context.rptObj.ui.div(align=align, width=width, height=height, options=options, profile=profile)
     icon = self.context.rptObj.ui.icons.awesome(icon)
@@ -396,7 +403,7 @@ class News(object):
     :param align:
     :param htmlCode:
     :param tooltip:
-    :param profile:
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     :param options:
     """
     button = self.context.rptObj.ui.button(text, icon, width=width, height=height, options=options, tooltip=tooltip, profile=profile, align=align)
@@ -418,7 +425,7 @@ class News(object):
     :param width:
     :param height:
     :param options:
-    :param profile:
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     size = (height[0] - 20) / (len(records) - 1)
     frgs, dflt_size = [], 0
@@ -441,13 +448,29 @@ class News(object):
 
   def search(self, text='', placeholder=None, color=None, height=(None, "px"), htmlCode=None,
              tooltip='', extensible=True, options=None, profile=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param text:
+    :param placeholder:
+    :param color:
+    :param height:
+    :param htmlCode:
+    :param tooltip:
+    :param extensible:
+    :param options:
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
+    """
     options = options or {}
     placeholder = placeholder or get_lang(options.get('lang')).PLACEHOLDER_SEARCH
     s = self.context.rptObj.ui.inputs.search(text=text, placeholder=placeholder, color=color, height=height,
          htmlCode=htmlCode, tooltip=tooltip, extensible=extensible, options=options, profile=profile)
     return s
 
-  def audio(self, text, url, icon="fas fa-volume-up"):
+  def audio(self, text, url, icon="fas fa-volume-up", options=None, profile=None):
     """
     Description:
     ------------
@@ -457,6 +480,8 @@ class News(object):
     :param text:
     :param url:
     :param icon:
+    :param options:
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     icon = self.context.rptObj.ui.icons.awesome(icon)
     icon.icon.style.css.font_factor(0)
@@ -468,7 +493,7 @@ class News(object):
     link.style.css.padding = "2px 5px"
     return link
 
-  def increase(self, fill=None, border=None, width=(30, "px"), height=(30, "px")):
+  def increase(self, fill=None, border=None, width=(30, "px"), height=(30, "px"), options=None, profile=None):
     """
     Description:
     ------------
@@ -483,13 +508,15 @@ class News(object):
     :param border:
     :param width:
     :param height:
+    :param options:
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     svg = self.context.rptObj.ui.pictos.path(fill=fill, stroke=border, width=width, height=height,
       path="M2.03,56.52c-2.66,2.58-2.72,6.83-0.13,9.49c2.58,2.66,6.83,2.72,9.49,0.13l27.65-26.98l23.12,22.31 c2.67,2.57,6.92,2.49,9.49-0.18l37.77-38.22v19.27c0,3.72,3.01,6.73,6.73,6.73s6.73-3.01,6.73-6.73V6.71h-0.02 c0-1.74-0.67-3.47-2-4.78c-1.41-1.39-3.29-2.03-5.13-1.91H82.4c-3.72,0-6.73,3.01-6.73,6.73c0,3.72,3.01,6.73,6.73,6.73h17.63 L66.7,47.2L43.67,24.97c-2.6-2.5-6.73-2.51-9.33,0.03L2.03,56.52L2.03,56.52z"
     )
     return svg
 
-  def decrease(self, fill=None, border=None, width=(30, "px"), height=(30, "px")):
+  def decrease(self, fill=None, border=None, width=(30, "px"), height=(30, "px"), options=None, profile=Non):
     """
     Description:
     ------------
@@ -504,6 +531,8 @@ class News(object):
     :param border:
     :param width:
     :param height:
+    :param options:
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     svg = self.context.rptObj.ui.pictos.path(fill=fill, stroke=border, width=width, height=height,
       path="M2.03,11.52C-0.63,8.94-0.68,4.69,1.9,2.03c2.58-2.66,6.83-2.72,9.49-0.13l27.65,26.98L62.16,6.57 c2.67-2.57,6.92-2.49,9.49,0.18l37.77,38.22V25.7c0-3.72,3.01-6.73,6.73-6.73s6.73,3.01,6.73,6.73v35.63h-0.02 c0,1.74-0.67,3.47-2,4.78c-1.41,1.39-3.29,2.03-5.13,1.91H82.4c-3.72,0-6.73-3.01-6.73-6.73c0-3.72,3.01-6.73,6.73-6.73h17.63 L66.7,20.84L43.67,43.07c-2.6,2.5-6.73,2.51-9.33-0.03L2.03,11.52L2.03,11.52z"

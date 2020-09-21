@@ -34,14 +34,34 @@ class Blog(object):
     ------------
     Add a line delimiter to the page
 
+    :tags: Layout, Delimiter
+    :categories: studio
+
+    Usage::
+
+      page.studio.blog.delimiter()
+
+    Related Pages:
+
+      https://www.w3schools.com/tags/tag_hr.asp
+      https://www.w3schools.com/howto/howto_css_style_hr.asp
+
+    Underlying HTML Objects:
+
+      - :class:`epyk.core.html.HtmlOthers.Hr`
+
+    Templates:
+
+      blog.py
+
     Attributes:
     ----------
     :param size: Integer. The size of the line.
     :param count: Integer. The number of lines
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     hr = self.context.rptObj.ui.layouts.hr(count, width=width, height=height, align=None, options=options, profile=profile)
     hr.style.css.padding = "0 20%"
@@ -54,48 +74,99 @@ class Blog(object):
     ------------
     Add a title to the page
 
+    :tags: Text
+    :categories: studio
+
+    Usage::
+
+      page.studio.blog.title("This is a title")
+
+    Related Pages:
+
+      https://www.w3schools.com/tags/tag_hn.asp
+
+    Underlying HTML Objects:
+
+      - :class:`epyk.core.html.HtmlText.Title`
+
+    Templates:
+
+      blog.py
+
     Attributes:
     ----------
-    :param text: String.
+    :param text: String. The text for the title
     :param width: Optional. A tuple with the integer for the component width and its unit
     :param height: Optional. A tuple with the integer for the component height and its unit
-    :param options:
-    :param profile:
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     text = self.context.rptObj.py.encode_html(text)
     title = self.context.rptObj.ui.title(text, width=width, height=height, options=options, profile=profile)
     title.style.css.white_space = 'normal'
     return title
 
-  def link(self, text, url, width=(100, '%'), height=(30, 'px'), options=None, profile=None):
+  def link(self, text, url, height=(30, 'px'), options=None, profile=None):
     """
     Description:
     ------------
+    Add a link to the page
+
+    :tags: Text, Link
+    :categories: Studio, Text
+
+    Usage::
+
+      page.studio.blog.title("google", "www.google.com")
+
+    Related Pages:
+
+      https://www.w3schools.com/tags/att_a_href.asp
+
+    Underlying HTML Objects:
+
+      - :class:`epyk.core.html.HtmlLinks.ExternalLink`
+
+    Templates:
+
+      blog.py
 
     Attributes:
     ----------
-    :param text:
-    :param url:
-    :param width: Optional. A tuple with the integer for the component width and its unit
+    :param text: String. The text to be displayed
+    :param url: String. The underlying url for the link
     :param height: Optional. A tuple with the integer for the component height and its unit
-    :param options:
-    :param profile:
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     text = self.context.rptObj.py.encode_html(text)
-    return self.context.rptObj.ui.link(text, url, width=width, height=height, options=options, profile=profile)
+    return self.context.rptObj.ui.link(text, url, height=height, options=options, profile=profile)
 
   def italic(self, text, width=(100, '%'), height=(None, 'px'), options=None, profile=None):
     """
     Description:
     ------------
 
+    :tags: Text
+    :categories: Studio, Text
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
+      blog.py
+
     Attributes:
     ----------
-    :param text:
+    :param text: String. The text to be displayed
     :param width: Optional. A tuple with the integer for the component width and its unit
     :param height: Optional. A tuple with the integer for the component height and its unit
-    :param options:
-    :param profile:
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     text = self.context.rptObj.py.encode_html(text)
     return self.context.rptObj.ui.tags.i(text, width=width, height=height, options=options, profile=profile)
@@ -105,13 +176,26 @@ class Blog(object):
     Description:
     ------------
 
+    :tags:
+    :categories:
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
+      blog.py
+
     Attributes:
     ----------
-    :param text:
+    :param text: String. The text to be displayed
     :param width: Optional. A tuple with the integer for the component width and its unit
     :param height: Optional. A tuple with the integer for the component height and its unit
-    :param options:
-    :param profile:
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     text = self.context.rptObj.py.encode_html(text)
     return self.context.rptObj.ui.text(text, align="center", width=width, height=height, options=options, profile=profile)
@@ -121,14 +205,27 @@ class Blog(object):
     Description:
     ------------
 
+    :tags:
+    :categories:
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
+      blog.py
+
     Attributes:
     ----------
     :param values:
     :param selected:
     :param width: Optional. A tuple with the integer for the component width and its unit
     :param height: Optional. A tuple with the integer for the component height and its unit
-    :param options:
-    :param profile:
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     bcrumb = self.context.rptObj.ui.breadcrumb(values, selected, width, height, options, profile)
     return bcrumb
@@ -138,15 +235,28 @@ class Blog(object):
     Description:
     ------------
 
+    :tags:
+    :categories:
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
+      blog.py
+
     Attributes:
     ----------
-    :param text:
-    :param css:
-    :param align:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param text: String. The text to be displayed
+    :param css: Dictionary. The CSS attributes to be added
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param width: Optional. A tuple with the integer for the component width and its unit
+    :param height: Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     text = self.context.rptObj.py.encode_html(text)
     text = self.context.rptObj.py.markdown.resolve(text, css_attrs=css)
@@ -157,17 +267,31 @@ class Blog(object):
     """
     Description:
     ------------
+    Add a quote on the page
+
+    :tags: Text, Feedbacks, Comment
+    :categories: Text, Studio
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
+      blog.py
 
     Attributes:
     ----------
-    :param text:
-    :param author:
-    :param job:
-    :param align:
+    :param text: String. Teh quote
+    :param author: String. Text the author for the quote
+    :param job: String. Optional. The job of the author
+    :param align: String. Optional. A string with the horizontal position of the component
     :param width: Optional. A tuple with the integer for the component width and its unit
     :param height: Optional. A tuple with the integer for the component height and its unit
-    :param options:
-    :param profile:
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     component = self.context.rptObj.ui.div(align=align, width=width, height=height, options=options, profile=profile)
     component.style.padding_left = 30
@@ -202,17 +326,30 @@ class Blog(object):
     Description:
     ------------
 
+    :tags:
+    :categories:
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
+      blog.py
+
     Attributes:
     ----------
-    :param text:
-    :param icon:
+    :param text: String. The text to be displayed
+    :param icon: String. Optional. The component icon content from font-awesome references
     :param border:
     :param background:
-    :param align:
+    :param align: String. Optional. A string with the horizontal position of the component
     :param width: Optional. A tuple with the integer for the component width and its unit
     :param height: Optional. A tuple with the integer for the component height and its unit
-    :param options:
-    :param profile:
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     button = self.context.rptObj.ui.button(text, icon=icon, width=width, align=align, height=height, options=options, profile=profile)
     button.style.clear()
@@ -221,24 +358,39 @@ class Blog(object):
     button.style.hover({"color": self.context.rptObj.theme.colors[-1]})
     return button
 
-  def picture(self, image, label=None, path=None, width=(300, 'px'), align="center", height=(None, 'px'), options=None, profile=False):
+  def picture(self, image, label=None, path=None, width=(300, 'px'), align="center", height=(None, 'px'), htmlCode=None, options=None, profile=False):
     """
     Description:
     ------------
+    Add a picture to the page
+
+    :tags: Picture
+    :categories: Studio, Image
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
+      blog.py
 
     Attributes:
     ----------
-    :param image:
-    :param label:
-    :param path:
-    :param align:
+    :param image: String. The picture name
+    :param label: String. Optional. The text to be deplayed with the picture
+    :param path: String. Optional. The picture path
+    :param align: String. Optional. A string with the horizontal position of the component
     :param width: Optional. A tuple with the integer for the component width and its unit
     :param height: Optional. A tuple with the integer for the component height and its unit
-    :param options:
-    :param profile:
+    :param htmlCode: String. Optional. An identifier for this component (on both Python and Javascript side)
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     if label is None:
-      img = self.context.rptObj.ui.img(image, path=path, width=width, height=height, align=align, options=options, profile=profile)
+      img = self.context.rptObj.ui.img(image, path=path, width=width, height=height, align=align, htmlCode=htmlCode, options=options, profile=profile)
       img.style.css.margin_top = 5
       img.style.css.margin_bottom = 5
       return img
@@ -271,23 +423,37 @@ class Blog(object):
     """
     Description:
     ------------
+    Add a video to the page
+
+    :tags: Video
+    :categories: Studio
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
+      blog.py
 
     Attributes:
     ----------
     :param video:
-    :param label:
-    :param align:
+    :param label: String. Optional. The text of label to be added to the component
+    :param align: String. Optional. A string with the horizontal position of the component
     :param width: Optional. A tuple with the integer for the component width and its unit
     :param height: Optional. A tuple with the integer for the component height and its unit
-    :param htmlCode:
-    :param profile:
-    :param options:
+    :param htmlCode: String. Optional. An identifier for this component (on both Python and Javascript side)
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     if label is None:
-      return self.context.rptObj.ui.media.video(video, width=width, height=height, align=align)
+      return self.context.rptObj.ui.media.video(video, width=width, height=height, align=align, htmlCode=htmlCode)
 
     component = self.context.rptObj.ui.div(align=align, width=width, height=height, options=options, profile=profile)
-    component.video = self.context.rptObj.ui.media.video(video, width=width, height=height, options=options, profile=profile)
+    component.video = self.context.rptObj.ui.media.video(video, width=width, height=height, htmlCode=htmlCode, options=options, profile=profile)
     component.style.css.position = "relative"
     component.add(component.video)
     if not hasattr(label, 'options'):
@@ -314,14 +480,27 @@ class Blog(object):
     Description:
     ------------
 
+    :tags:
+    :categories:
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
+      blog.py
+
     Attributes:
     ----------
     :param link:
     :param width: Optional. A tuple with the integer for the component width and its unit
     :param height: Optional. A tuple with the integer for the component height and its unit
-    :param htmlCode:
-    :param profile:
-    :param options:
+    :param htmlCode: String. Optional. An identifier for this component (on both Python and Javascript side)
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
+    :param options: Dictionary. Optional. Specific Python options available for this component
     """
     return self.context.rptObj.ui.media.youtube(link, width=width, height=height, htmlCode=htmlCode, profile=profile, options=options)
 
@@ -330,15 +509,28 @@ class Blog(object):
     Description:
     ------------
 
+    :tags:
+    :categories:
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
+      blog.py
+
     Attributes:
     ----------
     :param date:
-    :param icon:
-    :param align:
+    :param icon: String. Optional. The component icon content from font-awesome references
+    :param align: String. Optional. An identifier for this component (on both Python and Javascript side)
     :param width: Optional. A tuple with the integer for the component width and its unit
     :param height: Optional. A tuple with the integer for the component height and its unit
-    :param options:
-    :param profile:
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
+    :param options: Dictionary. Optional. Specific Python options available for this component
     """
     options = options or {}
     country = get_lang(options.get("lang")).country(options.get("country"))
@@ -384,16 +576,29 @@ class Blog(object):
     Description:
     ------------
 
+    :tags:
+    :categories:
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
+      blog.py
+
     Attributes:
     ----------
     :param name:
     :param url:
     :param date:
-    :param align:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
+    :param options: Dictionary. Optional. Specific Python options available for this component
     """
     component = self.context.rptObj.ui.div(align=align, width=width, height=height, options=options, profile=profile)
     options = options or {}
@@ -412,19 +617,32 @@ class Blog(object):
     Description:
     ------------
 
+    :tags:
+    :categories:
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
+      blog.py
+
     Related Pages:
 
       https://www.w3schools.com/howto/howto_js_typewriter.asp
 
     Attributes:
     ----------
-    :param text:
-    :param width:
-    :param height:
-    :param align:
-    :param htmlCode:
-    :param profile:
-    :param options:
+    :param text: String. The text to be displayed
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param htmlCode: String. Optional. An identifier for this component (on both Python and Javascript side)
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
+    :param options: Dictionary. Optional. Specific Python options available for this component
     """
     t = self.context.rptObj.ui.text(text, width=width, height=height, align=align, htmlCode=htmlCode, profile=profile, options=options)
     t.write()
@@ -435,19 +653,28 @@ class Blog(object):
     Description:
     ------------
 
+    :tags:
+    :categories:
+
     Related Pages:
 
       https://nosmoking.developpez.com/demos/css/css-marque-rtl.html
 
+    Underlying HTML Objects:
+
+    Templates:
+
+      blog.py
+
     Attributes:
     ----------
-    :param text:
-    :param width:
-    :param height:
-    :param align:
-    :param htmlCode:
-    :param profile:
-    :param options:
+    :param text: String. The text to be displayed
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param align: String. Optional. A string with the horizontal position of the component
+    :param htmlCode: String. Optional. An identifier for this component (on both Python and Javascript side)
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
+    :param options: Dictionary. Optional. Specific Python options available for this component
     """
     t = self.context.rptObj.ui.text(text, width=width, height=height, align=align, htmlCode=htmlCode, profile=profile, options=options)
     t.style.effects.sliding()
@@ -460,6 +687,20 @@ class Blog(object):
     """
     Description:
     ------------
+    Add a text on the page at a specific position
+
+    :tags: Text, Layout
+    :categories: Text, Studio
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
+      blog.py
 
     Attributes:
     ----------
@@ -469,9 +710,9 @@ class Blog(object):
     :param bottom:
     :param left:
     :param font_family:
-    :param htmlCode:
-    :param profile:
-    :param options:
+    :param htmlCode: String. Optional. An identifier for this component (on both Python and Javascript side)
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
+    :param options: Dictionary. Optional. Specific Python options available for this component
     """
     text = self.context.rptObj.studio.text(text, htmlCode=htmlCode, profile=profile, options=options)
     if right is not None:
@@ -496,6 +737,14 @@ class Gallery(Blog):
     Description:
     ------------
     Mosaic of pictures
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
 
     Attributes:
     ----------
@@ -606,6 +855,14 @@ class Gallery(Blog):
     Description:
     ------------
 
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
     Attributes:
     ----------
     :param images: List. Optional. The list with the pictures
@@ -636,6 +893,14 @@ class Gallery(Blog):
     Description:
     ------------
 
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
     Attributes:
     ----------
     :param count:
@@ -654,6 +919,14 @@ class Gallery(Blog):
     """
     Description:
     ------------
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
 
     Related Pages:
 
@@ -688,6 +961,14 @@ class Gallery(Blog):
     Description:
     ------------
 
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
     Attributes:
     ----------
     :param url:
@@ -718,6 +999,14 @@ class Gallery(Blog):
     Set a background as an image.
     This is wrapping the image.background base component
 
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
     Attributes:
     ----------
     :param url:
@@ -736,6 +1025,14 @@ class Gallery(Blog):
     ------------
     Set a background as an image.
     This is wrapping the image.background base component
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
 
     Attributes:
     ----------
@@ -756,6 +1053,14 @@ class Gallery(Blog):
     """
     Description:
     ------------
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
 
     Related Pages:
 
@@ -866,6 +1171,14 @@ class Gallery(Blog):
     Set a background as an image.
     This is wrapping the image.background base component
 
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
     Attributes:
     ----------
     :param url:
@@ -884,6 +1197,14 @@ class Gallery(Blog):
     """
     Description:
     ------------
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
 
     Attributes:
     ----------
@@ -906,6 +1227,14 @@ class Gallery(Blog):
     """
     Description:
     ------------
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
 
     Attributes:
     ----------
@@ -990,14 +1319,22 @@ class Gallery(Blog):
     Description:
     ------------
 
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
     Attributes:
     ----------
-    :param path:
-    :param urls:
-    :param width:
-    :param height:
-    :param options:
-    :param profile:
+    :param path: String. The path with the pictures
+    :param urls: Dictionary. Optional.
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     """
     list = []
     for f in os.listdir(path):

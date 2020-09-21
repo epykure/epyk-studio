@@ -184,7 +184,7 @@ class Shopping(object):
     div.prev_price = prev_price
     div.price = new_price
     div.discount = discount
-    prices = self.context.rptObj.ui.div([prev_price, new_price], width=("auto, "))
+    prices = self.context.rptObj.ui.div([prev_price, new_price], width=("auto", ""))
     prices.style.css.display = "inline-block"
     div.add(prices)
     discount.style.css.float = "right"
