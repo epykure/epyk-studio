@@ -311,7 +311,7 @@ class News(object):
       container.add(comp_tag)
     return container
 
-  def border(self, options=None, profile=No):
+  def border(self, options=None, profile=None):
     """
     Description:
     ------------
@@ -516,7 +516,7 @@ class News(object):
     )
     return svg
 
-  def decrease(self, fill=None, border=None, width=(30, "px"), height=(30, "px"), options=None, profile=Non):
+  def decrease(self, fill=None, border=None, width=(30, "px"), height=(30, "px"), options=None, profile=None):
     """
     Description:
     ------------
