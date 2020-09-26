@@ -676,12 +676,13 @@ class Blog(object):
     :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
     :param options: Dictionary. Optional. Specific Python options available for this component
     """
-    t = self.context.rptObj.ui.text(text, width=width, height=height, align=align, htmlCode=htmlCode, profile=profile, options=options)
+    t = self.context.rptObj.ui.div(text, width=width, height=height, align=align, htmlCode=htmlCode, profile=profile, options=options)
     t.style.effects.sliding()
-    self.context.rptObj.body.style.css.overflow_x = "hidden"
-    t.style.hover({"animation-play-state": 'paused', "-webkit-animation-play-state": 'paused',
-                   '-moz-animation-play-state': 'paused', '-o-animation-play-state': 'paused'})
-    return t
+    #t.style.hover({"animation-play-state": 'paused', "-webkit-animation-play-state": 'paused', '-moz-animation-play-state': 'paused', '-o-animation-play-state': 'paused'})
+    cont = self.context.rptObj.ui.div(t, width=(100, "%"), height=("auto", ''))
+    cont.style.css.overflow_x = "hidden"
+    cont.style.css.overflow_y = "hidden"
+    return cont
 
   def absolute(self, text, top=None, right=None, bottom=None, left=None, font_family=None, htmlCode=None, profile=None, options=None):
     """
@@ -763,7 +764,7 @@ class Gallery(Blog):
     grid.style.css.margin_top = 20
     grid.style.css.overflow = 'hidden'
     grid.style.css.margin_bottom = 20
-    row = self.context.rptObj.ui.row()
+    row = self.context.rptObj.ui.row(options=dflt_options)
     grid.pictures = []
     if path is not None and pictures is None:
       pictures = []
@@ -780,7 +781,7 @@ class Gallery(Blog):
 
       if i % columns == 0:
         grid.add(row)
-        row = self.context.rptObj.ui.row()
+        row = self.context.rptObj.ui.row(options=dflt_options)
       if not hasattr(picture, 'options'):
         picture = self.context.rptObj.ui.img(self.context.rptObj.py.encode_html(picture), path=self.context.rptObj.py.encode_html(path), htmlCode="%s_%s" % (grid.htmlCode, i))
         picture.attr["data-next"] = "%s_%s" % (grid.htmlCode, min(i + 1, len(pictures) - 1))
@@ -1353,3 +1354,164 @@ class Gallery(Blog):
         hr.style.css.width = "calc(100% - 10px)"
         list.append(self.context.rptObj.ui.col([div, hr]))
     return self.context.rptObj.ui.list(list, width=width, height=height, options=options, profile=profile)
+
+  def icons(self, icons=None, columns=6, width=(None, '%'), height=('auto', ''), options=None, profile=None):
+    """
+    Description:
+    ------------
+    Mosaic of pictures
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
+    Attributes:
+    ----------
+    :param icons: List. Optional. The list with the pictures
+    :param columns: Integer. Optional. The number of column for the mosaic component
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
+    """
+    dflt_options = {}
+    if options is not None:
+      dflt_options.update(options)
+    grid = self.context.rptObj.ui.grid(width=width, height=height, options=dflt_options, profile=profile)
+    grid.style.css.margin_top = 20
+    grid.style.css.overflow = 'hidden'
+    grid.style.css.margin_bottom = 20
+    row = self.context.rptObj.ui.row(options=dflt_options)
+    grid.icons = []
+    grid.texts = {}
+    for i, icon in enumerate(icons):
+      if dflt_options.get("max") is not None and len(grid.icons) > dflt_options.get("max"):
+        break
+
+      if i % columns == 0:
+        grid.add(row)
+        row = self.context.rptObj.ui.row(options=dflt_options)
+      text = None
+      if not hasattr(icon, 'options'):
+        if isinstance(icon, dict):
+          if not 'htmlCode' in icon:
+            icon["htmlCode"] = "%s_%s" % (grid.htmlCode, i)
+          if not 'align' in icon:
+            icon['align'] = "center"
+          if "text" in icon:
+            text = self.context.rptObj.ui.text(icon["text"], options=dflt_options)
+            text.style.css.bold()
+            text.style.css.white_space = "nowrap"
+            grid.texts[i] = text
+            del icon["text"]
+
+          icon = self.context.rptObj.ui.icon(**icon)
+        else:
+          icon = self.context.rptObj.ui.icon(icon, htmlCode="%s_%s" % (grid.htmlCode, i), align="center")
+        icon.style.css.font_factor(15)
+        icon.style.css.text_align = "center"
+        grid.icons.append(icon)
+      if text is not None:
+        text.style.css.display = "inline-block"
+        text.style.css.width = "100%"
+        text.style.css.text_align = "center"
+        row.add(self.context.rptObj.ui.col([icon, text], align="center", options=dflt_options))
+      else:
+        row.add(icon)
+      row.attr["class"].add("mt-3")
+      icon.parent = row[-1]
+    if len(row):
+      for i in range(columns - len(row)):
+        row.add(self.context.rptObj.ui.text("&nbsp;"))
+      row.attr["class"].add("mt-3")
+      grid.add(row)
+    grid.style.css.color = self.context.rptObj.theme.greys[6]
+    grid.style.css.padding_top = 5
+    grid.style.css.padding_bottom = 5
+    return grid
+
+  def images(self, images=None, columns=6, width=(None, '%'), height=('auto', ''), options=None, profile=None):
+    """
+    Description:
+    ------------
+    Mosaic of pictures
+
+    Usage::
+
+    Related Pages:
+
+    Underlying HTML Objects:
+
+    Templates:
+
+    Attributes:
+    ----------
+    :param images: List. Optional. The list with the pictures
+    :param columns: Integer. Optional. The number of column for the mosaic component
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
+    """
+    dflt_options = {}
+    if options is not None:
+      dflt_options.update(options)
+    grid = self.context.rptObj.ui.grid(width=width, height=height, options=dflt_options, profile=profile)
+    grid.style.css.margin_top = 20
+    grid.style.css.overflow = 'hidden'
+    grid.style.css.margin_bottom = 20
+    row = self.context.rptObj.ui.row(options=dflt_options)
+    grid.images = []
+    grid.texts = {}
+    for i, image in enumerate(images):
+      if dflt_options.get("max") is not None and len(grid.images) > dflt_options.get("max"):
+        break
+
+      if i % columns == 0:
+        grid.add(row)
+        row = self.context.rptObj.ui.row(options=dflt_options)
+      text = None
+      if not hasattr(image, 'options'):
+        if isinstance(image, dict):
+          if not 'htmlCode' in image:
+            image["htmlCode"] = "%s_%s" % (grid.htmlCode, i)
+          if not 'align' in image:
+            image['align'] = "center"
+          if "text" in image:
+            text = self.context.rptObj.ui.text(image["text"], options=dflt_options)
+            text.style.css.bold()
+            text.style.css.white_space = "nowrap"
+            grid.texts[i] = text
+            del image["text"]
+
+          image = self.context.rptObj.ui.img(**image)
+        else:
+          image = self.context.rptObj.ui.img(image, htmlCode="%s_%s" % (grid.htmlCode, i), align="center")
+        image.style.css.font_factor(15)
+        image.style.add_classes.div.border_hover()
+        image.style.css.text_align = "center"
+        grid.images.append(image)
+      if text is not None:
+        text.style.css.display = "inline-block"
+        text.style.css.width = "100%"
+        text.style.css.text_align = "center"
+        row.add(self.context.rptObj.ui.col([image, text], align="center", options=dflt_options))
+      else:
+        row.add(image)
+      row.attr["class"].add("mt-3")
+      for r in row:
+        r.attr["class"].add("px-1")
+      image.parent = row[-1]
+    if len(row):
+      for i in range(columns - len(row)):
+        row.add(self.context.rptObj.ui.text("&nbsp;"))
+      for r in row:
+        r.attr["class"].add("px-1")
+      row.attr["class"].add("mt-3")
+      grid.add(row)
+    grid.style.css.color = self.context.rptObj.theme.greys[6]
+    return grid

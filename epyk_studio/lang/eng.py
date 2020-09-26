@@ -16,6 +16,7 @@ PLACEHOLDER_COMMENT = "Let a comment"
 PLACEHOLDER_SEARCH = "Search..."
 
 BUTTON_SUBSCRIBE = "Subscribe"
+BUTTON_SHOW_MORE = "More results"
 
 LABEL_YESTERDAY = "Yesterday"
 LABEL_TIME = {

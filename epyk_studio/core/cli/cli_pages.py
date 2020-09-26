@@ -425,6 +425,117 @@ def transpile(args):
       print("Error in the script %s" % f)
 
 
+def start_parsers(subparser):
+  subparser.set_defaults(func=start)
+  subparser.add_argument('-p', '--port', default=8080, help='''Integer with the port for the app''')
+  subparser.add_argument('-l', '--localhost', default="Y", help='''Y / N flag to specify the hostname to define''')
+  subparser.add_argument('-d', '--debug', default="N", help='''Y / N flag to activate the debug mode of Tornado''')
+
+
+def start(args):
+  import socket
+  import os
+  import tornado.ioloop
+  import epyk_studio.core.cli.Server
+
+  address = '127.0.01'
+  if args.localhost.upper() == 'N':
+    address = socket.gethostbyname(socket.gethostname())
+  print("Server started at: %s:%s" % (address, args.port))
+  app = epyk_studio.core.cli.Server.make_app(os.getcwd(), debug=args.debug.upper()=="Y")
+  app.listen(args.port, address=address)
+  tornado.ioloop.IOLoop.current().start()
+
+
+def add_server_parser(subparser):
+  """
+  Description:
+  ------------
+  Paser for the transpile CLI
+
+  Attributes:
+  ----------
+  :param subparser: subparser
+  """
+  subparser.set_defaults(func=add_server)
+  subparser.add_argument('-n', '--name', help='''The name of the page to be transpiled (without the extension)''')
+  subparser.add_argument('-p', '--path', help='''The path where the new environment will be created: -p /foo/bar''')
+  subparser.add_argument('-s', '--server', help='''The path where the new environment will be created: -p /foo/bar''')
+
+
+def add_server(args):
+  project_path = args.path or os.getcwd()
+  page = os.path.join(project_path, args.name, "server_%s.py" % args.server)
+  if args.server == 'tornado':
+    with open(page, "w") as f:
+      f.write('''
+import socket
+import os
+import importlib
+import sys
+import tornado.ioloop
+import epyk_studio.core.cli.Server
+
+
+class MainHandlerPage(tornado.web.RequestHandler):
+
+  def get(self, name):
+    """
+    Description:
+    ------------
+
+    """
+    sys.path.append(os.path.join(os.getcwd(), 'ui'))
+    mod = __import__("ui.reports.%s" % name, fromlist=['object'])
+    importlib.reload(mod)
+    if self.request.query_arguments:
+      arguments = self.request.query_arguments
+      data = {arg: self.get_argument(arg) for arg in arguments.keys()}
+      if hasattr(mod, 'add_inputs'):
+        mod.add_inputs(data)
+    self.write(mod.page.outs.html())
+
+
+class MainHandlerView(tornado.web.RequestHandler):
+
+  def get(self, name):
+    """
+    Description:
+    ------------
+
+    """
+    content = ""
+    html_file = os.path.join(os.getcwd(), 'ui', 'views', "%s.html" % name)
+    if os.path.exists(html_file):
+      with open(html_file) as f:
+        content = f.read()
+    self.write(content)
+
+
+def make_app(debug=True):
+  """
+  Description:
+  ------------
+
+  Attributes:
+  ----------
+  :param debug:
+  """
+  return tornado.web.Application([
+      (r"/script/(.*)", MainHandlerPage, None),
+      (r"/view/(.*)", MainHandlerView, None),
+  ], debug=debug)
+
+
+if __name__ == '__main__':
+  address = socket.gethostbyname(socket.gethostname())
+  port = 8081
+  print("Server started at: %s:%s" % (address, port))
+  app = make_app()
+  app.listen(port, address=address)
+  tornado.ioloop.IOLoop.current().start()
+  ''')
+
 
 def main():
   """
@@ -434,6 +545,7 @@ def main():
   """
   parser_map = {
     'new': (new_parsers, '''Create new environment'''),
+    'start': (start_parsers, '''start the internal tornado server'''),
     'transpile': (transpile_parser, '''Transpile a script to web objects'''),
     'dashboard': (new_template, '''Create new dashboard'''),
     'management': (new_template, '''Create new Management report'''),
@@ -458,3 +570,10 @@ def main():
   args = arg_parser.parse_args(sys.argv[1:])
   return args.func(args)
 
+
+if __name__ =='__main__':
+  class Namespace:
+    def __init__(self, **kwargs):
+      self.__dict__.update(kwargs)
+
+  start(Namespace(localhost='N', port=8080, debug="Y"))

@@ -11,6 +11,9 @@ from epyk_studio.interfaces.studio import CompStudioVitrine
 from epyk_studio.interfaces.studio import CompStudioEvent
 from epyk_studio.interfaces.studio import CompStudioQuiz
 
+from epyk_studio.interfaces.studio.components import CompStudioButtons
+from epyk_studio.interfaces.studio.components import CompStudioChips
+
 from epyk.interfaces import Interface
 from epyk.core.css import Defaults as Defaults_css
 from epyk.core.html import Defaults as Defaults_html
@@ -542,6 +545,24 @@ class Studio(Interface.Components):
       else:
         div.add(i)
     return div
+
+  @property
+  def buttons(self):
+    """
+    Description:
+    ------------
+
+    """
+    return CompStudioButtons.StudioButtons(self)
+
+  @property
+  def pills(self):
+    """
+    Description:
+    ------------
+
+    """
+    return CompStudioChips.StudioChips(self)
 
   @property
   def shop(self):
