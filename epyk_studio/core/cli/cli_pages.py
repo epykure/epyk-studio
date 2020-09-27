@@ -483,6 +483,8 @@ import importlib
 import sys
 import tornado.ioloop
 
+from epyk_studio.core.Page import Report
+
 
 class MainHandlerPage(tornado.web.RequestHandler):
 
@@ -500,7 +502,13 @@ class MainHandlerPage(tornado.web.RequestHandler):
       data = {arg: self.get_argument(arg) for arg in arguments.keys()}
       if hasattr(mod, 'add_inputs'):
         mod.add_inputs(data)
-    self.write(mod.page.outs.html())
+    if hasattr(mod, 'get_page'):
+      page = Report()
+      page.inputs.update(data)
+      mod.get_page(page)
+      self.write(page.outs.html())
+    else:
+      self.write(mod.page.outs.html())
 
 
 class MainHandlerView(tornado.web.RequestHandler):
@@ -516,6 +524,11 @@ class MainHandlerView(tornado.web.RequestHandler):
     if os.path.exists(html_file):
       with open(html_file) as f:
         content = f.read()
+    if self.request.query_arguments:
+      arguments = self.request.query_arguments
+      data = {arg: self.get_argument(arg) for arg in arguments.keys()}
+      for k, v in data.items():
+        content = content.replace("%%(%s)s" % k, v)
     self.write(content)
 
 
@@ -590,7 +603,9 @@ def view(page):
   if os.path.exists(html_file):
     with open(html_file) as f:
       content = f.read()
-  return content % data
+  for k, v in data.items():
+    content = content.replace("%%(%s)s" % k, v)
+  return content
 
 
 if __name__ == '__main__':
