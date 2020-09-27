@@ -26,6 +26,17 @@ class GitHub(object):
     with urllib.request.urlopen('https://api.github.com/repos/%s/%s' % (self.user, self.project)) as response:
       return json.loads(response.read())
 
+  def get_file_path(self, path, branch='master'):
+    return "https://raw.githubusercontent.com/%s/%s/%s/%s" % (self.user, self.project, branch, path)
+
+  def get_file_content(self, path, branch='master'):
+    if path is None:
+      return ""
+
+    self.get_file_path(path, branch)
+    with urllib.request.urlopen(self.get_file_path(path, branch)) as response:
+      return response.read()
+
   def picture_path(self, path):
     """
 
