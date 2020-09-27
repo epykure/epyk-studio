@@ -471,6 +471,9 @@ def add_server_parser(subparser):
 def add_server(args):
   project_path = args.path or os.getcwd()
   page = os.path.join(project_path, args.name, "server_%s.py" % args.server)
+  static_path = os.path.join(project_path, args.name, "static")
+  if not os.path.exists(static_path):
+    os.makedirs(static_path)
   if args.server == 'tornado':
     with open(page, "w") as f:
       f.write('''
@@ -479,7 +482,6 @@ import os
 import importlib
 import sys
 import tornado.ioloop
-import epyk_studio.core.cli.Server
 
 
 class MainHandlerPage(tornado.web.RequestHandler):
@@ -526,10 +528,11 @@ def make_app(debug=True):
   ----------
   :param debug:
   """
+  pages_path = os.path.dirname(__file__)
   return tornado.web.Application([
       (r"/script/(.*)", MainHandlerPage, None),
       (r"/view/(.*)", MainHandlerView, None),
-  ], debug=debug)
+  ], debug=debug, static_path=os.path.join(pages_path, 'static'))
 
 
 if __name__ == '__main__':
@@ -540,6 +543,52 @@ if __name__ == '__main__':
   app.listen(port, address=address)
   tornado.ioloop.IOLoop.current().start()
   ''')
+  if args.server == 'flask':
+    with open(page, "w") as f:
+      f.write('''
+import socket
+import os
+import sys
+import importlib
+
+from flask import Flask
+from flask import request
+
+app = Flask(__name__, static_url_path='/static')
+
+
+@app.route('/')
+def home():
+  return 'Your project running with Flask!'
+
+
+@app.route('/script/<script>')
+def script(script):
+  sys.path.append(os.path.join(os.getcwd(), 'ui'))
+  mod = __import__("ui.reports.%s" % script, fromlist=['object'])
+  importlib.reload(mod)
+  data = dict(request.args)
+  if data:
+    if hasattr(mod, 'add_inputs'):
+      mod.add_inputs(data)
+  return mod.page.outs.html()
+
+
+@app.route('/view/<page>')
+def view(page):
+  content = ""
+  html_file = os.path.join(os.getcwd(), 'ui', 'views', "%s.html" % page)
+  if os.path.exists(html_file):
+    with open(html_file) as f:
+      content = f.read()
+  return content
+
+
+if __name__ == '__main__':
+  address = socket.gethostbyname(socket.gethostname())
+  app.run(host=address, port=8081, debug=True)
+
+''')
 
 
 def main():

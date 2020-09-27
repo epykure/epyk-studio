@@ -231,7 +231,7 @@ class MainHandlerPageAddServer(StudioHandler):
     from epyk_studio.core.cli import cli_pages
 
     data = tornado.escape.json_decode(self.request.body)
-    cli_pages.add_server(Namespace(path=self.current_path, name=data['project'], server='tornado'))
+    cli_pages.add_server(Namespace(path=self.current_path, name=data['project'], server=data['server'].lower()))
     self.write("")
 
 

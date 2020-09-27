@@ -27,7 +27,7 @@ setuptools.setup(
         "Code": "https://github.com/epykure/epyk-studio",
         "Issue tracker": "https://github.com/epykure/epyk-studio/issues"
     },
-    package_data={'epyk_studio': [os.path.join('static', 'images', '*')]},
+    package_data={'epyk_studio': [os.path.join('static', 'images', '*'), os.path.join('static', 'lang', '*'), os.path.join('static', 'pages', '*')]},
     entry_points={"console_scripts": [
       "epyk_studio = epyk_studio.core.cli.cli_pages:main", # For common quick page transformation
     ]},

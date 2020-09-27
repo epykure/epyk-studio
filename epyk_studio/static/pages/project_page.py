@@ -34,10 +34,17 @@ Produce rich HTML pages from your Python code
 ''', align="center")
 wp.style.standard()
 wp.style.css.margin_bottom = 10
-b_transpile = page.ui.buttons.large("Transpile", align="center")
+b_transpile = page.ui.buttons.large("Transpile Project", align="center")
 
 s = page.ui.title("Attach a server", align="center")
 s.style.standard()
+
+pim = page.studio.pills.images([
+  {"image": "flask.jpg", 'path': '/static', 'text': 'Flask'},
+  {"image": "tornado.jpg", 'path': '/static', 'text': 'Tornado', 'selected': True},
+], htmlCode="server")
+pim.style.standard()
+
 b_server = page.ui.buttons.large("Server", align="center")
 
 t = page.ui.title("Scan external packages")
@@ -66,5 +73,5 @@ def add_inputs(inputs):
   ])
 
   b_server.click([
-    page.js.post("/projects_add_server", {'project': inputs.get('name', '')})
+    page.js.post("/projects_add_server", {'project': inputs.get('name', '')}, components=[pim])
   ])
