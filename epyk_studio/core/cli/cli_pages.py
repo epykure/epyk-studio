@@ -425,23 +425,28 @@ def transpile(args):
       print("Error in the script %s" % f)
 
 
-def start_parsers(subparser):
-  subparser.set_defaults(func=start)
+def run_parsers(subparser):
+  subparser.set_defaults(func=run)
   subparser.add_argument('-p', '--port', default=8080, help='''Integer with the port for the app''')
   subparser.add_argument('-l', '--localhost', default="Y", help='''Y / N flag to specify the hostname to define''')
   subparser.add_argument('-d', '--debug', default="N", help='''Y / N flag to activate the debug mode of Tornado''')
 
 
-def start(args):
+def run(args):
   import socket
-  import os
   import tornado.ioloop
   import epyk_studio.core.cli.Server
+  import asyncio
 
-  address = '127.0.01'
+  # https://github.com/tornadoweb/tornado/issues/2751
+  if sys.platform == 'win32':
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+  address = '127.0.0.1'
   if args.localhost.upper() == 'N':
     address = socket.gethostbyname(socket.gethostname())
   print("Server started at: %s:%s" % (address, args.port))
+  print("Project path: %s" % os.getcwd())
   app = epyk_studio.core.cli.Server.make_app(os.getcwd(), debug=args.debug.upper()=="Y")
   app.listen(args.port, address=address)
   tornado.ioloop.IOLoop.current().start()
@@ -545,7 +550,7 @@ def main():
   """
   parser_map = {
     'new': (new_parsers, '''Create new environment'''),
-    'start': (start_parsers, '''start the internal tornado server'''),
+    'run': (run_parsers, '''start the internal tornado server'''),
     'transpile': (transpile_parser, '''Transpile a script to web objects'''),
     'dashboard': (new_template, '''Create new dashboard'''),
     'management': (new_template, '''Create new Management report'''),

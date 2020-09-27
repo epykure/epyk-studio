@@ -5,7 +5,7 @@ from epyk_studio.static.pages import add_code, nav_bar
 # Create a basic report object
 page = Report()
 
-nav_bar(page, "Project")
+nav = nav_bar(page, "Project")
 
 c = page.ui.title("Create new report")
 c.style.standard()

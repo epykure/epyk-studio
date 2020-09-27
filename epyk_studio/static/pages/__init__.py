@@ -14,6 +14,7 @@ def nav_bar(page, name):
   nav._right.style.css.padding_right = 60
   page.ui.banners.corner("Localhost", position="top")
   nav.logo.goto("/", name="_self")
+  return nav
 
 
 def add_code(page):
@@ -29,4 +30,5 @@ def add_code(page):
   code.style.css.border_radius = 15
   code.style.css.padding = 8
   code.style.css.background = page.theme.greys[0]
+  return code
 
