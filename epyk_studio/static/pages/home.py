@@ -47,7 +47,7 @@ menu = page.ui.menus.bar([
   {"value": "Project", 'children': [
     {"text": "Docs", 'url': 'http://www.epyk.io/'},
     {"text": "Components", 'url': '/search'},
-    {"text": "Projects", 'url': "/project", 'target': '_blank'},
+    {"text": "Projects", 'url': "/project"},
     {"text": "Packages", 'url': '/ext_packages'},
     {"text": "Servers", 'url': '/servers'},
     {"text": "Databases", 'url': '/databases'},

@@ -551,6 +551,8 @@ import os
 import sys
 import importlib
 
+from epyk_studio.core.Page import Report
+
 from flask import Flask
 from flask import request
 
@@ -568,20 +570,27 @@ def script(script):
   mod = __import__("ui.reports.%s" % script, fromlist=['object'])
   importlib.reload(mod)
   data = dict(request.args)
-  if data:
-    if hasattr(mod, 'add_inputs'):
-      mod.add_inputs(data)
-  return mod.page.outs.html()
+  if hasattr(mod, 'get_page'):
+    page = Report()
+    page.inputs.update(data)
+    mod.get_page(page)
+    return page.outs.html()
+  else:
+    if data:
+      if hasattr(mod, 'add_inputs'):
+        mod.add_inputs(data)
+    return mod.page.outs.html()
 
 
 @app.route('/view/<page>')
 def view(page):
   content = ""
   html_file = os.path.join(os.getcwd(), 'ui', 'views', "%s.html" % page)
+  data = dict(request.args)
   if os.path.exists(html_file):
     with open(html_file) as f:
       content = f.read()
-  return content
+  return content % data
 
 
 if __name__ == '__main__':
