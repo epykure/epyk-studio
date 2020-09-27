@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import os
 import datetime
 
 from epyk_studio.interfaces.studio import CompStudioBlog
@@ -453,7 +454,11 @@ class Studio(Interface.Components):
     if options is not None:
       dftl_options.update(options)
     dftl_options["width"] = width[0]
-    select = self.rptObj.ui.select(REGISTERED_LANGS, width=width, selected=selected or REGISTERED_LANGS[0]['value'], options=dftl_options, htmlCode="lang", height=height, profile=profile)
+    select = self.rptObj.ui.select(REGISTERED_LANGS, width=width, selected=os.environ.get("LANG") or selected or REGISTERED_LANGS[0]['value'], options=dftl_options, htmlCode="lang", height=height, profile=profile)
+    select.change([
+      self.rptObj.js.window.history.updateState("lang", select.dom.content),
+      self.rptObj.js.location.reload()
+    ])
     return select
 
   def themes(self, selected=None, width=(45, 'px'), height=(None, "%"), options=None, profile=None):
@@ -475,10 +480,17 @@ class Studio(Interface.Components):
     if options is not None:
       dftl_options.update(options)
     dftl_options["width"] = width[0]
-    select = self.rptObj.ui.select(values, width=width, selected=selected or values[0]['value'], options=dftl_options, height=height, htmlCode="theme", profile=profile)
-    mod_name, class_name = select.options.selected.split(".")
+    selected = os.environ.get("THEME") or selected or values[0]['value']
+    mod_name, class_name = selected.split(".")
     theme = getattr(getattr(themes, mod_name), class_name)
     self.rptObj.theme = theme()
+    select = self.rptObj.ui.select(values, width=width, selected=selected, options=dftl_options, height=height, htmlCode="theme", profile=profile)
+    self.rptObj.body.style.css.background = self.rptObj.theme.greys[0]
+    self.rptObj.body.style.css.color = self.rptObj.theme.greys[-1]
+    select.change([
+      self.rptObj.js.window.history.updateState("theme", select.dom.content),
+      self.rptObj.js.location.reload()
+    ])
     return select
 
   def footers(self, components=None, logo=None, width=(100, '%'), height=('auto', ''), options=None, profile=False):
