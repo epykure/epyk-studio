@@ -574,7 +574,23 @@ app = Flask(__name__, static_url_path='/static')
 
 @app.route('/')
 def home():
-  return 'Your project running with Flask!'
+  page = Report()
+  report_path = os.path.join(os.getcwd(), 'ui', 'reports')
+  view_path = os.path.join(os.getcwd(), 'ui', 'views')
+  r_col = page.ui.col([page.ui.title("Python Pages")], position="top", options={"responsive": False})
+  v_col = page.ui.col([page.ui.title("HTML Templates")], position="top", options={"responsive": False})
+  for r in os.listdir(report_path):
+    if r.endswith(".py") and r != '__init__.py':
+      link = page.ui.link(r, url="/script/%s" % r[:-3])
+      link.style.display = 'block'
+      r_col.add(link)
+  for v in os.listdir(view_path):
+    if v.endswith(".html"):
+      link = page.ui.link(v, url="/view/%s" % v[:-5])
+      link.style.display = 'block'
+      v_col.add(link)
+  page.ui.row([r_col, v_col], position="top", options={"responsive": False})
+  return page.outs.html()
 
 
 @app.route('/script/<script>')
