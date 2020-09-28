@@ -647,11 +647,3 @@ def main():
     parser_init[0](new_parser)
   args = arg_parser.parse_args(sys.argv[1:])
   return args.func(args)
-
-
-if __name__ =='__main__':
-  class Namespace:
-    def __init__(self, **kwargs):
-      self.__dict__.update(kwargs)
-
-  start(Namespace(localhost='N', port=8080, debug="Y"))

@@ -42,7 +42,9 @@ s.style.standard()
 pim = page.studio.pills.images([
   {"image": "flask.jpg", 'path': '/static', 'text': 'Flask'},
   {"image": "tornado.jpg", 'path': '/static', 'text': 'Tornado', 'selected': True},
-], htmlCode="server")
+  {"image": "fastapi-logo.png", 'path': '/static', 'text': 'FastAPI'},
+  {"image": "django-logo.png", 'path': '/static', 'text': 'Django'},
+], radius=False, htmlCode="server")
 pim.style.standard()
 
 b_server = page.ui.buttons.large("Server", align="center")

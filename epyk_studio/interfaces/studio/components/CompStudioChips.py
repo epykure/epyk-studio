@@ -111,7 +111,7 @@ class StudioChips(object):
         pills.add_panel(rec.get('text', ''), None, width=width, selected=rec.get("selected", False))
     return pills
 
-  def images(self, records, htmlCode=None, width=(40, 'px'), inline=True, options=None, profile=False):
+  def images(self, records, htmlCode=None, radius=True, width=(45, 'px'), inline=True, options=None, profile=False):
     """
     Description:
     ------------
@@ -120,12 +120,17 @@ class StudioChips(object):
     ----------
     :param records:
     :param htmlCode:
+    :param radius:
     :param width:
     :param inline:
     :param options:
     :param profile:
     """
     dflt_options = {"image_width": (25, 'px')}
+    if radius == True:
+      radius = dflt_options["image_width"][0]+10
+    elif not radius:
+      radius = 0
     if options is not None:
       dflt_options.update(options)
     pills = self.context.rptObj.ui.panels.pills(htmlCode=htmlCode, options=options, profile=profile)
@@ -134,7 +139,7 @@ class StudioChips(object):
                                      'background': self.context.rptObj.theme.success[0],
                                      'box-shadow': '0 3px 5px 0 rgba(%s,%s,%s,.08)' % (r, g, b)}
     pills.options.css_tab = {'display': 'inline-block', 'text-align': 'center', 'cursor': 'pointer',
-                             'margin': '0 2px 5px 0', 'border-radius': '%spx' % (dflt_options["image_width"][0]+10), 'padding': '5px',
+                             'margin': '0 2px 5px 0', 'border-radius': '%spx' % radius, 'padding': '5px',
                              'box-shadow': '0 3px 5px 0 rgba(0,0,0,.08)',
                              "border": "1px solid %s" % self.context.rptObj.theme.greys[0],
                              'color': self.context.rptObj.theme.greys[-1]}
@@ -145,7 +150,7 @@ class StudioChips(object):
       tab_width = width
       if 'text' in rec:
         img = self.context.rptObj.ui.img(rec['image'], path=rec.get('path'), width=dflt_options["image_width"], height=dflt_options["image_width"]).css(
-          {"display": 'block', 'border-radius': '%spx' % (dflt_options["image_width"][0]+10), "font-size": css_defaults.font(4)})
+          {"display": 'block', 'margin-left': '5px', 'margin-right': '5px', 'border-radius': '%spx' % radius, "font-size": css_defaults.font(4)})
         text = rec['text']
         if inline:
           img.style.css.display = "inline-block"
@@ -153,11 +158,12 @@ class StudioChips(object):
           text = self.context.rptObj.ui.text(rec['text'], width=(100, "%"))
           text.style.css.bold()
           text.style.css.text_align = "center"
+          text.style.css.padding_right = "5px"
           text.style.css.display = "inline-block"
         icon = self.context.rptObj.ui.div([img, text], width=width)
       else:
         icon = self.context.rptObj.ui.div(self.context.rptObj.ui.img(rec['image'], path=rec.get('path'), width=dflt_options["image_width"], height=dflt_options["image_width"]).css(
-          {'border-radius': '%spx' % (dflt_options["image_width"][0]+10), "font-size": css_defaults.font(4)}))
+          {'border-radius': '%spx' % radius, "font-size": css_defaults.font(4)}))
         icon.attr["data-value"] = rec['image']
       icon.style.css.text_align = "center"
       icon.options.managed = False
