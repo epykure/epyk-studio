@@ -14,6 +14,7 @@ from epyk_studio.interfaces.studio import CompStudioQuiz
 
 from epyk_studio.interfaces.studio.components import CompStudioButtons
 from epyk_studio.interfaces.studio.components import CompStudioChips
+from epyk_studio.interfaces.studio.components import CompStudioContainers
 
 from epyk.interfaces import Interface
 from epyk.core.css import Defaults as Defaults_css
@@ -557,6 +558,15 @@ class Studio(Interface.Components):
       else:
         div.add(i)
     return div
+
+  @property
+  def containers(self):
+    """
+    Description:
+    ------------
+
+    """
+    return CompStudioContainers.StudioContainers(self)
 
   @property
   def buttons(self):

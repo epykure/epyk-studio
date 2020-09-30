@@ -26,7 +26,7 @@ class StudioChips(object):
     """
     pills = self.context.rptObj.ui.panels.pills(htmlCode=htmlCode, options=options, profile=profile)
     r, g, b = Colors.getHexToRgb(self.context.rptObj.theme.success[1])
-    pills.options.css_tab_clicked = {'color': self.context.rptObj.theme.success[1], 'border': "1px solid %s" % self.context.rptObj.theme.success[0],
+    pills.options.css_tab_clicked = {'color': self.context.rptObj.theme.colors[-1], 'border': "1px solid %s" % self.context.rptObj.theme.colors[4],
                                      'box-shadow': '0 3px 5px 0 rgba(%s,%s,%s,.08)' % (r, g, b)}
     pills.options.css_tab = {'display': 'inline-block', 'text-align': 'center', 'cursor': 'pointer', 'margin': '0 2px 5px 0',
                              'box-shadow': '0 3px 5px 0 rgba(0,0,0,.08)', 'border-radius': '25px',
@@ -72,7 +72,7 @@ class StudioChips(object):
     """
     pills = self.context.rptObj.ui.panels.pills(htmlCode=htmlCode, options=options, profile=profile)
     r, g, b = Colors.getHexToRgb(self.context.rptObj.theme.success[1])
-    pills.options.css_tab_clicked = {'color': self.context.rptObj.theme.success[1], 'border': "1px solid %s" % self.context.rptObj.theme.success[0],
+    pills.options.css_tab_clicked = {'color': self.context.rptObj.theme.colors[-1], 'border': "1px solid %s" % self.context.rptObj.theme.colors[4],
                                      'box-shadow': '0 3px 5px 0 rgba(%s,%s,%s,.08)' % (r, g, b)}
     pills.options.css_tab = {'display': 'inline-block', 'text-align': 'center', 'cursor': 'pointer', 'margin': '0 10px 5px 0',
                              'box-shadow': '0 3px 5px 0 rgba(0,0,0,.08)', 'border-radius': '25px',
@@ -135,8 +135,7 @@ class StudioChips(object):
       dflt_options.update(options)
     pills = self.context.rptObj.ui.panels.pills(htmlCode=htmlCode, options=options, profile=profile)
     r, g, b = Colors.getHexToRgb(self.context.rptObj.theme.success[1])
-    pills.options.css_tab_clicked = {'color': self.context.rptObj.theme.success[1],
-                                     'background': self.context.rptObj.theme.success[0],
+    pills.options.css_tab_clicked = {'color': self.context.rptObj.theme.colors[-1], 'border': "1px solid %s" % self.context.rptObj.theme.colors[4],
                                      'box-shadow': '0 3px 5px 0 rgba(%s,%s,%s,.08)' % (r, g, b)}
     pills.options.css_tab = {'display': 'inline-block', 'text-align': 'center', 'cursor': 'pointer',
                              'margin': '0 2px 5px 0', 'border-radius': '%spx' % radius, 'padding': '5px',
