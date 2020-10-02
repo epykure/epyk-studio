@@ -320,6 +320,39 @@ class MainHandlerExts(StudioHandler):
     self.write(mod.page.outs.html())
 
 
+class MainHandlerPackages(StudioHandler):
+
+  def get(self):
+    """
+
+    :return:
+    """
+    from epyk.core.js import Imports
+
+    js_alias = [self.get_argument("p")]
+    Imports.npm(js_alias, self.current_path)
+    self.write({'status': "%s - package downloaded" % js_alias[0]})
+
+  def post(self):
+    """
+    Description:
+    ------------
+    Get all the JavaScript External packages with a structure similar to the one in NodeJs
+    """
+    from epyk.core.js import Imports
+
+    if self.request.body:
+      data = tornado.escape.json_decode(self.request.body)
+      js_alias = data["packages"].split(",")
+    else:
+      js_alias = list(Imports.JS_IMPORTS.keys())
+      for k in Imports.CSS_IMPORTS.keys():
+        if not k in js_alias:
+          js_alias.append(k)
+    Imports.npm(js_alias, self.current_path)
+    self.write({'status': "All packages downloaded"})
+
+
 class MainHandlerAdd(StudioHandler):
 
   def post(self):
@@ -445,6 +478,7 @@ def make_app(current_path, debug=True):
 
       #
       (r"/ext_packages", MainHandlerPage, dict(current_path=current_path, page="ext_packages")),
+      (r"/get/packages", MainHandlerPackages, dict(current_path=current_path)),
 
       (r"/analytics", MainHandlerPage, dict(current_path=current_path, page="analytics")),
       (r"/templates", MainHandlerPage, dict(current_path=current_path, page="templates")),
