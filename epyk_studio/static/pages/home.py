@@ -127,7 +127,7 @@ Start by creating simple static pages in your projects.
 This will allow you to discover the components and also have a view on the default rendering
 '''), blog_button])
 
-vignet = page.ui.vignets.image(title="Write your blog pages", content=content, image=page.ui.images.circular("blog.PNG", path='/static'))
+vignet = page.ui.vignets.image(title="Write your first pages", content=content, image=page.ui.images.circular("blog.PNG", path='/static'))
 vignet.image.style.css.margin_top = 10
 vignet.image.style.css.width = "300px"
 vignet.image.style.css.height = "300px"
