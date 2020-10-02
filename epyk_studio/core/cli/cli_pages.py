@@ -433,23 +433,9 @@ def run_parsers(subparser):
 
 
 def run(args):
-  import socket
-  import tornado.ioloop
-  import epyk_studio.core.cli.Server
-  import asyncio
+  from epyk_studio.core.cli import __main__
 
-  # https://github.com/tornadoweb/tornado/issues/2751
-  if sys.platform == 'win32':
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-
-  address = '127.0.0.1'
-  if args.localhost.upper() == 'N':
-    address = socket.gethostbyname(socket.gethostname())
-  print("Server started at: %s:%s" % (address, args.port))
-  print("Project path: %s" % os.getcwd())
-  app = epyk_studio.core.cli.Server.make_app(os.getcwd(), debug=args.debug.upper()=="Y")
-  app.listen(args.port, address=address)
-  tornado.ioloop.IOLoop.current().start()
+  __main__.set_app(args.port, args.localhost.upper()=="Y", args.debug.upper()=="Y")
 
 
 def add_server_parser(subparser):
@@ -484,6 +470,8 @@ import sys
 import tornado.ioloop
 
 from epyk_studio.core.Page import Report
+
+PORT = 8081
 
 
 class MainHandlerPage(tornado.web.RequestHandler):
@@ -550,10 +538,9 @@ def make_app(debug=True):
 
 if __name__ == '__main__':
   address = socket.gethostbyname(socket.gethostname())
-  port = 8081
-  print("Server started at: %s:%s" % (address, port))
+  print("Server started at: %s:%s" % (address, PORT))
   app = make_app()
-  app.listen(port, address=address)
+  app.listen(PORT, address=address)
   tornado.ioloop.IOLoop.current().start()
   ''')
   if args.server == 'flask':
@@ -570,6 +557,8 @@ from flask import Flask
 from flask import request
 
 app = Flask(__name__, static_url_path='/static')
+
+PORT = 8081
 
 
 @app.route('/')
@@ -626,8 +615,7 @@ def view(page):
 
 if __name__ == '__main__':
   address = socket.gethostbyname(socket.gethostname())
-  app.run(host=address, port=8081, debug=True)
-
+  app.run(host=address, port=PORT, debug=True)
 ''')
 
 

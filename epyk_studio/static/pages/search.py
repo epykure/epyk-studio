@@ -37,6 +37,7 @@ button = page.ui.buttons.large("Search", align="center")
 button.style.css.margin_top = 10
 
 search_results = page.ui.rich.search_results()
+search_results.style.standard()
 
 button.click([
   page.js.post("/search_post", components=[search, pills]).onSuccess([

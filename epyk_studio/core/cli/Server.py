@@ -55,7 +55,7 @@ def parse_doc(doc_string):
   :param doc_string: String. The class doctring in the Epyk format
   """
   group = None
-  result = {}
+  result = {'dsc': [], 'tags': []}
   for line in doc_string.split("\n"):
     s_line = line.strip()
     if s_line.startswith("--------") or not s_line:
@@ -89,6 +89,9 @@ def parse_doc(doc_string):
 
     if group is not None:
       result.setdefault(group, []).append(s_line)
+
+  if 'dsc' in result:
+    result['dsc'] = "".join(result['dsc'])
   return result
 
 
@@ -167,6 +170,18 @@ class MainHandlerPage(tornado.web.RequestHandler):
         os.environ["LANG"] = data['lang']
         del data['lang']
 
+    if self.request.uri == '/project':
+      data.update({"count_projects": 0, 'started_project': 0})
+      for f in os.listdir(self.current_path):
+        if not os.path.isfile(f):
+          p_path = os.path.join(self.current_path, f)
+          for p in os.listdir(p_path):
+            if p.endswith("_server.py"):
+              server_mod = __import__("%s.%s" % (f, p[:-3]), fromlist=['object'])
+              data['count_projects'] += 1
+              if hasattr(server_mod, 'PORT'):
+                app_url = "%s:%s" % (":".join(self.request.full_url().split(":")[0:2]), server_mod.PORT)
+                # TODO: add ping on the server to check and allow a link to it from the studio
     mod = __import__("epyk_studio.static.pages.%s" % self.page, fromlist=['object'])
     importlib.reload(mod)
     if data and hasattr(mod, 'add_inputs'):
@@ -340,8 +355,29 @@ class MainHandlerSearch(StudioHandler):
     result = {}
     get_components(components, result)
     data = tornado.escape.json_decode(self.request.body)
-    parse_doc(data)
-    self.write({'status': "%s Results retrieved in %s" % (len(result), time.time() - start), 'results': []})
+
+    components = []
+    for k, v in result.items():
+      parsed_doc = parse_doc(v)
+      if data['category'] == 'All' or data['category'] in parsed_doc.get("categories", []):
+        if data['input']:
+          if data['input'] in parsed_doc['dsc']:
+            links = [{"url": t, 'val': t} for t in parsed_doc.get("templates", [])]
+
+            components.append({"title": k, "urlTitle": '/search/component?v=%s' % k,
+                               'dsc': parsed_doc['dsc'], 'links': links})
+            if parsed_doc['tags']:
+              components[-1].update({'icon': 'fas fa-tags', 'url': ", ".join(parsed_doc['tags'])})
+        else:
+          links = [{"url": t, 'val': t} for t in parsed_doc.get("templates", [])]
+          components.append({"title": k, "urlTitle": '/search/component?v=%s' % k,
+                             'dsc': parsed_doc['dsc'], 'links': links})
+          if parsed_doc['tags']:
+            components[-1].update({'icon': 'fas fa-tags', 'url': ", ".join(parsed_doc['tags'])})
+
+    #print(data)
+    #parse_doc(data)
+    self.write({'status': "%s Results retrieved in %s" % (len(result), time.time() - start), 'results': components})
 
 
 class MainHandlerSearchResult(tornado.web.RequestHandler):
@@ -428,3 +464,6 @@ def make_app(current_path, debug=True):
       (r"/blog_editor", MainHandlerPage, dict(current_path=current_path, page="blog_editor")),
       (r"/survey_editor", MainHandlerPage, dict(current_path=current_path, page="survey_editor")),
   ], debug=debug, static_path=os.path.join(pages_path, '..', '..', 'static', 'images'))
+
+
+

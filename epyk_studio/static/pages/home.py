@@ -95,6 +95,13 @@ ics = page.studio.gallery.icons([
 ], options={"responsive": False})
 ics.style.css.margins(left=(10, '%'), right=(10, '%'), top=(0, ''))
 
+m = page.ui.panels.slidings.plus('''
+
+''', 'Time to market')
+m.options.expanded = False
+m.style.css.margins(left=(10, '%'), right=(10, '%'))
+m.title.style.css.color = page.theme.colors[-1]
+
 s = page.ui.panels.slidings.plus('''
 Epyk is a low Code framework in the way it will allow you to deal with other languages and technology from Python.
 It is fully based on Python to ensure you have all the Flexibility in improving your platform  as your technical knowledge is evolving.
@@ -127,17 +134,17 @@ vignet.image.style.css.height = "300px"
 
 blog = page.ui.banners.text(vignet, align="left")
 
-sv_button = page.ui.buttons.large("Survey", align="center")
-sv_button.goto("/survey_editor", name="_self")
-
-content = page.ui.div([page.ui.texts.paragraph('''
-Quickly create survey and monitor the results using the number of available dashboarding components in the framework.
-Publish and share the page and the results in one click.
-'''), sv_button])
-
-sv_vignet = page.ui.vignets.image(title="Create a Survey", content=content, image=page.ui.images.circular("monitoring.PNG", path='/static'))
-sv_vignet.image.style.css.width = "300px"
-sv_vignet.image.style.css.height = "300px"
+# sv_button = page.ui.buttons.large("Survey", align="center")
+# sv_button.goto("/survey_editor", name="_self")
+#
+# content = page.ui.div([page.ui.texts.paragraph('''
+# Quickly create survey and monitor the results using the number of available dashboarding components in the framework.
+# Publish and share the page and the results in one click.
+# '''), sv_button])
+#
+# sv_vignet = page.ui.vignets.image(title="Create a Survey", content=content, image=page.ui.images.circular("monitoring.PNG", path='/static'))
+# sv_vignet.image.style.css.width = "300px"
+# sv_vignet.image.style.css.height = "300px"
 
 add_code(page)
 
