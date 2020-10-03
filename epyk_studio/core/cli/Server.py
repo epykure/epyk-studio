@@ -229,8 +229,11 @@ class MainHandlerPageTranspile(StudioHandler):
 
     data = tornado.escape.json_decode(self.request.body)
     project_path = os.path.join(self.current_path, data['project'])
-    cli_project.transpile_all(Namespace(path=project_path, split=data["trans_type"]=='Multiple'))
-    self.write("")
+    results = cli_project.transpile_all(Namespace(path=project_path, split=data["trans_type"]=='Multiple'))
+    if len(results["failed"]) > 0:
+      self.write({"status": '%s scripts transpiled, %s errors' % (len(results["completed"]), len(results["failed"]))})
+    else:
+      self.write({"status": '%s scripts transpiled' % len(results["completed"])})
 
 
 class MainHandlerPageAddServer(StudioHandler):

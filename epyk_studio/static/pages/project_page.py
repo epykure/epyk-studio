@@ -67,6 +67,9 @@ p_sacn = page.ui.buttons.large("Get Packages", align="center")
 
 add_code(page)
 
+dis = page.ui.banners.disclaimer()
+dis.style.css.margin_top = 20
+
 
 def add_inputs(inputs):
   nav.title._vals = inputs.get('name', '')
@@ -75,7 +78,9 @@ def add_inputs(inputs):
   ])
 
   b_transpile.click([
-    page.js.post("/projects_transpile", {'project': inputs.get('name', '')}, components=[radios])
+    page.js.post("/projects_transpile", {'project': inputs.get('name', '')}, components=[radios]).onSuccess([
+      page.js.msg.status()
+    ])
   ])
 
   b_server.click([
