@@ -12,7 +12,7 @@ def nav_bar(page, name):
   nav.add_right(page.studio.langs())
   nav.add_right(page.studio.themes(selected="ThemeRed.Red"))
   nav._right.style.css.padding_right = 60
-  page.ui.banners.corner("Localhost", position="top")
+  page.ui.banners.corner("Beta", position="top")
   nav.logo.goto("/", name="_self")
   return nav
 

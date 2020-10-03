@@ -45,7 +45,7 @@ pim = page.studio.pills.images([
   {"image": "flask.jpg", 'path': '/static', 'text': 'Flask'},
   {"image": "tornado.jpg", 'path': '/static', 'text': 'Tornado', 'selected': True},
   {"image": "fastapi-logo.png", 'path': '/static', 'text': 'FastAPI'},
-  {"image": "django-logo.png", 'path': '/static', 'text': 'Django'},
+  #{"image": "django-logo.png", 'path': '/static', 'text': 'Django'},
 ], radius=False, htmlCode="server", align="center")
 pim.style.standard()
 
