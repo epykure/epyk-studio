@@ -48,10 +48,6 @@ button.click([
 
 search.enter(button.dom.events.trigger("click"))
 
-code = page.ui.icon("fas fa-code")
-code.style.css.absolute(bottom=20, right=20)
-code.goto("/code?script=home")
-
 add_code(page)
 
 dis = page.ui.banners.disclaimer()

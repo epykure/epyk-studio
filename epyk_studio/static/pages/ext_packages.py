@@ -27,7 +27,22 @@ button.click([
   ]),
 ])
 
-#  page.js.post("/get/packages", {"packages": "jqueryui"})
+package = page.ui.title("Find Package")
+package.style.standard()
+page.ui.texts.paragraph('''
+Not all the packages available on the JavaScript ecosystem are available. You can check here if a package existing.
+This will search in the module Imports.py installed and tell you all the possible matched.
+''').style.standard()
+search = page.ui.inputs.search(htmlCode='input')
+search.style.standard()
+
+page.ui.texts.paragraph('''
+If your package is not available you can add it and propose this to the community
+''').style.standard()
+
+link = page.ui.link("Framework Extension", "https://nbviewer.jupyter.org/github/epykure/epyk-templates-notebooks/blob/master/tutorials/extensions/01_framework_ext.ipynb", align="center")
+link.style.css.font_factor(8)
+link.style.standard()
 
 title = page.ui.title("All packages available")
 title.style.standard()

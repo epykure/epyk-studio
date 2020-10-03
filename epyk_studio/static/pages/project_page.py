@@ -28,6 +28,7 @@ pills.add_panel("Dashboard", None)
 b_new = page.ui.buttons.large("New Report", align="center")
 
 wa = page.ui.title("Get web artifacts", align="center")
+wa.style.css.margin_top = 30
 wa.style.standard()
 wp = page.ui.texts.text('''
 Produce rich HTML pages from your Python code
@@ -37,6 +38,7 @@ wp.style.css.margin_bottom = 10
 b_transpile = page.ui.buttons.large("Transpile Project", align="center")
 
 s = page.ui.title("Attach a server", align="center")
+s.style.css.margin_top = 30
 s.style.standard()
 
 pim = page.studio.pills.images([
@@ -44,22 +46,20 @@ pim = page.studio.pills.images([
   {"image": "tornado.jpg", 'path': '/static', 'text': 'Tornado', 'selected': True},
   {"image": "fastapi-logo.png", 'path': '/static', 'text': 'FastAPI'},
   {"image": "django-logo.png", 'path': '/static', 'text': 'Django'},
-], radius=False, htmlCode="server")
+], radius=False, htmlCode="server", align="center")
 pim.style.standard()
 
 b_server = page.ui.buttons.large("Server", align="center")
 
-t = page.ui.title("Scan external packages")
+t = page.ui.title("Scan external packages", align="center")
+t.style.css.margin_top = 30
 t.style.standard()
-pr = page.ui.texts.paragraph('''
+pr = page.ui.texts.text('''
 Find an existing report in the project
-''')
+''', align="center")
 pr.style.standard()
+p_sacn = page.ui.buttons.large("Get Packages", align="center")
 
-inp_pr = page.ui.input(htmlCode="reports")
-inp_pr.style.css.text_align = "left"
-inp_pr.style.css.padding_left = 5
-inp_pr.style.standard()
 
 add_code(page)
 

@@ -111,7 +111,7 @@ class StudioChips(object):
         pills.add_panel(rec.get('text', ''), None, width=width, selected=rec.get("selected", False))
     return pills
 
-  def images(self, records, htmlCode=None, radius=True, width=(45, 'px'), inline=True, options=None, profile=False):
+  def images(self, records, htmlCode=None, radius=True, align="left", width=(45, 'px'), inline=True, options=None, profile=False):
     """
     Description:
     ------------
@@ -121,6 +121,7 @@ class StudioChips(object):
     :param records:
     :param htmlCode:
     :param radius:
+    :param align:
     :param width:
     :param inline:
     :param options:
@@ -133,7 +134,7 @@ class StudioChips(object):
       radius = 0
     if options is not None:
       dflt_options.update(options)
-    pills = self.context.rptObj.ui.panels.pills(htmlCode=htmlCode, options=options, profile=profile)
+    pills = self.context.rptObj.ui.panels.pills(htmlCode=htmlCode, align=align, options=options, profile=profile)
     r, g, b = Colors.getHexToRgb(self.context.rptObj.theme.success[1])
     pills.options.css_tab_clicked = {'color': self.context.rptObj.theme.colors[-1], 'border': "1px solid %s" % self.context.rptObj.theme.colors[4],
                                      'box-shadow': '0 3px 5px 0 rgba(%s,%s,%s,.08)' % (r, g, b)}

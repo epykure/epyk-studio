@@ -49,8 +49,8 @@ menu = page.ui.menus.bar([
     {"text": "Components", 'url': '/search'},
     {"text": "Projects", 'url': "/project"},
     {"text": "Packages", 'url': '/ext_packages'},
-    {"text": "Servers", 'url': '/servers'},
-    {"text": "Databases", 'url': '/databases'},
+    #{"text": "Servers", 'url': '/servers'},
+    #{"text": "Databases", 'url': '/databases'},
   ]},
   {"value": "Links", 'children': [
     {"text": "Examples", 'url': "https://github.com/epykure/epyk-templates"},
@@ -59,10 +59,10 @@ menu = page.ui.menus.bar([
     {"text": "Studio", 'url': "http://www.epyk-studio.com/"}
    ]},
   {"value": 'Production', 'children': [
-    {"text": "Testing"}, # local report
-    {"text": "Analytics", 'url': '/analytics'}, # local report
-    {"text": "Publish"}, # local report
-    {"text": "Link to App"}, # local report
+    #{"text": "Testing"}, # local report
+    #{"text": "Analytics", 'url': '/analytics'}, # local report
+    #{"text": "Publish"}, # local report
+    #{"text": "Link to App"}, # local report
     {"text": "Community", 'url': 'https://github.com/epykure/epyk-studio'} # local report
   ]},
 ], options={"responsive": False})
