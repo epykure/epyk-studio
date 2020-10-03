@@ -229,7 +229,7 @@ class MainHandlerPageTranspile(StudioHandler):
 
     data = tornado.escape.json_decode(self.request.body)
     project_path = os.path.join(self.current_path, data['project'])
-    cli_project.transpile_all(Namespace(path=project_path))
+    cli_project.transpile_all(Namespace(path=project_path, split=data["trans_type"]=='Multiple'))
     self.write("")
 
 

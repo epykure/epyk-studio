@@ -35,6 +35,10 @@ Produce rich HTML pages from your Python code
 ''', align="center")
 wp.style.standard()
 wp.style.css.margin_bottom = 10
+
+radios = page.ui.radio(['Single', 'Multiple'], htmlCode="trans_type", checked="Multiple", align="center")
+radios.style.standard()
+
 b_transpile = page.ui.buttons.large("Transpile Project", align="center")
 
 s = page.ui.title("Attach a server", align="center")
@@ -71,7 +75,7 @@ def add_inputs(inputs):
   ])
 
   b_transpile.click([
-    page.js.post("/projects_transpile", {'project': inputs.get('name', '')})
+    page.js.post("/projects_transpile", {'project': inputs.get('name', '')}, components=[radios])
   ])
 
   b_server.click([
