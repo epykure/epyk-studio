@@ -174,14 +174,16 @@ class MainHandlerPage(tornado.web.RequestHandler):
       data.update({"count_projects": 0, 'started_project': 0})
       for f in os.listdir(self.current_path):
         if not os.path.isfile(f):
+          p_path_ui = os.path.join(self.current_path, f, 'ui')
           p_path = os.path.join(self.current_path, f)
-          for p in os.listdir(p_path):
-            if p.endswith("_server.py"):
-              server_mod = __import__("%s.%s" % (f, p[:-3]), fromlist=['object'])
-              data['count_projects'] += 1
-              if hasattr(server_mod, 'PORT'):
-                app_url = "%s:%s" % (":".join(self.request.full_url().split(":")[0:2]), server_mod.PORT)
-                # TODO: add ping on the server to check and allow a link to it from the studio
+          if os.path.exists(p_path_ui):
+            data['count_projects'] += 1
+            for p in os.listdir(p_path):
+              if p.endswith("_server.py"):
+                server_mod = __import__("%s.%s" % (f, p[:-3]), fromlist=['object'])
+                if hasattr(server_mod, 'PORT'):
+                  app_url = "%s:%s" % (":".join(self.request.full_url().split(":")[0:2]), server_mod.PORT)
+                  # TODO: add ping on the server to check and allow a link to it from the studio
     mod = __import__("epyk_studio.static.pages.%s" % self.page, fromlist=['object'])
     importlib.reload(mod)
     if data and hasattr(mod, 'add_inputs'):
@@ -203,10 +205,18 @@ class MainHandlerProjects(StudioHandler):
     filter = data.get('project', '').upper()
     if not filter:
       for f in os.listdir(self.current_path):
+        path_dir = os.path.join(self.current_path, f, 'ui')
+        if not os.path.isdir(path_dir):
+          continue
+
         repo.append({'text': f, 'url': '/project_page?name=%s' % f, 'button': 'get',
                      'event': {'url': '/test', 'data': {'Ok': f}}})
     else:
       for f in os.listdir(self.current_path):
+        path_dir = os.path.join(self.current_path, f, 'ui')
+        if not os.path.isdir(path_dir):
+          continue
+
         if filter in f.upper():
           repo.append({'text': f, 'url': '/project_page?name=%s' % f, 'button': 'get',
                        'event': {'url': '/test', 'data': {'Ok': f}}})

@@ -31,7 +31,8 @@ get_started.click([
 
 p = page.ui.texts.number(0, 'Projects', align="center")
 p.style.css.font_factor(40)
-p.title.style.css.font_factor(40)
+p.title.style.css.font_factor(20)
+p.title.style.css.color = page.theme.colors[-1]
 p.style.css.margin_top = 20
 
 t2 = page.ui.title("Find an existing projects")
