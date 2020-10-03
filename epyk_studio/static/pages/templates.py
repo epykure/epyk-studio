@@ -4,6 +4,7 @@ from epyk_studio.core.Page import Report
 from epyk_studio.static.pages import add_code, nav_bar
 from epyk_studio.utils import git
 
+import os
 
 # Create a basic report object
 page = Report()
@@ -23,6 +24,8 @@ search.style.standard()
 
 gallery = page.studio.gallery.images(pictures, columns=4, options={"responsive": False})
 gallery.style.standard()
+for i in gallery.images:
+  i.goto(os.path.join(repo_templates.main, 'locals', 'studio'))
 
 add_code(page)
 

@@ -43,3 +43,11 @@ class GitHub(object):
     :param path:
     """
     return "https://github.com/%s/%s/blob/master/%s?raw=true" % (self.user, self.project, path)
+
+  @property
+  def path(self):
+    return "https://github.com/%s/%s" % (self.user, self.project)
+
+  @property
+  def main(self):
+    return "https://github.com/%s/%s/tree/master" % (self.user, self.project)

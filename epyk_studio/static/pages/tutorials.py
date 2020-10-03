@@ -34,3 +34,6 @@ search = page.ui.inputs.search(htmlCode='input')
 search.style.standard()
 
 add_code(page)
+
+dis = page.ui.banners.disclaimer()
+dis.style.css.margin_top = 20
