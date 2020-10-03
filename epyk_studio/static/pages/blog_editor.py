@@ -8,6 +8,14 @@ page = Report()
 
 nav_bar(page, "Designer Mode")
 
+p = page.ui.texts.paragraph('''
+Create your first dashboards without having anything installed.
+
+Ideal for Manager or Product owners eagger to illustrate the renderer of the final web template quickly.
+This will ensure a perfect understanding and a good basis to start the implementation.
+''')
+p.style.standard()
+
 title = page.ui.title("Add components")
 title.style.standard()
 
@@ -21,8 +29,9 @@ tabs = page.ui.panels.tabs()
 tabs.style.standard()
 
 editor = page.ui.codes.python('''
-def test():
-  print('ok')
+from epyk_studio.core.Page import Report
+
+page = Report()
 ''')
 
 iframe = page.ui.layouts.iframe()
@@ -31,7 +40,7 @@ tabs.add_panel("Editor", page.ui.div(editor), selected=True)
 tabs.add_panel("Result", page.ui.div(iframe))
 
 pills[0].click([
-  editor.build("page.ui.title('vhbr')")
+  editor.dom.appendText("page.ui.title('vhbr')")
 ])
 
 
