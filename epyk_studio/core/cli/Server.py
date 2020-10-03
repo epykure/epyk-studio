@@ -275,6 +275,43 @@ class MainHandlerPageAdd(StudioHandler):
       self.write("")
 
 
+class MainHandlerPageGetExt(StudioHandler):
+
+  def post(self):
+    """
+    Description:
+    ------------
+
+    """
+    import sys
+    from epyk.core.cli import utils
+    from epyk.core.js import Imports
+
+    data = tornado.escape.json_decode(self.request.body)
+    modules = set()
+    if data['project']:
+      sys.path.append(os.path.join(self.current_path, data['project']))
+      path = os.path.join(self.current_path, data['project'], 'ui', 'reports')
+      sys.path.append(path)
+      for f in os.listdir(path):
+        if f.endswith(".py") and f != "__init__.py":
+          view_name = f[:-3]
+          try:
+            mod = __import__(view_name, fromlist=['object'])
+            importlib.reload(mod)
+            page = utils.get_page(mod, template=True)
+            modules |= page.imports().requirements
+          except:
+            pass
+
+    pkgs = []
+    for m in modules:
+      if m in Imports.JS_IMPORTS:
+        pkgs.append({"pkg": m, 'vr': Imports.JS_IMPORTS[m]['modules'][0]['version'],
+                     'get': "<button class='cssbuttonbasic' style='padding:0 5px;line-height:15px!IMPORTANT' onclick='(function(){var xhttp = new XMLHttpRequest(); xhttp.open(\"GET\", \"/get/packages?p=%s\", true); xhttp.send()})()'>get</button>" % m})
+    self.write({"packages": pkgs})
+
+
 class MainHandlerExts(StudioHandler):
 
   def get(self):
@@ -494,6 +531,7 @@ def make_app(current_path, debug=True):
       (r"/project", MainHandlerPage, dict(current_path=current_path, page="project")),
       (r"/project_page", MainHandlerPage, dict(current_path=current_path, page="project_page")),
       (r"/projects_page_add", MainHandlerPageAdd, dict(current_path=current_path)),
+      (r"/projects_get_packages", MainHandlerPageGetExt, dict(current_path=current_path)),
       (r"/projects_transpile", MainHandlerPageTranspile, dict(current_path=current_path)),
       (r"/projects_add_server", MainHandlerPageAddServer, dict(current_path=current_path)),
       (r"/projects_get", MainHandlerProjects, dict(current_path=current_path)),

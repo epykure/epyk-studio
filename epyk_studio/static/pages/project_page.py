@@ -1,6 +1,8 @@
 
 from epyk_studio.core.Page import Report
 from epyk_studio.static.pages import add_code, nav_bar
+from epyk.core.data import events
+
 
 # Create a basic report object
 page = Report()
@@ -62,8 +64,15 @@ pr = page.ui.texts.text('''
 Find an existing report in the project
 ''', align="center")
 pr.style.standard()
-p_sacn = page.ui.buttons.large("Get Packages", align="center")
+p_packages = page.ui.buttons.large("Scan Packages", align="center")
+p_packages.style.css.margin_bottom = 15
 
+table = page.ui.table(cols=['pkg'], rows=['vr', 'get'])
+table.get_column('pkg').title = "Package"
+table.get_column('vr').title = "Version"
+table.get_column('get').title = "Install"
+table.get_column('get').formatters.html()
+table.style.standard()
 
 add_code(page)
 
@@ -85,4 +94,10 @@ def add_inputs(inputs):
 
   b_server.click([
     page.js.post("/projects_add_server", {'project': inputs.get('name', '')}, components=[pim])
+  ])
+
+  p_packages.click([
+    page.js.post("/projects_get_packages", {'project': inputs.get('name', '')}).onSuccess([
+      table.build(events.data["packages"])
+    ])
   ])
