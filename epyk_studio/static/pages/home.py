@@ -74,7 +74,7 @@ blog_button = page.ui.buttons.large("Start", align="center")
 blog_button.goto("/blog_editor", name="_self")
 
 vignet1 = page.ui.vignets.vignet("Thousand of components available", '''
-Fully documented on the Python side based on the JavaScript documentation available online. Links available to find out more JavaScript concepts and gradually improve your UI knowledge
+Fully documented on the Python side based on the JavaScript documentation available online. Links available to find out more on JavaScript concepts and gradually improve your UI knowledge
 ''', width=("auto", ""))
 vignet1.style.css.margin = "0 10%"
 
@@ -105,15 +105,15 @@ m.title.style.css.color = page.theme.colors[-1]
 
 s = page.ui.panels.slidings.plus('''
 Epyk is a low Code framework in the way it will allow you to deal with other languages and technology from Python.
-It is fully based on Python to ensure you have all the Flexibility in improving your platform  as your technical knowledge is evolving.
+It is fully based on Python to ensure you have all the Flexibility in improving your platform when your technical knowledge is evolving.
 ''', 'Low Code Framework')
 s.options.expanded = False
 s.style.css.margins(left=(10, '%'), right=(10, '%'))
 s.title.style.css.color = page.theme.colors[-1]
 
 s = page.ui.panels.slidings.plus('''
-Since this is based on Python you will be able to do everything you want to customise your solution. No need to depend from an upgrade in a tool or external compagny to change the core framework.
-Using Epyk will give you the entire transparency and flexibility in the same way than other popular Web framework (React, Angular, Vue...) 
+Since this is based on Python you will be able to do everything you want to customise your solution. There is no dependance on any upgrade of a tool to change the core framework.
+Using Epyk will give you the entire transparency and flexibility in the same way as other popular Web framework (React, Angular, Vue...).
 ''', 'No Dependency')
 s.options.expanded = False
 s.style.css.margins(left=(10, '%'), right=(10, '%'))
@@ -125,7 +125,7 @@ page.ui.link("Get more details", align="center")
 
 content = page.ui.div([page.ui.texts.paragraph('''
 Start by creating simple static pages in your projects.
-This will allow you to discover the components and also have a view on the default rendering
+This will allow you to discover the components and also have a view on the default rendering.
 '''), blog_button])
 
 vignet = page.ui.vignets.image(title="Write your first pages", content=content, image=page.ui.images.circular("blog.PNG", path='/static'))
