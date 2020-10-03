@@ -63,7 +63,8 @@ menu = page.ui.menus.bar([
     #{"text": "Analytics", 'url': '/analytics'}, # local report
     #{"text": "Publish"}, # local report
     #{"text": "Link to App"}, # local report
-    {"text": "Community", 'url': 'https://github.com/epykure/epyk-studio'} # local report
+    {"text": "Community", 'url': 'https://github.com/epykure/epyk-studio'}, # local report
+    {"text": "Share issues", 'url': 'https://github.com/epykure/epyk-studio/issues'} # local report
   ]},
 ], options={"responsive": False})
 menu.style.css.margin = "10px auto"
