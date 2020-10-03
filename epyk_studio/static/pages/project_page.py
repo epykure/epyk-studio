@@ -42,6 +42,7 @@ radios = page.ui.radio(['Single', 'Multiple'], htmlCode="trans_type", checked="M
 radios.style.standard()
 
 b_transpile = page.ui.buttons.large("Transpile Project", align="center")
+b_transpile.style.css.margin_top = 10
 
 s = page.ui.title("Attach a server", align="center")
 s.style.css.margin_top = 30
@@ -64,8 +65,10 @@ pr = page.ui.texts.text('''
 Find an existing report in the project
 ''', align="center")
 pr.style.standard()
+
 p_packages = page.ui.buttons.large("Scan Packages", align="center")
 p_packages.style.css.margin_bottom = 15
+p_packages.style.css.margin_top = 10
 
 table = page.ui.table(cols=['pkg'], rows=['vr', 'get'])
 table.get_column('pkg').title = "Package"

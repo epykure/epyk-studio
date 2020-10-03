@@ -10,6 +10,7 @@ nav_bar(page, "Blog Editor")
 
 pills = page.ui.menus.pills(["Title", 'Paragraph', 'Link', 'Wallpaper', 'Image', 'Delimiter'])
 pills.style.standard()
+
 tabs = page.ui.panels.tabs()
 tabs.style.standard()
 
