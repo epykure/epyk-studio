@@ -17,6 +17,9 @@ This will ensure a perfect understanding and a good basis to start the implement
 ''')
 p.style.standard()
 
+reset = page.ui.buttons.large("Reset", align="center")
+
+
 title = page.ui.title("Add components")
 title.style.standard()
 
@@ -24,9 +27,11 @@ components = {
   'Title': "page.ui.title('This is a title')",
   'Paragraph': "page.ui.texts.paragraph('This is a paragraph')",
   'Link': "page.ui.link('google', 'www.google.com')",
-  'Image': "page.ui.img('vhbr')",
+  'Image': "page.ui.img('https://raw.githubusercontent.com/epykure/epyk-ui/master/epyk/static/images/epyklogo.ico', height=(50, 'px'))",
   'Delimiter': "page.ui.layouts.hr()",
   'New Line': "page.ui.layouts.br()",
+  'Button': "page.ui.buttons.large('Button')",
+  'Table': "page.ui.table([{'y': 43, 'x': 0}, {'y': 83, 'x': 0}])",
   'Pie': "page.ui.charts.chartJs.pie([{'y': 43, 'x': 0}, {'y': 83, 'x': 0}], y_columns=['y'], x_axis='x')",
 
 }
@@ -34,7 +39,7 @@ pills = page.ui.menus.pills(list(components.keys()), height=(30, 'px'))
 pills.style.css.margin_bottom = 0
 pills.style.standard()
 
-check = page.ui.check(True, label="Append to end", htmlCode="to_end")
+check = page.ui.check(True, label="Add at the end", htmlCode="to_end")
 check.style.standard()
 check.click([])
 
@@ -56,7 +61,7 @@ iframe.style.css.padding = 5
 iframe.scrolling()
 
 tabs.add_panel("Editor", page.ui.div(editor), selected=True)
-tabs.add_panel("Result", page.ui.div(iframe))
+tabs.add_panel("Web", page.ui.div(iframe))
 
 for i, items in enumerate(components.items()):
   pills[i].click([
@@ -64,26 +69,34 @@ for i, items in enumerate(components.items()):
     editor.dom.appendText(items[1], check.dom.content)
   ])
 
-tabs.tab("Result").click([
+tabs.tab("Web").click([
   page.js.post("/code_frame", components=[editor]).onSuccess([
       iframe.dom.srcdoc(events.data["page"])
   ])
 ])
 
-title = page.ui.title("Ger result")
-title.style.standard()
 
-script = page.ui.buttons.large("Python", icon="fab fa-python", align="center")
-script.style.css.margin_top = 10
+reset.click([
+  editor.build('''from epyk_studio.core.Page import Report
 
-html = page.ui.buttons.large("HTML", icon="fab fa-html5", align="center")
-html.style.css.margin_top = 10
+page = Report()
+''')
+])
 
 
-row = page.ui.row([
-  [script, "share"],
-  [html]], options={"responsive": False})
-row.style.standard()
+script = page.ui.icon("fab fa-python", color="white")
+script.style.css.fixed(top=60, right=20)
+script.style.add_classes.div.border_hover()
+script.style.css.border_radius = 15
+script.style.css.padding = 8
+script.style.css.background = page.theme.colors[-1]
+
+html = page.ui.icon("fab fa-html5", color="white")
+html.style.css.fixed(top=100, right=20)
+html.style.add_classes.div.border_hover()
+html.style.css.border_radius = 15
+html.style.css.padding = 8
+html.style.css.background = page.theme.colors[-1]
 
 add_code(page)
 

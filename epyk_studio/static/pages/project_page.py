@@ -59,7 +59,7 @@ pim.style.standard()
 b_server = page.ui.buttons.large("Server", align="center")
 
 t = page.ui.title("Scan external packages", align="center")
-t.style.css.margin_top = 30
+t.style.css.margin_top = 35
 t.style.standard()
 pr = page.ui.texts.text('''
 Find an existing report in the project
