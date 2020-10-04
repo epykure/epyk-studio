@@ -38,7 +38,7 @@ Produce rich HTML pages from your Python code
 wp.style.standard()
 wp.style.css.margin_bottom = 10
 
-radios = page.ui.radio(['Single', 'Multiple'], htmlCode="trans_type", checked="Multiple", align="center")
+radios = page.ui.radio(['Single', 'Multiple'], htmlCode="trans_type", checked="Single", align="center")
 radios.style.standard()
 
 b_transpile = page.ui.buttons.large("Transpile Project", align="center")
