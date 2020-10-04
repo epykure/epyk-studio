@@ -64,8 +64,15 @@ iframe.style.css.border = "1px solid %s" % page.theme.greys[2]
 iframe.style.css.padding = 5
 iframe.scrolling()
 
-tabs.add_panel("Editor", page.ui.div(editor), selected=True)
+rem_last_cange = page.ui.button("Remove last change")
+tabs.add_panel("Editor", page.ui.col([
+  rem_last_cange,
+  editor]), selected=True)
 tabs.add_panel("Web", page.ui.div(iframe))
+
+rem_last_cange.click([
+  editor.js.undo()
+])
 
 for i, items in enumerate(components.items()):
   pills[i].click([
