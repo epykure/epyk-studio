@@ -71,7 +71,7 @@ menu.style.css.margin = "10px auto"
 # add media on the margin
 
 blog_button = page.ui.buttons.large("Start", align="center")
-blog_button.goto("/blog_editor", name="_self")
+blog_button.goto("/code_editor", name="_self")
 
 vignet1 = page.ui.vignets.vignet("Thousand of components available", '''
 Fully documented on the Python side based on the JavaScript documentation available online. Links available to find out more on JavaScript concepts and gradually improve your UI knowledge
@@ -134,18 +134,6 @@ vignet.image.style.css.width = "300px"
 vignet.image.style.css.height = "300px"
 
 blog = page.ui.banners.text(vignet, align="left")
-
-# sv_button = page.ui.buttons.large("Survey", align="center")
-# sv_button.goto("/survey_editor", name="_self")
-#
-# content = page.ui.div([page.ui.texts.paragraph('''
-# Quickly create survey and monitor the results using the number of available dashboarding components in the framework.
-# Publish and share the page and the results in one click.
-# '''), sv_button])
-#
-# sv_vignet = page.ui.vignets.image(title="Create a Survey", content=content, image=page.ui.images.circular("monitoring.PNG", path='/static'))
-# sv_vignet.image.style.css.width = "300px"
-# sv_vignet.image.style.css.height = "300px"
 
 add_code(page)
 

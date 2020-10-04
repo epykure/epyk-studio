@@ -504,6 +504,20 @@ class MainHandlerSearchResult(tornado.web.RequestHandler):
     self.write(mod.page.outs.html())
 
 
+class MainHandlerCodeFrame(StudioHandler):
+
+  def get(self):
+    self.write('Hello Get')
+
+
+  def post(self):
+    data = tornado.escape.json_decode(self.request.body)
+    loc = {}
+    exec("%s\nhtml_page = page.outs.html()" % data['editor'], globals(), loc)
+    print(loc['html_page'])
+    self.write({'page': loc['html_page']})
+
+
 def make_app(current_path, debug=True):
   """
   Description:
@@ -546,8 +560,8 @@ def make_app(current_path, debug=True):
       (r"/projects_add_server", MainHandlerPageAddServer, dict(current_path=current_path)),
       (r"/projects_get", MainHandlerProjects, dict(current_path=current_path)),
 
-      (r"/blog_editor", MainHandlerPage, dict(current_path=current_path, page="blog_editor")),
-      (r"/survey_editor", MainHandlerPage, dict(current_path=current_path, page="survey_editor")),
+      (r"/code_editor", MainHandlerPage, dict(current_path=current_path, page="code_editor")),
+      (r"/code_frame", MainHandlerCodeFrame, dict(current_path=current_path)),
   ], debug=debug, static_path=os.path.join(pages_path, '..', '..', 'static', 'images'))
 
 
