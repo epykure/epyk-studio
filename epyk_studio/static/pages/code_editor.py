@@ -9,6 +9,10 @@ page = Report()
 
 nav_bar(page, "Designer")
 
+anchor = page.ui.buttons.large("Templates", align="center")
+
+page.ui.navigation.side(position="left", anchor=anchor)
+
 p = page.ui.texts.paragraph('''
 Create your first dashboards without having anything installed.
 
@@ -18,7 +22,7 @@ This will ensure a perfect understanding and a good basis to start the implement
 p.style.standard()
 
 reset = page.ui.buttons.large("Reset", align="center")
-
+page.ui.row([reset, anchor], options={"responsive": False})
 
 title = page.ui.title("Add components")
 title.style.standard()
