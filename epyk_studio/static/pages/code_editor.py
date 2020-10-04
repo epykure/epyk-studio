@@ -72,7 +72,7 @@ redo_last_cange.style.border = None
 redo_last_cange.style.margin_left = 15
 
 tabs.add_panel("Editor", page.ui.col([
-  page.ui.div([rem_last_cange, redo_last_cange]),
+  page.ui.div([rem_last_cange, redo_last_cange]).css({"margin-top": '10px'}),
   editor]), selected=True)
 tabs.add_panel("Web", page.ui.div(iframe))
 
