@@ -64,15 +64,20 @@ iframe.style.css.border = "1px solid %s" % page.theme.greys[2]
 iframe.style.css.padding = 5
 iframe.scrolling()
 
-rem_last_cange = page.ui.button("Remove last change")
+rem_last_cange = page.ui.button("Undo", icon="fas fa-caret-left")
+rem_last_cange.style.border = None
+
+redo_last_cange = page.ui.button("Redo", icon="fas fa-caret-right")
+redo_last_cange.style.border = None
+redo_last_cange.style.margin_left = 15
+
 tabs.add_panel("Editor", page.ui.col([
-  rem_last_cange,
+  page.ui.div([rem_last_cange, redo_last_cange]),
   editor]), selected=True)
 tabs.add_panel("Web", page.ui.div(iframe))
 
-rem_last_cange.click([
-  editor.js.undo()
-])
+rem_last_cange.click([editor.js.undo()])
+redo_last_cange.click([editor.js.redo()])
 
 for i, items in enumerate(components.items()):
   pills[i].click([
@@ -88,6 +93,7 @@ tabs.tab("Web").click([
 
 
 reset.click([
+  tabs.tab("Editor").dom.events.trigger("click"),
   editor.build('''from epyk_studio.core.Page import Report
 
 page = Report()
