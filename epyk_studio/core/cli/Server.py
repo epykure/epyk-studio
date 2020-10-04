@@ -514,7 +514,6 @@ class MainHandlerCodeFrame(StudioHandler):
     data = tornado.escape.json_decode(self.request.body)
     loc = {}
     exec("%s\nhtml_page = page.outs.html()" % data['editor'], globals(), loc)
-    print(loc['html_page'])
     self.write({'page': loc['html_page']})
 
 

@@ -20,8 +20,23 @@ p.style.standard()
 title = page.ui.title("Add components")
 title.style.standard()
 
-pills = page.ui.menus.pills(["Title", 'Paragraph', 'Link', 'Wallpaper', 'Image', 'Delimiter'])
+components = {
+  'Title': "page.ui.title('This is a title')",
+  'Paragraph': "page.ui.texts.paragraph('This is a paragraph')",
+  'Link': "page.ui.link('google', 'www.google.com')",
+  'Image': "page.ui.img('vhbr')",
+  'Delimiter': "page.ui.layouts.hr()",
+  'New Line': "page.ui.layouts.br()",
+  'Pie': "page.ui.charts.chartJs.pie([{'y': 43, 'x': 0}, {'y': 83, 'x': 0}], y_columns=['y'], x_axis='x')",
+
+}
+pills = page.ui.menus.pills(list(components.keys()), height=(30, 'px'))
+pills.style.css.margin_bottom = 0
 pills.style.standard()
+
+check = page.ui.check(True, label="Append to end", htmlCode="to_end")
+check.style.standard()
+check.click([])
 
 title = page.ui.title("Previews")
 title.style.standard()
@@ -43,10 +58,11 @@ iframe.scrolling()
 tabs.add_panel("Editor", page.ui.div(editor), selected=True)
 tabs.add_panel("Result", page.ui.div(iframe))
 
-pills[0].click([
-  tabs.tab("Editor").dom.events.trigger("click"),
-  editor.dom.appendText("page.ui.title('vhbr')")
-])
+for i, items in enumerate(components.items()):
+  pills[i].click([
+    tabs.tab("Editor").dom.events.trigger("click"),
+    editor.dom.appendText(items[1], check.dom.content)
+  ])
 
 tabs.tab("Result").click([
   page.js.post("/code_frame", components=[editor]).onSuccess([
