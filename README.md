@@ -28,6 +28,20 @@ Install Epyk
 
 > pip install epyk_studio
 
+#### From the internal Server
+
+Once installed on your Python distribution, run the below command in any folder you want to user as project path.
+The below options will run it using localhost address without the debug mode.
+
+```cmd
+%python%\scripts\epyk_studio.exe run -l=Y -d=N
+```
+
+This should start a terminal and page will be accessible from your browser.
+The pages should guide you in the design of your web application.
+
+#### From Python IDE
+
 Create a web page
 
 ```py
