@@ -260,6 +260,11 @@ class MainHandlerPageAddServer(StudioHandler):
 
     data = tornado.escape.json_decode(self.request.body)
     cli_pages.add_server(Namespace(path=self.current_path, name=data['project'], server=data['server'].lower()))
+    # create the two underlying folders reports and views
+    for f in ['reports', 'views']:
+      pages_path = os.path.join(self.current_path, data['project'], 'ui', f)
+      if not os.path.exists(pages_path):
+        os.makedirs(pages_path)
     self.write("")
 
 

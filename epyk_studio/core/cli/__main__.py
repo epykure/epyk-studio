@@ -31,7 +31,7 @@ def start():
   """
 
   """
-  if sys.platform == 'win32':
+  if sys.platform == 'win32' and hasattr(asyncio, 'WindowsSelectorEventLoopPolicy'):
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
   address = '127.0.0.1'
