@@ -33,3 +33,17 @@ class StudioButtons(Buttons):
     html_button.style.add_classes.div.border_hover()
     html_button.style.css.padding = "3px 20px"
     return html_button
+
+  def clipboard(self, clickFncs=None):
+    component = self.context.rptObj.ui.icon("far fa-clipboard")
+    component.style.add_classes.div.color_hover()
+    if clickFncs is not None:
+      component.click(clickFncs)
+    return component
+
+  def picture(self, clickFncs=None):
+    component = self.context.rptObj.ui.icon("fas fa-camera")
+    component.style.add_classes.div.color_hover()
+    if clickFncs is not None:
+      component.click(clickFncs)
+    return component

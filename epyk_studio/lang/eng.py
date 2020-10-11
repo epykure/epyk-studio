@@ -31,6 +31,9 @@ RATES_HEADER = ["Symbol", 'Last Price', 'Change', '% Change']
 
 LABEL_YESNO = ["True", "False"]
 
+COLUMNS = "Columns"
+VALUES = 'Values'
+
 
 def country(cty='us'):
   return "us"

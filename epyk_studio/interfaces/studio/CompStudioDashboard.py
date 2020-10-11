@@ -5,7 +5,8 @@ from epyk.interfaces.components import CompFields
 from epyk.interfaces.components import CompCalendars
 from epyk.interfaces.graphs import CompCharts
 
-from epyk.core.css import Defaults as Defaults_css
+from epyk_studio.core import html
+
 from epyk_studio.lang import get_lang
 
 
@@ -16,7 +17,100 @@ class Dashboard(CompFields.Fields, CompFields.Timelines, CompCharts.Graphs):
     self.context = context
     self.parent = self
 
-  def inputs(self):
+  def filters(self, items=None, button=None, width=(100, "%"), height=(60, "px"), htmlCode=None, helper=None, options=None, profile=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param items:
+    :param width:
+    :param height:
+    :param htmlCode:
+    :param helper:
+    :param options:
+    :param profile:
+    """
+    container = self.context.rptObj.ui.div()
+    container.select = self.context.rptObj.ui.select()
+    container.select.options.liveSearch = True
+    container.input = self.context.rptObj.ui.input(width=(200, 'px'), options={"select": True})
+    container.input.style.css.text_align = 'left'
+    container.input.style.css.padding_left = 5
+    container.input.style.css.margin_left = 10
+    if button is None:
+      button = self.context.rptObj.ui.button("add")
+      button.style.css.margin_left = 10
+    container.button = button
+    container.add(self.context.rptObj.ui.div([container.select, container.input, container.button]))
+    container.filters = self.context.rptObj.ui.panels.filters(items, container.select.dom.content, width, height, htmlCode, helper, options, profile)
+    container.add(container.filters)
+    container.button.click([
+      container.filters.dom.add(container.input.dom.content, container.select.dom.content)
+    ])
+    container.input.enter(container.button.dom.events.trigger("click"))
+    return container
+
+  def columns(self, width=('auto', ""), height=('auto', ""), htmlCode=None, options=None, profile=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param width:
+    :param height:
+    :param htmlCode:
+    :param options:
+    :param profile:
+    """
+    component = html.HtmlDashboards.Columns(self.context.rptObj, [], None, width, height, htmlCode, None, options, profile)
+    component.style.css.min_height = 20
+    component.style.css.min_width = 150
+    component.css({"display": "inline-block", 'text-align': 'center', "margin-top": '5px', "list-style": 'none',
+                   'border': "1px dashed %s" % self.context.rptObj.theme.colors[-1]})
+    component.style.css.padding = 5
+    component.style.css.margins(left=5, right=5)
+    return component
+
+  def pivots(self, rows=None, columns=None, width=(100, "%"), height=('auto', ""), htmlCode=None, options=None, profile=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param rows:
+    :param columns:
+    :param width:
+    :param height:
+    :param htmlCode:
+    :param options:
+    :param profile:
+    """
+    options = options or {}
+    dflt_options = {"columns": get_lang(options.get("lang")).COLUMNS, 'rows': get_lang(options.get("lang")).VALUES}
+    if options is not None:
+      dflt_options.update(options)
+    component = html.HtmlDashboards.Pivots(self.context.rptObj, width, height, htmlCode, options, profile)
+    if rows is None:
+      component.rows = self.context.rptObj.ui.lists.drop(htmlCode="%s_rows" % component.htmlCode)
+      component.rows.drop()
+    else:
+      component.rows = rows
+    component.rows.options.managed = False
+    if columns is None:
+      component.columns = self.context.rptObj.ui.lists.drop(htmlCode="%s_columns" % component.htmlCode)
+      component.columns.drop()
+    else:
+      component.columns = columns
+    component.columns.options.managed = False
+    component.style.css.margin_top = 5
+    component.style.css.margin_bottom = 5
+    return component
+
+  def groups(self):
     pass
 
   def process(self, fill=None, border=None, width=(30, "px"), height=(30, "px"), options=None, profile=None):
