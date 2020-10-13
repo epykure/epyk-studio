@@ -4,6 +4,8 @@
 from epyk.core.html import Html
 from epyk.core.html import HtmlList
 
+from epyk.core.js import JsUtils
+
 from epyk_studio.core.js.html import JsHtmlDashboard
 
 
@@ -14,6 +16,9 @@ class Pivots(Html.Html):
     super(Pivots, self).__init__(report, [], htmlCode=htmlCode, css_attrs={"width": width, "height": height}, profile=profile)
     self.container = self._report.ui.row(position="top", options={"responsive": False})
     self.container.options.managed = False
+
+  def clear(self):
+    return JsUtils.jsConvertFncs([self.rows.dom.clear(), self.columns.dom.clear()], toStr=True)
 
   def __str__(self):
     self.container._vals = []

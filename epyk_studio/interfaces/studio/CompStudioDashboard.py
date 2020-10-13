@@ -4,6 +4,7 @@
 from epyk.interfaces.components import CompFields
 from epyk.interfaces.components import CompCalendars
 from epyk.interfaces.graphs import CompCharts
+from epyk.core.html import Defaults as Defaults_html
 
 from epyk_studio.core import html
 
@@ -32,15 +33,23 @@ class Dashboard(CompFields.Fields, CompFields.Timelines, CompCharts.Graphs):
     :param options:
     :param profile:
     """
+    options = options or {}
     container = self.context.rptObj.ui.div()
-    container.select = self.context.rptObj.ui.select()
-    container.select.options.liveSearch = True
-    container.input = self.context.rptObj.ui.input(width=(200, 'px'), options={"select": True})
+    if options.get("select", 'select') == 'input':
+      container.select = self.context.rptObj.ui.inputs.autocomplete(htmlCode="%s_select" % htmlCode, width=(Defaults_html.TEXTS_SPAN_WIDTH, 'px'))
+      container.select.style.css.text_align = "left"
+      container.select.style.css.padding_left = 5
+      container.select.options.liveSearch = True
+    else:
+      container.select = self.context.rptObj.ui.select(htmlCode="%s_select" % htmlCode)
+      container.select.attr['data-width'] = '%spx' % options.get('width', Defaults_html.TEXTS_SPAN_WIDTH)
+      container.select.options.liveSearch = True
+    container.input = self.context.rptObj.ui.input(width=(Defaults_html.INPUTS_MIN_WIDTH, 'px'), options={"select": True})
     container.input.style.css.text_align = 'left'
     container.input.style.css.padding_left = 5
     container.input.style.css.margin_left = 10
     if button is None:
-      button = self.context.rptObj.ui.button("add")
+      button = self.context.rptObj.ui.buttons.colored("add")
       button.style.css.margin_left = 10
     container.button = button
     container.add(self.context.rptObj.ui.div([container.select, container.input, container.button]))
