@@ -18,6 +18,28 @@ class Dashboard(CompFields.Fields, CompFields.Timelines, CompCharts.Graphs):
     self.context = context
     self.parent = self
 
+  def task(self, label, status=None, width=(100, "%"), height=(25, "px"), htmlCode=None, options=None, profile=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param label:
+    :param status:
+    :param width:
+    :param height:
+    :param htmlCode:
+    :param options:
+    :param profile:
+    """
+    map_status = {True: "COMPLETED", False: 'FAILED', None: 'WAITING'}.get(status, status)
+    dflt_options = {"status": map_status}
+    if options is not None:
+      dflt_options.update(options)
+    component = html.HtmlDashboards.Task(self.context.rptObj, label, width, height, htmlCode, dflt_options, profile)
+    return component
+
   def filters(self, items=None, button=None, width=(100, "%"), height=(60, "px"), htmlCode=None, helper=None, options=None, profile=None):
     """
     Description:

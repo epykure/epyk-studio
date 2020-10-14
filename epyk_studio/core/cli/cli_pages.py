@@ -457,7 +457,7 @@ def add_server_parser(subparser):
 def add_server(args):
   project_path = args.path or os.getcwd()
   page = os.path.join(project_path, args.name, "server_%s.py" % args.server)
-  static_path = os.path.join(project_path, args.name, "static")
+  static_path = os.path.join(project_path, args.name, "static", 'configs', 'eng')
   if not os.path.exists(static_path):
     os.makedirs(static_path)
   if args.server == 'tornado':
@@ -549,6 +549,7 @@ if __name__ == '__main__':
 import socket
 import os
 import sys
+import json
 import importlib
 
 from epyk_studio.core.Page import Report
@@ -603,13 +604,21 @@ def script(script):
 @app.route('/view/<page>')
 def view(page):
   content = ""
-  html_file = os.path.join(os.getcwd(), 'ui', 'views', "%s.html" % page)
   data = dict(request.args)
+  tmpl_page = page
+  config_path = os.path.join(os.getcwd(), "static", "configs", data.get("lang", "eng"), "%s.json" % page)
+  if os.path.exists(config_path):
+    with open(config_path) as f:
+      config_data = json.load(f)
+    tmpl_page = config_data.get("template", page)
+  html_file = os.path.join(os.getcwd(), 'ui', 'views', "%s.html" % tmpl_page)
   if os.path.exists(html_file):
     with open(html_file) as f:
       content = f.read()
   for k, v in data.items():
     content = content.replace("%%(%s)s" % k, v)
+  # rempa the configuration file
+  content = content.replace("%s.json" % tmpl_page, "%s.json" % page)
   return content
 
 
