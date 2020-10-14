@@ -66,7 +66,10 @@ class Dashboard(CompFields.Fields, CompFields.Timelines, CompCharts.Graphs):
       container.select = self.context.rptObj.ui.select(htmlCode="%s_select" % htmlCode)
       container.select.attr['data-width'] = '%spx' % options.get('width', Defaults_html.TEXTS_SPAN_WIDTH)
       container.select.options.liveSearch = True
-    container.input = self.context.rptObj.ui.input(width=(Defaults_html.INPUTS_MIN_WIDTH, 'px'), options={"select": True})
+    if options.get("autocomplete"):
+      container.input = self.context.rptObj.ui.inputs.autocomplete(width=(Defaults_html.INPUTS_MIN_WIDTH, 'px'), options={"select": True})
+    else:
+      container.input = self.context.rptObj.ui.input(width=(Defaults_html.INPUTS_MIN_WIDTH, 'px'), options={"select": True})
     container.input.style.css.text_align = 'left'
     container.input.style.css.padding_left = 5
     container.input.style.css.margin_left = 10
