@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from epyk.core.Page import Report#
+from epyk.core.Page import Report
 from epyk_studio.interfaces import Interface
 
 

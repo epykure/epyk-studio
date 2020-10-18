@@ -492,6 +492,7 @@ class MainHandlerPage(tornado.web.RequestHandler):
         mod.add_inputs(data)
     if hasattr(mod, 'get_page'):
       page = Report()
+      page.json_config_file = script
       page.inputs.update(data)
       mod.get_page(page)
       self.write(page.outs.html())
@@ -585,12 +586,21 @@ def home():
 
 @app.route('/script/<script>')
 def script(script):
+  tmpl_page = script
+  data = dict(request.args)
+  config_path = os.path.join(os.getcwd(), "static", "configs", data.get("lang", "eng"), "%s.json" % tmpl_page)
+  if os.path.exists(config_path):
+    with open(config_path) as f:
+      config_data = json.load(f)
+    tmpl_page = config_data.get("template", script)
+
   sys.path.append(os.path.join(os.getcwd(), 'ui'))
-  mod = __import__("ui.reports.%s" % script, fromlist=['object'])
+  mod = __import__("ui.reports.%s" % tmpl_page, fromlist=['object'])
   importlib.reload(mod)
   data = dict(request.args)
   if hasattr(mod, 'get_page'):
     page = Report()
+    page.json_config_file = script
     page.inputs.update(data)
     mod.get_page(page)
     return page.outs.html()

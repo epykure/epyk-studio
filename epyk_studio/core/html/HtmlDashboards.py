@@ -3,6 +3,7 @@
 
 from epyk.core.html import Html
 from epyk.core.html import HtmlList
+from epyk.core.html import Defaults as default_html
 
 from epyk.core.js import JsUtils
 
@@ -56,8 +57,10 @@ class Task(Html.Html):
     self.icon.style.css.font_factor(3)
     self.icon.style.css.color = self.options.color
     self.icon.options.managed = False
-    self.text = self._report.ui.text(text, "%s_text" % self.htmlCode)
+    self.text = self._report.ui.text(text, htmlCode="%s_text" % self.htmlCode)
     self.text.options.managed = False
+    self.text.style.css.vertical_align = "middle"
+    self.text.style.css.line_height = default_html.LINE_HEIGHT
     self.add(self.icon)
     self.add(self.text)
     self._jsStyles['colors'] = {"COMPLETED": self._report.theme.success[1], "RUNNING": self._report.theme.warning[1],
@@ -65,11 +68,34 @@ class Task(Html.Html):
 
   @property
   def _js__builder__(self):
-    return ''' console.log(htmlObj);
-      var iconObj = document.getElementById(htmlObj.id  + "_icon") ;
-      iconObj.classList = []; options[data.toLowerCase()].split(' ').forEach(function(cls){iconObj.classList.add(cls)});
-      iconObj.style.color = options['colors'][data];
-      '''
+    return ''' 
+      if(typeof data === 'string'){
+        if (data === true){ data.status = 'completed'}
+        else if (data === false){ data.status = 'FAILED'}
+        var iconObj = document.getElementById(htmlObj.id  + "_icon") ;
+        iconObj.classList = []; options[data.toLowerCase()].split(' ').forEach(function(cls){iconObj.classList.add(cls)});
+        iconObj.style.color = options['colors'][data.toUpperCase()];
+      } else {
+        if (data.status === true){ data.status = 'completed'}
+        else if (data.status === false){ data.status = 'FAILED'}
+        var iconObj = document.getElementById(htmlObj.id  + "_icon") ;
+        var textObj = document.getElementById(htmlObj.id  + "_text") ;
+        iconObj.classList = []; options[data.status.toLowerCase()].split(' ').forEach(function(cls){iconObj.classList.add(cls)});
+        iconObj.style.color = options['colors'][data.status.toUpperCase()];
+        textObj.innerText = data.text
+      }'''
+
+  @property
+  def dom(self):
+    """
+    Description:
+    ------------
+
+    :rtype: JsHtmlDashboard.JsHtmlTask
+    """
+    if self._dom is None:
+      self._dom = JsHtmlDashboard.JsHtmlTask(self, report=self._report)
+    return self._dom
 
   @property
   def options(self):
@@ -81,6 +107,23 @@ class Task(Html.Html):
     :rtype: OptDashboards.OptionTask
     """
     return self.__options
+
+  def loading(self, label="Processing data"):
+    """
+    Description:
+    -----------
+
+    Attributes:
+    ----------
+    :param label:
+    """
+    return self.icon.dom.setAttribute("class", "fas fa-spinner fa-spin")
+
+  def click(self, jsFncs, profile=False, source_event=None, onReady=False):
+    self.style.css.cursor = "pointer"
+    if onReady:
+      self._report.body.onReady([self.dom.events.trigger("click")])
+    return self.on("click", jsFncs, profile, source_event)
 
   def __str__(self):
     return "<div %s>%s%s</div>" % (self.get_attrs(pyClassNames=self.style.get_classes()), self.icon.html(), self.text.html())

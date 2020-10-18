@@ -1,8 +1,10 @@
 
 
 from epyk.core.js.html import JsHtml
+from epyk.core.js.html import JsHtmlNetwork
 from epyk.core.js.primitives import JsObjects
 from epyk.core.js import JsUtils
+from epyk.core.data import events
 
 
 class JsHtmlColumns(JsHtml.JsHtml):
@@ -122,3 +124,26 @@ class JsHtmlColumns(JsHtml.JsHtml):
     :param label:
     """
     return JsObjects.JsVoid("%s.innerHTML = '<i style=\"margin-right:5px\" class=\"fas fa-spinner fa-spin\"></i>%s'" % (self._src.dom.varName, label))
+
+
+class JsHtmlTask(JsHtmlNetwork.JsHtmlDropFiles):
+
+  def store(self, delimiter=None, format=None):
+    """
+    Description:
+    ------------
+    Not available for a task object as the data will be directly returned and there is not need to
+    perform some string transformation before loading
+    """
+    raise Exception("Not available use load instead")
+
+  def load(self, jsData):
+    """
+    Description:
+    ------------
+
+    :param jsData:
+    """
+    return JsObjects.JsVoid('''window['%s_data'] = %s; %s
+      ''' % (self._src.htmlCode, JsUtils.jsConvertData(jsData, None),
+             self._src.text.dom.setAttribute("title", self.content.length.toString().add(" rows")).r))
