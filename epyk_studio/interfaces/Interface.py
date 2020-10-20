@@ -358,7 +358,8 @@ class Studio(Interface.Components):
       button.style.hover({"color": self.rptObj.theme.greys[0]})
     return button
 
-  def carousel(self, components=None, selected=0, width=('100', '%'), height=(None, 'px'), left="fas fa-angle-left", right="fas fa-angle-right", options=None, profile=False):
+  def carousel(self, components=None, selected=0, width=('100', '%'), height=(None, 'px'), left="fas fa-angle-left",
+               right="fas fa-angle-right", options=None, profile=False):
     """
     Description:
     ------------
