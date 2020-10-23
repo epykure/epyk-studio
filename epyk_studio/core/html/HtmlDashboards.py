@@ -45,6 +45,34 @@ class Columns(HtmlList.List):
       self._dom = JsHtmlDashboard.JsHtmlColumns(self, report=self._report)
     return self._dom
 
+  def fixed(self, top, right, z_index=200, tooltip="List of columns in the data source"):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param top:
+    :param right:
+    :param z_index:
+    """
+    self.anchor = self._report.ui.icon("fas fa-chevron-right")
+    self.anchor.style.css.position = "fixed"
+    self.anchor.style.css.cursor = "pointer"
+    self.anchor.style.css.top = top + 8
+    self.anchor.style.css.right = 18
+    self.anchor.tooltip(tooltip)
+    self.anchor.style.css.z_index = z_index + 10
+    self.anchor.click([
+      self.anchor.dom.switchClass("fa-chevron-left", "fa-chevron-right"),
+      self.dom.toggle()
+    ])
+    self.style.css.overflow = "auto"
+    self.style.css.max_height = "calc(100vh - %spx)" % top
+    self.style.css.fixed(top=top, right=right, transform=False)
+    self.style.css.z_index = z_index
+    return self
+
 
 class Task(Html.Html):
   name = 'Dashboard Task'
@@ -127,12 +155,4 @@ class Task(Html.Html):
 
   def __str__(self):
     return "<div %s>%s%s</div>" % (self.get_attrs(pyClassNames=self.style.get_classes()), self.icon.html(), self.text.html())
-
-
-class Filters(Html.Html):
-  name = 'Dashboard Filters'
-
-
-class Groups(Html.Html):
-  name = 'Dashboard Filters'
 

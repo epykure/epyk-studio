@@ -144,9 +144,6 @@ class Dashboard(CompFields.Fields, CompFields.Timelines, CompCharts.Graphs):
     component.style.css.margin_bottom = 5
     return component
 
-  def groups(self):
-    pass
-
   def process(self, fill=None, border=None, width=(30, "px"), height=(30, "px"), options=None, profile=None):
     """
     Description:
