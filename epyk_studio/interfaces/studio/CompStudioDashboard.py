@@ -40,7 +40,7 @@ class Dashboard(CompFields.Fields, CompFields.Timelines, CompCharts.Graphs):
     component = html.HtmlDashboards.Task(self.context.rptObj, label, width, height, htmlCode, dflt_options, profile)
     return component
 
-  def filters(self, items=None, button=None, width=(100, "%"), height=(60, "px"), htmlCode=None, helper=None, options=None, profile=None):
+  def filters(self, items=None, button=None, width=("auto", ""), height=(60, "px"), htmlCode=None, helper=None, options=None, profile=None):
     """
     Description:
     ------------
@@ -56,20 +56,20 @@ class Dashboard(CompFields.Fields, CompFields.Timelines, CompCharts.Graphs):
     :param profile:
     """
     options = options or {}
-    container = self.context.rptObj.ui.div()
+    container = self.context.rptObj.ui.div(width=width)
     if options.get("select", 'select') == 'input':
-      container.select = self.context.rptObj.ui.inputs.autocomplete(htmlCode="%s_select" % htmlCode, width=(Defaults_html.TEXTS_SPAN_WIDTH, 'px'))
+      container.select = self.context.rptObj.ui.inputs.autocomplete(htmlCode="%s_select" % htmlCode if htmlCode is not None else htmlCode, width=(Defaults_html.TEXTS_SPAN_WIDTH, 'px'))
       container.select.style.css.text_align = "left"
       container.select.style.css.padding_left = 5
       container.select.options.liveSearch = True
     else:
-      container.select = self.context.rptObj.ui.select(htmlCode="%s_select" % htmlCode)
+      container.select = self.context.rptObj.ui.select(htmlCode="%s_select" % htmlCode if htmlCode is not None else htmlCode)
       container.select.attr['data-width'] = '%spx' % options.get('width', Defaults_html.TEXTS_SPAN_WIDTH)
       container.select.options.liveSearch = True
     if options.get("autocomplete"):
-      container.input = self.context.rptObj.ui.inputs.autocomplete(width=(Defaults_html.INPUTS_MIN_WIDTH, 'px'), options={"select": True})
+      container.input = self.context.rptObj.ui.inputs.autocomplete(htmlCode="%s_input" % htmlCode if htmlCode is not None else htmlCode, width=(Defaults_html.INPUTS_MIN_WIDTH, 'px'), options={"select": True})
     else:
-      container.input = self.context.rptObj.ui.input(width=(Defaults_html.INPUTS_MIN_WIDTH, 'px'), options={"select": True})
+      container.input = self.context.rptObj.ui.input(htmlCode="%s_input" % htmlCode if htmlCode is not None else htmlCode, width=(Defaults_html.INPUTS_MIN_WIDTH, 'px'), options={"select": True})
     container.input.style.css.text_align = 'left'
     container.input.style.css.padding_left = 5
     container.input.style.css.margin_left = 10
@@ -77,9 +77,16 @@ class Dashboard(CompFields.Fields, CompFields.Timelines, CompCharts.Graphs):
       button = self.context.rptObj.ui.buttons.colored("add")
       button.style.css.margin_left = 10
     container.button = button
-    container.add(self.context.rptObj.ui.div([container.select, container.input, container.button]))
-    container.filters = self.context.rptObj.ui.panels.filters(items, container.select.dom.content, width, height, htmlCode, helper, options, profile)
+    container.clear = self.context.rptObj.ui.icon("fas fa-times")
+    container.clear.style.color = self.context.rptObj.theme.danger[1]
+    container.clear.style.margin_left = 20
+    container.clear.tooltip("Clear all filters")
+    container.add(self.context.rptObj.ui.div([container.select, container.input, container.button, container.clear]))
+    container.filters = self.context.rptObj.ui.panels.filters(items, container.select.dom.content, (100, '%'), height, htmlCode, helper, options, profile)
     container.add(container.filters)
+    container.clear.click([
+      container.filters.dom.clear()
+    ])
     container.button.click([
       container.filters.dom.add(container.input.dom.content, container.select.dom.content)
     ])
