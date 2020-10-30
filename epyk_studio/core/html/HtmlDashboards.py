@@ -4,6 +4,7 @@
 from epyk.core.html import Html
 from epyk.core.html import HtmlList
 from epyk.core.html import Defaults as default_html
+from epyk.core.css import Defaults as default_css
 
 from epyk.core.js import JsUtils
 
@@ -24,8 +25,8 @@ class Pivots(Html.Html):
 
   def __str__(self):
     self.container._vals = []
-    self.container.add([self._report.ui.titles.rubric("Rows"), self.rows])
-    self.container.add([self._report.ui.titles.rubric("Values"), self.columns])
+    self.container.add([self._report.ui.text("Rows <i style='font-size:%s'>(unique field)</i>" % default_css.font(-3)), self.rows])
+    self.container.add([self._report.ui.text("Values <i style='font-size:%s'>(multiple fields)</i>" % default_css.font(-3)), self.columns])
     html = [h.html() for h in self._vals]
     return "<div %s>%s%s</div>" % (self.get_attrs(pyClassNames=self.style.get_classes()), self.container.html(), "".join(html))
 

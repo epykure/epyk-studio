@@ -1,10 +1,10 @@
-
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 from epyk.core.js.html import JsHtml
 from epyk.core.js.html import JsHtmlNetwork
 from epyk.core.js.primitives import JsObjects
 from epyk.core.js import JsUtils
-from epyk.core.data import events
 
 
 class JsHtmlColumns(JsHtml.JsHtml):
@@ -58,9 +58,11 @@ class JsHtmlColumns(JsHtml.JsHtml):
     item = JsUtils.jsConvertData(item, None)
     unique = JsUtils.jsConvertData(unique, None)
     draggable = JsUtils.jsConvertData(draggable, None)
+    options = JsUtils.jsConvertData(self._src.options, None)
     return JsObjects.JsVoid('''
       var listItems = %(item)s; 
       if(!Array.isArray(listItems)){listItems = [listItems]};
+      var listItemOptions = %(options)s; 
       listItems.forEach(function(item){
         var li = document.createElement("li");
         if(%(unique)s){
@@ -72,17 +74,19 @@ class JsHtmlColumns(JsHtml.JsHtml):
             text.style.display = 'inline-block';
             text.style['margin-right'] = '10px';
             text.addEventListener("click", function(event){
+              
               if (document.selection) {
                 var range = document.body.createTextRange();
                 range.moveToElementText(event.srcElement);
                 range.select().createTextRange();
                 document.execCommand("copy");
-              } else if (window.getSelection) {
-                var range = document.createRange();
-                range.selectNode(event.srcElement);
-                window.getSelection().addRange(range);
-                document.execCommand("copy");
-                alert("Text has been copied, now paste in the text-area")
+              } else if (window.getSelection) { 
+                var x = document.createElement("input");
+                x.setAttribute("type", "text");
+                x.setAttribute("value", event.srcElement.innerText);
+                document.body.appendChild(x); var initColor = event.srcElement.style.color; event.srcElement.style.color = 'green';
+                x.select(); setTimeout(function(){ event.srcElement.style.color = initColor}, 1000)
+                document.execCommand("copy"); x.remove();
               }
             });
             if (%(draggable)s){
@@ -91,7 +95,14 @@ class JsHtmlColumns(JsHtml.JsHtml):
             }
             var div = document.createElement("div"); div.appendChild(text);
             var span = document.createElement("span"); span.innerHTML = '&#10006';  div.appendChild(span);
-            span.addEventListener("click", function(){li.remove()});
+            span.addEventListener("click", function(){
+              if(typeof listItemOptions.source !== 'undefined'){
+                var column = li.firstChild.firstChild.innerText;
+                window[listItemOptions.source].forEach(function(rec){
+                  delete rec[column]
+                })
+              }
+              li.remove()});
             span.style.display = 'inline-block';
             
             li.appendChild(div); li.style.cursor = "pointer"; li.style['text-align'] = "left";
@@ -106,7 +117,7 @@ class JsHtmlColumns(JsHtml.JsHtml):
           li.appendChild(div); li.style.cursor = "pointer"; li.style['text-align'] = "left";
           %(component)s.appendChild(li)
         }
-      })''' % {"item": item, "component": self._src.dom.varName, 'unique': unique, 'draggable': draggable})
+      })''' % {"item": item, "component": self._src.dom.varName, 'unique': unique, 'draggable': draggable, "options": options})
 
   def clear(self):
     """

@@ -131,18 +131,25 @@ class Dashboard(CompFields.Fields, CompFields.Timelines, CompCharts.Graphs):
     :param profile:
     """
     options = options or {}
-    dflt_options = {"columns": get_lang(options.get("lang")).COLUMNS, 'rows': get_lang(options.get("lang")).VALUES}
+    dflt_options = {"max": {"rows": 1}, "columns": get_lang(options.get("lang")).COLUMNS, 'rows': get_lang(options.get("lang")).VALUES}
     if options is not None:
       dflt_options.update(options)
     component = html.HtmlDashboards.Pivots(self.context.rptObj, width, height, htmlCode, options, profile)
     if rows is None:
-      component.rows = self.context.rptObj.ui.lists.drop(htmlCode="%s_rows" % component.htmlCode)
+      row_options = dict(dflt_options)
+      row_options["max"] = dflt_options.get("max", {}).get("rows")
+      component.rows = self.context.rptObj.ui.lists.drop(htmlCode="%s_rows" % component.htmlCode, options=row_options)
+      component.rows.style.css.min_height = 20
+      component.rows.style.css.margin_top = 0
       component.rows.drop()
     else:
       component.rows = rows
     component.rows.options.managed = False
     if columns is None:
-      component.columns = self.context.rptObj.ui.lists.drop(htmlCode="%s_columns" % component.htmlCode)
+      columns_options = dict(dflt_options)
+      columns_options["max"] = dflt_options.get("max", {}).get("columns")
+      component.columns = self.context.rptObj.ui.lists.drop(htmlCode="%s_columns" % component.htmlCode, options=columns_options)
+      component.columns.style.css.margin_top = 0
       component.columns.drop()
     else:
       component.columns = columns
