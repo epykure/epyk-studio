@@ -4,6 +4,10 @@
 import os
 import datetime
 
+from epyk.interfaces import Arguments
+
+from epyk_studio.core import html
+
 from epyk_studio.interfaces.studio import CompStudioBlog
 from epyk_studio.interfaces.studio import CompStudioShopping
 from epyk_studio.interfaces.studio import CompStudioNews
@@ -741,3 +745,17 @@ class Studio(Interface.Components):
     """
     return CompStudioNews.News(self)
 
+  def clipboard(self, icon="fas fa-paste", text=None, tooltip=None, position=None, width=(25, 'px'), height=(25, 'px'),
+              htmlCode=None, options=None, profile=None):
+    """
+
+    :return:
+    """
+    width = Arguments.size(width, unit="px")
+    height = Arguments.size(height, unit="px")
+    html_edit = html.HtmlClipboards.Clipboard(self.rptObj, position, icon, text, tooltip, width, height, htmlCode, options or {}, profile)
+    html_edit.style.css.float = position
+    html_edit.icon.style.css.font_size = Defaults_css.font()
+    html_edit.icon.style.css.line_height = Defaults_html.LINE_HEIGHT + 2
+    html_edit.style.css.display = "inline"
+    return html_edit
