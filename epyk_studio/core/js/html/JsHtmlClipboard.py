@@ -12,13 +12,17 @@ class JsClipboard(JsHtml.JsHtml):
   def content(self):
     return JsObjects.JsObjects.get("(event.clipboardData || window.clipboardData).getData('text')")
 
-  def store(self):
+  def store(self, jsData=None):
     """
     Description:
     ------------
 
     """
-    return JsObjects.JsVoid("window[%s] = (event.clipboardData || window.clipboardData).getData('text')" % self._src.htmlCode)
+    if jsData is None:
+      return JsObjects.JsVoid("window['%s'] = (event.clipboardData || window.clipboardData).getData('text')" % self.code)
+
+    JsUtils.jsConvertData(jsData, None)
+    return JsObjects.JsVoid("window['%s'] = %s" %(self.code, jsData))
 
   def clear(self):
     """
@@ -26,11 +30,19 @@ class JsClipboard(JsHtml.JsHtml):
     ------------
     Clear the data store in the clipboard component (not in memory in the current clipboard)
     """
-    return JsObjects.JsVoid("window[%s] = ''" % self._src.htmlCode)
+    return JsObjects.JsVoid("window['%s'] = ''" % self.code)
+
+  @property
+  def code(self):
+    """
+    The default data reference
+    :return:
+    """
+    return "%s_data" % self._src.htmlCode
 
   @property
   def data(self):
     """
     Get the data store in the clipboard component
     """
-    return JsObjects.JsString.JsString.get("window[%s]" % self._src.htmlCode)
+    return JsObjects.JsString.JsString.get("window['%s']" % self.code)

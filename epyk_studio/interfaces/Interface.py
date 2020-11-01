@@ -745,7 +745,7 @@ class Studio(Interface.Components):
     """
     return CompStudioNews.News(self)
 
-  def clipboard(self, icon="fas fa-paste", text=None, tooltip=None, position=None, width=(25, 'px'), height=(25, 'px'),
+  def clipboard(self, icon="fas fa-paste", text="", tooltip=None, width=(100, 'px'), height=("auto", ''),
               htmlCode=None, options=None, profile=None):
     """
 
@@ -753,9 +753,9 @@ class Studio(Interface.Components):
     """
     width = Arguments.size(width, unit="px")
     height = Arguments.size(height, unit="px")
-    html_edit = html.HtmlClipboards.Clipboard(self.rptObj, position, icon, text, tooltip, width, height, htmlCode, options or {}, profile)
-    html_edit.style.css.float = position
-    html_edit.icon.style.css.font_size = Defaults_css.font()
+    html_edit = html.HtmlClipboards.Clipboard(self.rptObj, icon, text, tooltip, width, height, htmlCode, options or {}, profile)
+    html_edit.style.css.text_align = "right"
     html_edit.icon.style.css.line_height = Defaults_html.LINE_HEIGHT + 2
     html_edit.style.css.display = "inline"
+    html_edit.style.css.z_index = 200
     return html_edit

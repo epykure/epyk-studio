@@ -131,7 +131,7 @@ class Dashboard(CompFields.Fields, CompFields.Timelines, CompCharts.Graphs):
     :param profile:
     """
     options = options or {}
-    dflt_options = {"max": {"rows": 1}, "columns": get_lang(options.get("lang")).COLUMNS, 'rows': get_lang(options.get("lang")).VALUES}
+    dflt_options = {"sub_chart": False, "max": {"rows": 1}, "columns": get_lang(options.get("lang")).COLUMNS, 'rows': get_lang(options.get("lang")).VALUES}
     if options is not None:
       dflt_options.update(options)
     component = html.HtmlDashboards.Pivots(self.context.rptObj, width, height, htmlCode, options, profile)
@@ -139,11 +139,20 @@ class Dashboard(CompFields.Fields, CompFields.Timelines, CompCharts.Graphs):
       row_options = dict(dflt_options)
       row_options["max"] = dflt_options.get("max", {}).get("rows")
       component.rows = self.context.rptObj.ui.lists.drop(htmlCode="%s_rows" % component.htmlCode, options=row_options)
-      component.rows.style.css.min_height = 20
+      if row_options["max"] == 1:
+        component.rows.style.css.min_height = 20
       component.rows.style.css.margin_top = 0
       component.rows.drop()
     else:
       component.rows = rows
+
+    if dflt_options.get("sub_chart"):
+      component.sub_rows = self.context.rptObj.ui.lists.drop(htmlCode="%s_sub_rows" % component.htmlCode, options={"max": 1})
+      component.sub_rows.style.css.min_height = 20
+      component.sub_rows.style.css.margin_top = 0
+      component.sub_rows.options.managed = False
+    else:
+      component.sub_rows = None
     component.rows.options.managed = False
     if columns is None:
       columns_options = dict(dflt_options)

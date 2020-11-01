@@ -7,6 +7,20 @@ from epyk.core.js.primitives import JsObjects
 from epyk.core.js import JsUtils
 
 
+class JsHtmlPivot(JsHtml.JsHtml):
+
+  @property
+  def content(self):
+    """
+    Description:
+    ------------
+    Return the values of the items in the list.
+    """
+    if self._src.sub_rows is None:
+      return JsObjects.JsObjects.get("{rows: %s, columns: %s}" % (self._src.rows.dom.content, self._src.columns.dom.content))
+    return JsObjects.JsObjects.get("{rows: %s, columns: %s, sub_rows: %s}" % (self._src.rows.dom.content, self._src.columns.dom.content, self._src.sub_rows.dom.content))
+
+
 class JsHtmlColumns(JsHtml.JsHtml):
 
   @property

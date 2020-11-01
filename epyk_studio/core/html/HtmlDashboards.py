@@ -20,12 +20,31 @@ class Pivots(Html.Html):
     self.container = self._report.ui.row(position="top", options={"responsive": False})
     self.container.options.managed = False
 
+  @property
+  def dom(self):
+    """
+    Description:
+    ------------
+
+    :rtype: JsHtmlDashboard.JsHtmlPivot
+    """
+    if self._dom is None:
+      self._dom = JsHtmlDashboard.JsHtmlPivot(self, report=self._report)
+    return self._dom
+
   def clear(self):
     return JsUtils.jsConvertFncs([self.rows.dom.clear(), self.columns.dom.clear()], toStr=True)
 
   def __str__(self):
     self.container._vals = []
-    self.container.add([self._report.ui.text("Rows <i style='font-size:%s'>(unique field)</i>" % default_css.font(-3)), self.rows])
+    if self.sub_rows is not None:
+      self.container.add([self._report.ui.text("Rows <i style='font-size:%s'>(unique field)</i>" % default_css.font(-3)), self.rows,
+                          self._report.ui.text("Sub Rows <i style='font-size:%s'>(unique field)</i>" % default_css.font(-3)),self.sub_rows])
+    else:
+      if self.rows.options.max == 1:
+        self.container.add([self._report.ui.text("Rows <i style='font-size:%s'>(unique field)</i>" % default_css.font(-3)), self.rows])
+      else:
+        self.container.add([self._report.ui.text("Rows <i style='font-size:%s'>(multiple field)</i>" % default_css.font(-3)), self.rows])
     self.container.add([self._report.ui.text("Values <i style='font-size:%s'>(multiple fields)</i>" % default_css.font(-3)), self.columns])
     html = [h.html() for h in self._vals]
     return "<div %s>%s%s</div>" % (self.get_attrs(pyClassNames=self.style.get_classes()), self.container.html(), "".join(html))
@@ -69,6 +88,7 @@ class Columns(HtmlList.List):
       self.dom.toggle()
     ])
     self.style.css.overflow = "auto"
+    self.style.css.background = self._report.theme.greys[0]
     self.style.css.max_height = "calc(100vh - %spx)" % top
     self.style.css.fixed(top=top, right=right, transform=False)
     self.style.css.z_index = z_index

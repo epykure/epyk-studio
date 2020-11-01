@@ -13,6 +13,7 @@ class StudioContainers(Buttons):
     container.style.css.padding = "5px 15px"
     container.style.css.background = self.context.rptObj.theme.greys[0]
     container.style.css.border = "1px solid %s" % self.context.rptObj.theme.greys[3]
-    container.style.css.margin_bottom = 10
+    container.style.css.margin_bottom = 5
+    container.style.css.margin_top = 10
     return container
 
