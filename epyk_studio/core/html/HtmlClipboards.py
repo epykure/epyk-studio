@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from epyk.core.html import Html
+from epyk.core.html import HtmlImage
 from epyk_studio.core.js.html import JsHtmlClipboard
 
 
@@ -101,3 +102,54 @@ class Clipboard(Html.Html):
   def __str__(self):
     return "<div %s><div style='display:inline-block'>%s%s</div>%s</div>" % (self.get_attrs(pyClassNames=self.style.get_classes()),
                 self.icon.html(), self.input.html(), self.text.html())
+
+
+class ConfigEditor(HtmlImage.Icon):
+  requirements = ('font-awesome',)
+  name = 'Configuration'
+
+  def __init__(self, report, value, data, width, height, color, tooltip, options, htmlCode, profile):
+    super(ConfigEditor, self).__init__(report, value, width, height, color, tooltip, options, htmlCode, profile)
+    self.varName = data or "window['page_config']"
+    self.components = []
+
+  def add(self, component):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param component:
+    """
+    if not hasattr(component, "htmlCode"):
+      component = self._report.components[component]
+    component.options.editable = True
+    print(component)
+    self.components.append(component)
+    return self
+
+  def extend(self, components):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param components:
+    """
+    for component in components:
+      self.add(component)
+    return self
+
+  def __str__(self):
+    data_ovr = "; ".join(["configData['%s'] = %s" % (h.htmlCode, h.dom.content.toStr()) for h in self.components or []])
+    self.click([
+      '''
+      var configData = %(configData)s; %(data_ovr)s;
+      var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(configData));
+      var dlAnchorElem = document.createElement('a'); dlAnchorElem.setAttribute("href", dataStr);
+      dlAnchorElem.setAttribute("download", "config.json"); dlAnchorElem.click(); dlAnchorElem.remove();
+      ''' % {"configData": self.varName, "data_ovr": data_ovr}
+    ])
+    return super(ConfigEditor, self).__str__()

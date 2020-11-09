@@ -32,11 +32,33 @@ class Pivots(Html.Html):
       self._dom = JsHtmlDashboard.JsHtmlPivot(self, report=self._report)
     return self._dom
 
+  def items(self, style):
+    """
+    Description:
+    ------------
+    Function to load a predefined style for the items of the components
+
+    Attributes:
+    ----------
+    :param style. String. Mandatory. The alias of the style to apply
+    """
+    if style == "bullets":
+      bullter_style = {"display": 'inline-block', 'padding': '0 5px', 'margin-right': '2px',  'background': self._report.theme.greys[2],
+                             'border': '1px solid %s' % self._report.theme.greys[2], 'border-radius': '10px'}
+      self.columns.options.li_css = bullter_style
+      self.columns.set_items()
+      self.rows.options.li_css = bullter_style
+      if self.sub_rows is not None:
+        self.sub_rows.options.li_css = bullter_style
+    return self
+
   def clear(self):
     return JsUtils.jsConvertFncs([self.rows.dom.clear(), self.columns.dom.clear()], toStr=True)
 
   def __str__(self):
     self.container._vals = []
+    self.rows.drop()
+    self.columns.drop()
     if self.sub_rows is not None:
       self.container.add([self._report.ui.text("Rows <i style='font-size:%s'>(unique field)</i>" % default_css.font(-3)), self.rows,
                           self._report.ui.text("Sub Rows <i style='font-size:%s'>(unique field)</i>" % default_css.font(-3)),self.sub_rows])
@@ -52,6 +74,7 @@ class Pivots(Html.Html):
 
 class Columns(HtmlList.List):
   name = 'Dashboard Columns'
+  requirements = ('font-awesome',)
 
   @property
   def dom(self):
@@ -79,7 +102,7 @@ class Columns(HtmlList.List):
     self.anchor = self._report.ui.icon("fas fa-chevron-right")
     self.anchor.style.css.position = "fixed"
     self.anchor.style.css.cursor = "pointer"
-    self.anchor.style.css.top = top + 8
+    self.anchor.style.css.top = top + 10
     self.anchor.style.css.right = 18
     self.anchor.tooltip(tooltip)
     self.anchor.style.css.z_index = z_index + 10
@@ -88,7 +111,7 @@ class Columns(HtmlList.List):
       self.dom.toggle()
     ])
     self.style.css.overflow = "auto"
-    self.style.css.background = self._report.theme.greys[0]
+    self.style.css.background = self._report.theme.colors[0]
     self.style.css.max_height = "calc(100vh - %spx)" % top
     self.style.css.fixed(top=top, right=right, transform=False)
     self.style.css.z_index = z_index

@@ -20,6 +20,17 @@ class JsHtmlPivot(JsHtml.JsHtml):
       return JsObjects.JsObjects.get("{rows: %s, columns: %s}" % (self._src.rows.dom.content, self._src.columns.dom.content))
     return JsObjects.JsObjects.get("{rows: %s, columns: %s, sub_rows: %s}" % (self._src.rows.dom.content, self._src.columns.dom.content, self._src.sub_rows.dom.content))
 
+  def clear(self):
+    """
+    Description:
+    ------------
+    Clear all the items in the list.
+    """
+    if self._src.sub_rows is not None:
+      return JsUtils.jsConvertFncs([self._src.sub_rows.dom.clear(), self._src.rows.dom.clear(), self._src.columns.dom.clear()], toStr=True)
+
+    return JsUtils.jsConvertFncs([self._src.rows.dom.clear(), self._src.columns.dom.clear()], toStr=True)
+
 
 class JsHtmlColumns(JsHtml.JsHtml):
 
