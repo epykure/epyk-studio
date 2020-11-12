@@ -32,7 +32,7 @@ class Pivots(Html.Html):
       self._dom = JsHtmlDashboard.JsHtmlPivot(self, report=self._report)
     return self._dom
 
-  def items(self, style):
+  def items_style(self, style):
     """
     Description:
     ------------
@@ -44,7 +44,7 @@ class Pivots(Html.Html):
     """
     if style == "bullets":
       bullter_style = {"display": 'inline-block', 'padding': '0 5px', 'margin-right': '2px',  'background': self._report.theme.greys[2],
-                             'border': '1px solid %s' % self._report.theme.greys[2], 'border-radius': '10px'}
+                       'border': '1px solid %s' % self._report.theme.greys[2], 'border-radius': '10px'}
       self.columns.options.li_css = bullter_style
       self.columns.set_items()
       self.rows.options.li_css = bullter_style

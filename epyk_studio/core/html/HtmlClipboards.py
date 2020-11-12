@@ -113,6 +113,13 @@ class ConfigEditor(HtmlImage.Icon):
     self.varName = data or "window['page_config']"
     self.components = []
 
+  @property
+  def _js__builder__(self):
+    return '''var position = options.top; 
+      if((typeof data === 'undefined') || (!data.download)){htmlObj.remove()} else {htmlObj.style.top = position + "px"; position = position + 30} 
+      if((typeof data === 'undefined') || (!data.edit)){document.getElementById(htmlObj.id + "_lock").remove()} 
+      else {document.getElementById(htmlObj.id + "_lock").click(); document.getElementById(htmlObj.id + "_lock").style.top = position + "px"}'''
+
   def add(self, component):
     """
     Description:
@@ -124,8 +131,6 @@ class ConfigEditor(HtmlImage.Icon):
     """
     if not hasattr(component, "htmlCode"):
       component = self._report.components[component]
-    component.options.editable = True
-    print(component)
     self.components.append(component)
     return self
 
@@ -144,6 +149,9 @@ class ConfigEditor(HtmlImage.Icon):
 
   def __str__(self):
     data_ovr = "; ".join(["configData['%s'] = %s" % (h.htmlCode, h.dom.content.toStr()) for h in self.components or []])
+    self.icon.click(
+      {"on": [c.dom.setAttribute("contenteditable", False).r for c in self.components],
+       "off": [c.dom.setAttribute("contenteditable", True).r for c in self.components]})
     self.click([
       '''
       var configData = %(configData)s; %(data_ovr)s;

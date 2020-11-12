@@ -638,27 +638,18 @@ class Dashboard(CompFields.Fields, CompFields.Timelines, CompCharts.Graphs):
     )
     return svg
 
-  def ceditor(self, data=None, icon="fas fa-layer-group", width=(None, 'px'), height=(None, "px"), top=(90, "px"),
-              left=(10, "px"), options=None, profile=None):
+  def editable(self, data=None, icon="fas fa-layer-group", width=(None, 'px'), height=(None, "px"), top=(90, "px"),
+              left=(10, "px"), htmlCode=None, options=None, profile=None):
     dflt_options = {'icon_family': 'font-awesome'}
     if options is not None:
       dflt_options.update(options)
-    note = html.HtmlClipboards.ConfigEditor(self.context.rptObj, icon, data, width, height, None, "Copy to get the configuration", dflt_options, None, profile)
+    note = html.HtmlClipboards.ConfigEditor(self.context.rptObj, icon, data, width, height, None, "Copy to get the configuration", dflt_options, htmlCode, profile)
+    note._jsStyles["top"] = top[0]
     note.style.css.remove("color")
-    #note.style.css.cursor = "pointer"
     note.style.add_classes.div.color_hover()
     note.style.css.fixed(top=top[0], left=left[0])
-    #data_ovr = "; ".join(["configData['%s'] = %s" % (h.htmlCode, h.dom.content.toStr()) for h in note.components or []])
-    # note.click([
-    #   '''
-    #   var configData = %(configData)s; %(data_ovr)s;
-    #   var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(configData));
-    #   var dlAnchorElem = document.createElement('a'); dlAnchorElem.setAttribute("href", dataStr);
-    #   dlAnchorElem.setAttribute("download", "config.json"); dlAnchorElem.click(); dlAnchorElem.remove();
-    #   ''' % {"configData": jsData or "window['page_config']", "data_ovr": data_ovr}
-    # ])
-    #self.context.rptObj._props['js']['builders'].add('''
-    #''')
+    note.icon = self.context.rptObj.ui.icons.toggles.lock(options=options, profile=profile, htmlCode="%s_lock" % note.htmlCode)
+    note.icon.style.css.fixed(top=(120, 'px'), left=(10, "px"))
     return note
 
 
