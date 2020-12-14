@@ -729,6 +729,36 @@ class Blog(object):
     text.style.css.position = "absolute"
     return text
 
+  def like(self, value=0, icon="far fa-heart", top=(60, "px"), right=(10, "px"), tooltip="Like the page", htmlCode=None,
+           options=None, profile=None):
+    """
+    Description:
+    ------------
+
+    Attributes:
+    ----------
+    :param value:
+    :param icon:
+    :param top:
+    :param right:
+    :param tooltip:
+    :param htmlCode: String. Optional. An identifier for this component (on both Python and Javascript side)
+    :param options: Dictionary. Optional. Specific Python options available for this component
+    :param profile: Boolean or Dictionary. Optional. A flag to set the component performance storage
+    """
+    like = self.context.rptObj.ui.icon(icon, options=options, profile=profile)
+    ike_counter = self.context.rptObj.ui.text("(%s)" % (value or 0), htmlCode=htmlCode, options=options, profile=profile)
+    ike_counter.style.css.margin_left = 5
+    like.tooltip(tooltip)
+    like.style.css.remove("color")
+    like.style.css.cursor = "pointer"
+    like.style.add_classes.div.color_hover()
+    container = self.context.rptObj.ui.div([like, ike_counter], options=options, profile=profile, width="auto")
+    container.style.css.fixed(top=top[0], right=right[0])
+    container.text = ike_counter
+    container.icon = like
+    return container
+
 
 class Gallery(Blog):
 
