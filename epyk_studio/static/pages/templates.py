@@ -19,13 +19,19 @@ for rec in git_files['tree']:
 
 nav_bar(page, 'Templates')
 
+t1 = page.ui.title("Static templates")
+
 search = page.ui.inputs.search(htmlCode='input')
-search.style.standard()
 
 gallery = page.studio.gallery.images(pictures, columns=4, options={"responsive": False})
-gallery.style.standard()
 for i in gallery.images:
   i.goto(os.path.join(repo_templates.main, 'locals', 'studio'))
+
+t2 = page.ui.title("Web templates")
+
+box = page.studio.containers.box()
+box.extend([t1, search, gallery, t2])
+box.style.standard()
 
 add_code(page)
 

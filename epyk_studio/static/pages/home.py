@@ -19,6 +19,13 @@ content = page.ui.text(lang.get_lang().TEXT_2, align="center")
 content.style.css.font_factor(5)
 content.style.css.italic()
 
+twitter = page.ui.icons.twitter()
+linkedIn = page.ui.icons.linkedIn()
+
+text_follow = page.ui.text("Follow us on", align="center")
+text_follow.style.css.italic()
+page.ui.div([twitter, linkedIn], align="center")
+
 pg = page.ui.texts.paragraph(lang.get_lang().TEXT_3)
 pg.style.css.margin = "10px 20% 0 20%"
 pg.style.css.width = "60%"
@@ -64,7 +71,8 @@ menu = page.ui.menus.bar([
     #{"text": "Publish"}, # local report
     #{"text": "Link to App"}, # local report
     {"text": "Community", 'url': 'https://github.com/epykure/epyk-studio'}, # local report
-    {"text": "Share issues", 'url': 'https://github.com/epykure/epyk-studio/issues'} # local report
+    {"text": "Share issues (Studio)", 'url': 'https://github.com/epykure/epyk-studio/issues'}, # local report
+    {"text": "Share issues (Core)", 'url': 'https://github.com/epykure/epyk-ui/issues'} # local report
   ]},
 ], options={"responsive": False})
 menu.style.css.margin = "10px auto"

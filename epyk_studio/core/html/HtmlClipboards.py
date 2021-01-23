@@ -37,28 +37,34 @@ class Clipboard(Html.Html):
     ])
     #self.text.on("blur", [self.text.dom.hide()])
 
-  def paste(self, jsFncs):
+  def paste(self, js_funcs):
     """
     Description:
     ------------
     Paste data stored in the clipboard.
 
-    The paste is not automatic for secutity reasons on the browser to avoid stealing data.
+    The paste is not automatic for security reasons on the browser to avoid stealing data.
     THis is the reason why this framework will also do not try to automate this.
 
     If clipboard is used it will only encourage the user to paste the data.
 
-    :param jsFncs:
+    Usage:
+    -----
+
+    :param js_funcs:
     """
-    if not isinstance(jsFncs, list):
-      jsFncs = [jsFncs]
-    jsFncs.append(self.input.dom.hide())
-    self.input.paste([self.loading()] + jsFncs)
+    if not isinstance(js_funcs, list):
+      js_funcs = [js_funcs]
+    js_funcs.append(self.input.dom.hide())
+    self.input.paste([self.loading()] + js_funcs)
 
   def loading(self, label="Processing data"):
     """
     Description:
     -----------
+
+    Usage:
+    -----
 
     Attributes:
     ----------
@@ -66,9 +72,7 @@ class Clipboard(Html.Html):
     """
     return self.text.build('<i style="margin-right:5px" class="fas fa-spinner fa-spin"></i>%s' % label)
 
-  @property
-  def _js__builder__(self):
-    return '''
+  _js__builder__ = '''
       var content = data.text;
       htmlTextObj = document.getElementById(htmlObj.id + "_text");
       htmlIconObj = document.getElementById(htmlObj.id + "_icon");
@@ -93,6 +97,9 @@ class Clipboard(Html.Html):
     ------------
     Shortcut to the clipboard dom elment.
 
+    Usage:
+    -----
+
     :rtype: JsHtmlClipboard.JsClipboard
     """
     if self._dom is None:
@@ -113,9 +120,7 @@ class ConfigEditor(HtmlImage.Icon):
     self.varName = data or "window['page_config']"
     self.components = []
 
-  @property
-  def _js__builder__(self):
-    return '''var position = options.top; 
+  _js__builder__ = '''var position = options.top; 
       if((typeof data === 'undefined') || (!data.download)){htmlObj.remove()} else {htmlObj.style.top = position + "px"; position = position + 30} 
       if((typeof data === 'undefined') || (!data.edit)){document.getElementById(htmlObj.id + "_lock").remove()} 
       else {document.getElementById(htmlObj.id + "_lock").click(); document.getElementById(htmlObj.id + "_lock").style.top = position + "px"}'''
@@ -124,6 +129,9 @@ class ConfigEditor(HtmlImage.Icon):
     """
     Description:
     ------------
+
+    Usage:
+    -----
 
     Attributes:
     ----------
@@ -138,6 +146,9 @@ class ConfigEditor(HtmlImage.Icon):
     """
     Description:
     ------------
+
+    Usage:
+    -----
 
     Attributes:
     ----------
@@ -161,3 +172,18 @@ class ConfigEditor(HtmlImage.Icon):
       ''' % {"configData": self.varName, "data_ovr": data_ovr}
     ])
     return super(ConfigEditor, self).__str__()
+
+
+class DataExplorer(Html.Html):
+  requirements = ('font-awesome',)
+  name = 'Explorer'
+
+  def __init__(self, report, width, height, htmlCode, options, profile):
+    super(DataExplorer, self).__init__(report, '', htmlCode=htmlCode, profile=profile,
+                                    css_attrs={"width": width, 'height': height})
+
+  _js__builder__ = '''
+      '''
+
+  def __str__(self):
+    return "<div %s></div>" % self.get_attrs(pyClassNames=self.style.get_classes())

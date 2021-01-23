@@ -14,7 +14,7 @@ class OptionTask(Options):
 
     Attributes:
     ----------
-    :param icon: Dictionary. CSS attributes
+    :prop icon: Dictionary. CSS attributes
     """
     return self.get("fas fa-check-circle")
 
@@ -31,7 +31,7 @@ class OptionTask(Options):
 
     Attributes:
     ----------
-    :param icon: Dictionary. CSS attributes
+    :prop icon: Dictionary. CSS attributes
     """
     return self.get("fas fa-times-circle")
 
@@ -48,7 +48,7 @@ class OptionTask(Options):
 
     Attributes:
     ----------
-    :param icon: Dictionary. CSS attributes
+    :prop icon: Dictionary. CSS attributes
     """
     return self.get("fas fa-pause")
 
@@ -65,7 +65,7 @@ class OptionTask(Options):
 
     Attributes:
     ----------
-    :param icon: Dictionary. CSS attributes
+    :prop icon: Dictionary. CSS attributes
     """
     return self.get("fas fa-spinner")
 
@@ -82,7 +82,7 @@ class OptionTask(Options):
 
     Attributes:
     ----------
-    :param icon: Dictionary. CSS attributes
+    :prop icon: Dictionary. CSS attributes
     """
     return self.get("")
 

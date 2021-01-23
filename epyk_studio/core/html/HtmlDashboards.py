@@ -57,8 +57,10 @@ class Pivots(Html.Html):
 
   def __str__(self):
     self.container._vals = []
-    self.rows.drop()
-    self.columns.drop()
+    if "ondrop" not in self.rows.attr:
+      self.rows.drop()
+    if "ondrop" not in self.columns.attr:
+      self.columns.drop()
     if self.sub_rows is not None:
       self.container.add([self._report.ui.text("Rows <i style='font-size:%s'>(unique field)</i>" % default_css.font(-3)), self.rows,
                           self._report.ui.text("Sub Rows <i style='font-size:%s'>(unique field)</i>" % default_css.font(-3)),self.sub_rows])
@@ -138,9 +140,7 @@ class Task(Html.Html):
     self._jsStyles['colors'] = {"COMPLETED": self._report.theme.success[1], "RUNNING": self._report.theme.warning[1],
                                 "WAITING": self._report.theme.greys[5], "FAILED": self._report.theme.danger[1]}
 
-  @property
-  def _js__builder__(self):
-    return ''' 
+  _js__builder__ = ''' 
       if(typeof data === 'string'){
         if (data === true){ data.status = 'completed'}
         else if (data === false){ data.status = 'FAILED'}
@@ -176,6 +176,9 @@ class Task(Html.Html):
     -----------
     Property to set all the Tasks properties
 
+    Usage:
+    -----
+
     :rtype: OptDashboards.OptionTask
     """
     return self.__options
@@ -185,17 +188,32 @@ class Task(Html.Html):
     Description:
     -----------
 
+    Usage:
+    -----
+
     Attributes:
     ----------
     :param label:
     """
     return self.icon.dom.setAttribute("class", "fas fa-spinner fa-spin")
 
-  def click(self, jsFncs, profile=False, source_event=None, onReady=False):
+  def click(self, js_funcs, profile=False, source_event=None, onReady=False):
+    """
+    Description:
+    -----------
+
+    Usage:
+    -----
+
+    :param js_funcs:
+    :param profile:
+    :param source_event:
+    :param onReady:
+    """
     self.style.css.cursor = "pointer"
     if onReady:
       self._report.body.onReady([self.dom.events.trigger("click")])
-    return self.on("click", jsFncs, profile, source_event)
+    return self.on("click", js_funcs, profile, source_event)
 
   def __str__(self):
     return "<div %s>%s%s</div>" % (self.get_attrs(pyClassNames=self.style.get_classes()), self.icon.html(), self.text.html())

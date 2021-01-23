@@ -417,8 +417,9 @@ def transpile(args):
       page = utils.get_page(mod)
       if settings is not None:
         page.node_modules(settings.PACKAGE_PATH, alias=settings.SERVER_PACKAGE_URL)
-      output = page.outs.html_file(path=view_folder, name=f, split_files=split_files, install_modules=install_modules,
-                                   options={"css_route": '/css', "js_route": '/js'})
+      # TODO review install_modules
+      output = page.outs.html_file(path=view_folder, name=f,
+                                   options={"split": split_files, "css_route": '/css', "js_route": '/js'})
       print(output)
     except Exception as err:
       traceback.print_exception(*sys.exc_info())

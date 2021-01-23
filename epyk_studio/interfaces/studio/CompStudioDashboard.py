@@ -124,11 +124,11 @@ class Dashboard(CompFields.Fields, CompFields.Timelines, CompCharts.Graphs):
     ----------
     :param rows:
     :param columns:
-    :param width:
-    :param height:
-    :param htmlCode:
-    :param options:
-    :param profile:
+    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit.
+    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit.
+    :param htmlCode: String. Optional. An identifier for this component (on both Python and Javascript side).
+    :param options: Dictionary. Optional. Specific Python options available for this component.
+    :param profile: Optional. A flag to set the component performance storage.
     """
     options = options or {}
     dflt_options = {"sub_chart": False, "max": {"rows": 1}, "columns": get_lang(options.get("lang")).COLUMNS, 'rows': get_lang(options.get("lang")).VALUES}
@@ -651,6 +651,10 @@ class Dashboard(CompFields.Fields, CompFields.Timelines, CompCharts.Graphs):
     note.icon = self.context.rptObj.ui.icons.toggles.lock(options=options, profile=profile, htmlCode="%s_lock" % note.htmlCode)
     note.icon.style.css.fixed(top=(120, 'px'), left=(10, "px"))
     return note
+
+  def explorer(self, width=(None, "px"), height=(None, "px"), htmlCode=None, options=None, profile=None):
+    container = html.HtmlClipboards.DataExplorer(self.context.rptObj, width, height, htmlCode, options, profile)
+    return container
 
 
 class Calendar(CompCalendars.Calendar):
