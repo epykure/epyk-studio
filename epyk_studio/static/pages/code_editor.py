@@ -6,26 +6,19 @@ from epyk.core.data import events
 
 # Create a basic report object
 page = Report()
-
 nav_bar(page, "Designer")
-
 anchor = page.ui.buttons.large("Templates", align="center")
-
 page.ui.navigation.side(position="left", anchor=anchor)
-
+t1 = page.ui.title("Quick start")
 p = page.ui.texts.paragraph('''
 Create your first dashboards without having anything installed.
 
 Ideal for Manager or Product owners eagger to illustrate the renderer of the final web template quickly.
 This will ensure a perfect understanding and a good basis to start the implementation.
 ''')
-p.style.standard()
 
 reset = page.ui.buttons.large("Reset", align="center")
-page.ui.row([reset, anchor], options={"responsive": False})
-
-title = page.ui.title("Add components")
-title.style.standard()
+title_comps = page.ui.title("Add components")
 
 components = {
   'Title': "page.ui.title('This is a title')",
@@ -41,23 +34,30 @@ components = {
 }
 pills = page.ui.menus.pills(list(components.keys()), height=(30, 'px'))
 pills.style.css.margin_bottom = 0
-pills.style.standard()
 
-check = page.ui.check(True, label="Add at the end", htmlCode="to_end")
-check.style.standard()
+check = page.ui.check(True, label="Add at the end", html_code="to_end")
 check.click([])
 
 title = page.ui.title("Previews")
-title.style.standard()
-
 tabs = page.ui.panels.tabs()
-tabs.style.standard()
 
 editor = page.ui.codes.python('''
+# Epyk Designer
+
 from epyk_studio.core.Page import Report
 
 page = Report()
-''', htmlCode="editor")
+''', html_code="editor")
+editor.addon.search()
+editor.addon.foldcode()
+editor.options.hintOptions.hint([[
+  "text", "paragraph", "image"
+]])
+
+editor.addon.highlighter()
+editor.addon.trailingspace()
+editor.addon.fullscreen()
+editor.placeholder("Put your python code here...")
 
 iframe = page.ui.layouts.iframe(height=(600, 'px'))
 iframe.style.css.border = "1px solid %s" % page.theme.greys[2]
@@ -71,10 +71,19 @@ redo_last_cange = page.ui.button("Redo", icon="fas fa-caret-right")
 redo_last_cange.style.border = None
 redo_last_cange.style.margin_left = 15
 
+rpt_classpath = page.ui.input(placeholder="extra classpath for this report", html_code="rpt_classpath")
+rpt_classpath.style.css.text_align = "left"
+rpt_classpath.style.css.padding_left = 5
+rpt_link = page.ui.rich.search_input(placeholder="put the link to the report, e.g: https://raw.githubusercontent.com/epykure/epyk-templates/master/locals/texts/editor.py", html_code="rpt_path")
+rpt_page = page.ui.links.colored("Full page")
+
+ext_rpt = page.ui.panels.sliding([rpt_classpath, rpt_link, rpt_page], "External report")
+ext_rpt.options.expanded = False
+
 tabs.add_panel("Editor", page.ui.col([
   page.ui.div([rem_last_cange, redo_last_cange]).css({"margin-top": '10px'}),
   editor]), selected=True)
-tabs.add_panel("Web", page.ui.div(iframe))
+tabs.add_panel("Web", [ext_rpt, page.ui.div(iframe)])
 
 rem_last_cange.click([editor.js.undo()])
 redo_last_cange.click([editor.js.redo()])
@@ -87,33 +96,51 @@ for i, items in enumerate(components.items()):
 
 tabs.tab("Web").click([
   page.js.post("/code_frame", components=[editor]).onSuccess([
-      iframe.dom.srcdoc(events.data["page"])
+      iframe.dom.srcdoc(events.data["page"]),
   ])
 ])
 
-
 reset.click([
   tabs.tab("Editor").dom.events.trigger("click"),
-  editor.build('''from epyk_studio.core.Page import Report
+  editor.build('''# Epyk Designer
+  
+from epyk_studio.core.Page import Report
 
 page = Report()
 ''')
 ])
 
+rpt_link.enter([
+  page.js.post("/code_frame", components=[rpt_classpath, rpt_link]).onSuccess([
+    editor.build(events.data["content"]),
+    iframe.dom.srcdoc(events.data["page"]),
+    rpt_page.dom.url(events.data["link"]),
+    rpt_page.dom.css({"display": 'inline-block'})
+  ])
+])
+# C:\TestStudio\Studio\ui\reports\tmpl_2.py
 
-script = page.ui.icon("fab fa-python", color="white")
+rpt_link.input.change([rpt_page.dom.css({"display": 'none'})])
+
+script = page.ui.icon("fab fa-python", color=page.theme.greys[0])
 script.style.css.fixed(top=60, right=20)
 script.style.add_classes.div.border_hover()
 script.style.css.border_radius = 15
 script.style.css.padding = 8
 script.style.css.background = page.theme.colors[-1]
 
-html = page.ui.icon("fab fa-html5", color="white")
+html = page.ui.icon("fab fa-html5", color=page.theme.greys[0])
 html.style.css.fixed(top=100, right=20)
 html.style.add_classes.div.border_hover()
 html.style.css.border_radius = 15
 html.style.css.padding = 8
 html.style.css.background = page.theme.colors[-1]
+
+box = page.studio.containers.box()
+box.extend([
+  t1, p, page.ui.row([reset, anchor], options={"responsive": False}), title_comps, pills, check, title, tabs
+])
+box.style.standard()
 
 add_code(page)
 

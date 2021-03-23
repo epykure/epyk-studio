@@ -6,7 +6,6 @@ from epyk.core.data import events
 
 # Create a basic report object
 page = Report()
-
 nav_bar(page, "Project")
 
 title = page.ui.title("Start new project")
@@ -17,13 +16,13 @@ special characters.
 ''')
 p_1.style.standard()
 
-inp = page.ui.input(placeholder="project's name", htmlCode="name")
+inp = page.ui.input(placeholder="project's name", html_code="name")
 inp.style.css.text_align = "left"
 inp.style.css.padding_left = 5
 inp.style.css.padding_right = 5
 inp.style.standard()
 
-get_started = page.ui.buttons.large("Create", align="center")
+get_started = page.ui.buttons.colored("Create", align="center")
 get_started.style.css.margin_top = 10
 get_started.click([
   page.js.post("/test", components=[inp]).onSuccess([
@@ -40,14 +39,15 @@ p.style.css.margin_top = 20
 t2 = page.ui.title("Find an existing projects")
 t2.style.standard()
 
-inp_pr = page.ui.input(placeholder="project's name", htmlCode="project")
+inp_pr = page.ui.input(placeholder="project's name", html_code="project")
 inp_pr.style.css.text_align = "left"
 inp_pr.style.css.padding_left = 5
 inp_pr.style.css.padding_right = 5
 inp_pr.style.standard()
 
-find_project = page.ui.buttons.large("Find", align="center")
+find_project = page.ui.buttons.colored("Find", align="center")
 find_project.style.css.margin_top = 10
+find_project.style.css.margin_bottom = 10
 
 items = page.ui.lists.items()
 items.style.hover_border()
@@ -82,7 +82,6 @@ imgs = page.ui.menus.images([
 imgs.style.standard()
 
 add_code(page)
-
 dis = page.ui.banners.disclaimer()
 dis.style.css.margin_top = 20
 

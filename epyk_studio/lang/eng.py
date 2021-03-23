@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 
 DAYS = ['Monday']
-MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+MONTHS = [
+  "January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+  "November", "December"]
 
 BY_WITH_NAME = "The %s, by&nbsp;"
 BY = "by&nbsp;"
@@ -36,13 +38,25 @@ VALUES = 'Values'
 
 
 def country(cty='us'):
+  """
+  Description:
+  ------------
+
+  Attributes:
+  ----------
+  :param cty: String. Optional. The country code.
+  """
   return "us"
 
 
 def distance_unit(cty='us'):
   """
+  Description:
+  ------------
 
-  :param cty:
+  Attributes:
+  ----------
+  :param cty: String. Optional. The country code.
   """
   cty = cty or 'us'
   cty = cty.lower()
@@ -54,8 +68,12 @@ def distance_unit(cty='us'):
 
 def currency(cty='uk'):
   """
+  Description:
+  ------------
 
-  :param cty:
+  Attributes:
+  ----------
+  :param cty: String. Optional. The country code.
   """
   cty = cty or 'us'
   cty = cty.lower()

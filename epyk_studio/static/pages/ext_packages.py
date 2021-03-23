@@ -6,7 +6,6 @@ from epyk.core.js import Imports
 
 # Create a basic report object
 page = Report()
-
 nav_bar(page, "JavaScript")
 
 title = page.ui.title("Get all packages")
@@ -33,7 +32,7 @@ page.ui.texts.paragraph('''
 Not all the packages available on the JavaScript ecosystem are available. You can check here if a package existing.
 This will search in the module Imports.py installed and tell you all the possible matched.
 ''').style.standard()
-search = page.ui.inputs.search(htmlCode='input')
+search = page.ui.inputs.search(html_code='input')
 search.style.standard()
 
 page.ui.texts.paragraph('''

@@ -34,14 +34,38 @@ VALUES = 'Valeurs'
 
 
 def country(cty='fr'):
+  """
+  Description:
+  ------------
+
+  Attributes:
+  ----------
+  :param cty: String. Optional. The country code.
+  """
   return "fr"
 
 
 def distance_unit(cty='fr'):
+  """
+  Description:
+  ------------
+
+  Attributes:
+  ----------
+  :param cty: String. Optional. The country code.
+  """
   return "km"
 
 
 def currency(cty='fr'):
+  """
+  Description:
+  ------------
+
+  Attributes:
+  ----------
+  :param cty: String. Optional. The country code.
+  """
   cty = cty or 'uk'
   cty = cty.lower()
   return "€"

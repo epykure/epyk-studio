@@ -11,10 +11,11 @@ class OptionTask(Options):
     """
     Description:
     ------------
+    Icon for a completed task status.
 
     Attributes:
     ----------
-    :prop icon: Dictionary. CSS attributes
+    :prop icon: String. The icon reference.
     """
     return self.get("fas fa-check-circle")
 
@@ -28,10 +29,11 @@ class OptionTask(Options):
     """
     Description:
     ------------
+    Icon for a failed task status.
 
     Attributes:
     ----------
-    :prop icon: Dictionary. CSS attributes
+    :prop icon: String. The icon reference.
     """
     return self.get("fas fa-times-circle")
 
@@ -45,10 +47,11 @@ class OptionTask(Options):
     """
     Description:
     ------------
+    Icon for a waiting task status.
 
     Attributes:
     ----------
-    :prop icon: Dictionary. CSS attributes
+    :prop icon: String. The icon reference.
     """
     return self.get("fas fa-pause")
 
@@ -62,10 +65,11 @@ class OptionTask(Options):
     """
     Description:
     ------------
+    Icon for a running task status.
 
     Attributes:
     ----------
-    :prop icon: Dictionary. CSS attributes
+    :prop icon: String. The icon reference.
     """
     return self.get("fas fa-spinner")
 
@@ -79,10 +83,11 @@ class OptionTask(Options):
     """
     Description:
     ------------
+    Set the task status.
 
     Attributes:
     ----------
-    :prop icon: Dictionary. CSS attributes
+    :prop icon: String. A task status
     """
     return self.get("")
 
@@ -96,8 +101,11 @@ class OptionTask(Options):
     self.failed = self.failed
     self.completed  = self.completed
     self._attrs["icon"] = getattr(self, value.lower())
-    self._attrs["color"] = {"COMPLETED": self._report._report.theme.success[1], "RUNNING": self._report._report.theme.warning[1],
-                "WAITING": self._report._report.theme.greys[5], "FAILED": self._report._report.theme.danger[1]}[value]
+    self._attrs["color"] = {
+      "COMPLETED": self.component.page.theme.success[1],
+      "RUNNING": self.component.page.theme.warning[1],
+      "WAITING": self.component.page.theme.greys[5],
+      "FAILED": self.component.page.theme.danger[1]}[value]
     self.set(value)
 
   @property

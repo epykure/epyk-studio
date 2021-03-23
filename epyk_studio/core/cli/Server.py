@@ -4,10 +4,13 @@ Internal module to start the webserver which will drive the creation of a projec
 
 import tornado.web
 import os
+import json
+import sys
 import time
 import importlib
 
-from epyk_studio.utils import git
+
+TEMPS_FILE_HISTORY = "run_history.json"
 
 
 def get_components(components, results, alias=None):
@@ -21,7 +24,7 @@ def get_components(components, results, alias=None):
   ----------
   :param components: HTML Component. An internal HTML Component
   :param results: Dictionary. A dictionary with the documentation per component
-  :param alias: String. The components prefixe (for the sub categories)
+  :param alias: String. The components prefix (for the sub categories)
   """
   for v in dir(components):
     if v == 'google':
@@ -30,7 +33,7 @@ def get_components(components, results, alias=None):
     obj = getattr(components, v)
     if callable(obj):
       doc_string = obj.__doc__
-      if doc_string is None or not "Description" in doc_string:
+      if doc_string is None or "Description" not in doc_string:
         continue
 
       if alias is None:
@@ -48,7 +51,8 @@ def parse_doc(doc_string):
   """
   Description:
   ------------
-  Parse the documentation and structure this to an internal object in order to be lookup in the Studio to help on the implementation.
+  Parse the documentation and structure this to an internal object in order to be lookup in the Studio to help on
+  the implementation.
 
   Attributes:
   ----------
@@ -95,7 +99,7 @@ def parse_doc(doc_string):
   return result
 
 
-#This is for the compatibility with Python 2
+# This is for the compatibility with Python 2
 class Namespace:
   def __init__(self, **kwargs):
     self.__dict__.update(kwargs)
@@ -158,10 +162,10 @@ class MainHandlerPage(tornado.web.RequestHandler):
 
     TODO: Find a way to improve the reload
     """
-    data = {}
+    data = {"current_path": self.current_path}
     if self.request.query_arguments:
       arguments = self.request.query_arguments
-      data = {arg: self.get_argument(arg) for arg in arguments.keys()}
+      data.update({arg: self.get_argument(arg) for arg in arguments.keys()})
       if 'theme' in data:
         os.environ["THEME"] = data['theme']
         del data['theme']
@@ -298,7 +302,6 @@ class MainHandlerPageGetExt(StudioHandler):
     ------------
 
     """
-    import sys
     from epyk.core.cli import utils
     from epyk.core.js import Imports
 
@@ -335,7 +338,7 @@ class MainHandlerExts(StudioHandler):
     ------------
 
     """
-    import sys
+    from epyk_studio.utils import git
 
     data = {'script': 'bars.py'}
     if self.request.query_arguments:
@@ -402,7 +405,7 @@ class MainHandlerPackages(StudioHandler):
     else:
       js_alias = list(Imports.JS_IMPORTS.keys())
       for k in Imports.CSS_IMPORTS.keys():
-        if not k in js_alias:
+        if k not in js_alias:
           js_alias.append(k)
     Imports.npm(js_alias, self.current_path)
     self.write({'status': "All packages downloaded"})
@@ -512,14 +515,206 @@ class MainHandlerSearchResult(tornado.web.RequestHandler):
 class MainHandlerCodeFrame(StudioHandler):
 
   def get(self):
-    self.write('Hello Get')
+    """
+    Description:
+    -----------
 
+    :return:
+    """
+
+    # TODO find a way to segregate the loading of the imports
+    script = self.get_argument("script")
+    classpath = self.get_argument("classpath", "")
+    if classpath:
+      for p in classpath.split(";"):
+        sys.path.append(p.strip())
+    path, script_name = os.path.split(script)
+    sys.path.append(path)
+
+    mod = __import__(script_name[:-3], fromlist=['object'])
+    importlib.reload(mod)
+    if hasattr(mod, 'get_page'):
+      from epyk_studio.core.Page import Report
+
+      page = Report()
+      mod.get_page(page)
+    else:
+      page = mod.page
+
+    contents = page.ui.contents("Environment", options={"manual": True})
+    title_link = contents.add_category("Other Pages", level=1, options={"hidden": True})
+    title_link.style.css.margin_top = 10
+    script_path, selected_file, next_url = os.path.dirname(mod.__file__), False, None
+    for fp in os.listdir(script_path):
+      if fp != "__init__.py" and fp.endswith(".py"):
+        url = contents.add_url(page.ui.text(fp), r"/code_frame?classpath=&script=%s\%s" % (script_path, fp))
+        if selected_file:
+          next_url = r"/code_frame?classpath=&script=%s\%s" % (script_path, fp)
+          selected_file = False
+        if os.path.join(script_path, fp) == mod.__file__:
+          url.style.css.color = page.theme.colors[-1]
+          url.style.css.bold()
+          selected_file = True
+
+    parent_folder = os.path.dirname(script_path)
+
+    title_link = contents.add_category("Other Folders", level=1, options={"hidden": True})
+    title_link.style.css.margin_top = 10
+    for fp in os.listdir(parent_folder):
+      if os.path.isdir(path) and os.path.exists(os.path.join(parent_folder, fp, "__init__.py")):
+        url = contents.add_url(page.ui.text(fp), r"/code_frame?classpath=&script=%s\%s\__init__.py" % (script_path, fp))
+        if os.path.join(parent_folder, fp) == script_path:
+          url.style.css.color = page.theme.colors[-1]
+          url.style.css.bold()
+
+    doc_link = page.ui.icon("fas fa-book-reader")
+    doc_link.style.css.fixed(bottom=20, right=20)
+    doc_link.goto("/docs")
+    doc_link.style.add_classes.div.border_hover()
+    doc_link.style.css.border_radius = 15
+    doc_link.style.css.padding = 8
+    doc_link.style.css.z_index = 900
+    doc_link.style.css.background = page.theme.colors[0]
+
+    if next_url is not None:
+      doc_next = page.ui.icon("fas fa-caret-right")
+      doc_next.style.css.fixed(bottom=80, right=20)
+      doc_next.style.add_classes.div.border_hover()
+      doc_next.goto(next_url)
+      doc_next.style.css.border_radius = 15
+      doc_next.style.css.min_width = 15
+      doc_next.style.css.text_align = "center"
+      doc_next.style.css.padding = 8
+      doc_next.style.css.z_index = 900
+      doc_next.style.css.background = page.theme.colors[0]
+
+    if hasattr(mod, "INFOS"):
+      doc_info = page.ui.icon("fas fa-info")
+      doc_info.style.css.fixed(bottom=60, right=20)
+      doc_info.style.css.color = page.theme.colors[5]
+      doc_info.style.css.margin = "8px 15px"
+      doc_info.click([
+        page.js.msg.text(mod.INFOS, cssAttrs={"right": "60px", "bottom": "60px"}, options={"markdown": True})
+      ])
+    output = page.outs.html()
+    self.write(output)
+
+    temp_file = os.path.join(self.current_path, 'temps', TEMPS_FILE_HISTORY)
+    content = []
+    if os.path.exists(temp_file):
+      with open(temp_file) as fp:
+        content = json.load(fp)
+
+    if script not in content:
+      content.insert(0, script)
+      with open(temp_file, "w") as fp:
+        json.dump(content, fp, indent=4)
+
+    sys.path.remove(path)
 
   def post(self):
+    """
+    Description:
+    -----------
+
+    :return:
+    """
+    from epyk.core.py import PyRest
+
     data = tornado.escape.json_decode(self.request.body)
-    loc = {}
-    exec("%s\nhtml_page = page.outs.html()" % data['editor'], globals(), loc)
-    self.write({'page': loc['html_page']})
+    if 'rpt_path' in data:
+      url = data['rpt_path']
+      if data['rpt_path'].startswith("http"):
+        if data['rpt_path'].startswith("https://github.com/epykure/epyk-templates"):
+          url = data['rpt_path'].replace("https://github.com/epykure/epyk-templates/blob/master",
+                                         "https://raw.githubusercontent.com/epykure/epyk-templates/master")
+        response = PyRest.PyRest().request(url)
+        loc = {}
+        exec("%s\nhtml_page = page.outs.html() " % response.decode("utf-8"), globals(), loc)
+        self.write({'page': loc['html_page'], 'content': response.decode("utf-8")})
+      else:
+        with open(data['rpt_path']) as fp:
+          content = fp.read()
+
+        if data['rpt_classpath']:
+          for p in data['rpt_classpath'].split(";"):
+            sys.path.append(p.strip())
+        path, script_name = os.path.split(data['rpt_path'])
+        sys.path.append(path)
+
+        # TODO find a way to segregate the loading of the imports
+        mod = __import__(script_name[:-3], fromlist=['object'])
+        if hasattr(mod, 'get_page'):
+          from epyk_studio.core.Page import Report
+
+          page = Report()
+          mod.get_page(page)
+        else:
+          page = mod.page
+        output = page.outs.html()
+        self.write({'page': output, 'content': content, 'link': '/code_frame?script=%s&classpath=%s' % (
+          data['rpt_path'], data['rpt_classpath'])})
+    else:
+      loc = {}
+      exec("%s\nhtml_page = page.outs.html()" % data['editor'], globals(), loc)
+      self.write({'page': loc['html_page']})
+
+
+class MainHandlerDocs(StudioHandler):
+
+  def get(self):
+    """
+    Description:
+    -----------
+
+    :return:
+    """
+    from epyk_studio.static import lang
+
+    rubric = self.get_argument("r", "home")
+    md_path = os.path.join(os.path.dirname(__file__), '..', '..', 'static', 'docs', "%s_%s.md" % (rubric, lang.get_alias()))
+    if not os.path.exists(md_path):
+      # Default to the english version
+      md_path = os.path.join(os.path.dirname(__file__), '..', '..', 'static', 'docs', "%s_eng.md" % (rubric))
+    if os.path.exists(md_path):
+      from epyk_studio.core.Page import Report
+      from epyk_studio.static.pages import add_code, nav_bar
+
+      page = Report()
+      nav_bar(page, "EpykDocs: %s" % rubric)
+      with open(md_path) as fp:
+        components = page.py.markdown.resolve(fp.read())
+        box = page.studio.containers.box()
+        box.extend(components)
+        box.style.standard()
+      add_code(page, doc_only=True)
+      page.ui.banners.disclaimer()
+      self.write(page.outs.html())
+
+
+class MainHandlerTmpls(StudioHandler):
+
+  def get(self):
+    data = {"current_path": self.current_path}
+    if self.request.query_arguments:
+      arguments = self.request.query_arguments
+      data.update({arg: self.get_argument(arg) for arg in arguments.keys()})
+      if 'theme' in data:
+        os.environ["THEME"] = data['theme']
+        del data['theme']
+
+      if 'lang' in data:
+        os.environ["LANG"] = data['lang']
+        del data['lang']
+    mod = __import__("epyk_studio.static.pages.template", fromlist=['object'])
+    importlib.reload(mod)
+    if data and hasattr(mod, 'add_inputs'):
+      if hasattr(mod, 'add_inputs'):
+        mod.add_inputs(data)
+    self.write(mod.page.outs.html())
+
+  def post(self):
+    print("Ok")
 
 
 def make_app(current_path, debug=True):
@@ -539,6 +734,15 @@ def make_app(current_path, debug=True):
       (r"/test", MainHandlerAdd, dict(current_path=current_path)),
       (r"/exts", MainHandlerExts, dict(current_path=current_path)),
 
+      #(r"/static/configs/(.*).json", tornado.web.StaticFileHandler, {"path": "./TestStudio/Studio/configs/eng/blotter.json"},),
+      #(r'/static/(.*).json', MyFileHandler, dict(path="/Studio/static/", current_path=current_path)),
+
+      #
+      (r"/docs", MainHandlerDocs, dict(current_path=current_path)),
+
+      #
+      (r"/catalog", MainHandlerPage, dict(current_path=current_path, page="catalog")),
+
       #
       (r"/search", MainHandlerPage, dict(current_path=current_path, page="search")),
       (r"/search_result", MainHandlerSearchResult, dict(current_path=current_path, page="search_result")),
@@ -548,12 +752,16 @@ def make_app(current_path, debug=True):
       (r"/ext_packages", MainHandlerPage, dict(current_path=current_path, page="ext_packages")),
       (r"/get/packages", MainHandlerPackages, dict(current_path=current_path)),
 
+      #
       (r"/analytics", MainHandlerPage, dict(current_path=current_path, page="analytics")),
-      (r"/templates", MainHandlerPage, dict(current_path=current_path, page="templates")),
       (r"/tutorials", MainHandlerPage, dict(current_path=current_path, page="tutorials")),
       (r"/servers", MainHandlerPage, dict(current_path=current_path, page="servers")),
       (r"/databases", MainHandlerPage, dict(current_path=current_path, page="databases")),
       (r"/code", MainHandlerCode, dict(current_path=current_path)),
+
+      #
+      (r"/templates", MainHandlerPage, dict(current_path=current_path, page="templates")),
+      (r"/template", MainHandlerTmpls, dict(current_path=current_path)),
 
       #
       (r"/project", MainHandlerPage, dict(current_path=current_path, page="project")),
@@ -564,9 +772,11 @@ def make_app(current_path, debug=True):
       (r"/projects_add_server", MainHandlerPageAddServer, dict(current_path=current_path)),
       (r"/projects_get", MainHandlerProjects, dict(current_path=current_path)),
 
+      #
       (r"/code_editor", MainHandlerPage, dict(current_path=current_path, page="code_editor")),
       (r"/code_frame", MainHandlerCodeFrame, dict(current_path=current_path)),
-  ], debug=debug, static_path=os.path.join(pages_path, '..', '..', 'static', 'images'))
+  ], debug=debug, static_path=os.path.join(pages_path, '..', '..', 'static', 'images')
+  )
 
 
 

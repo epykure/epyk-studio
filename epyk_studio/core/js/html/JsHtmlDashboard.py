@@ -17,19 +17,35 @@ class JsHtmlPivot(JsHtml.JsHtml):
     Return the values of the items in the list.
     """
     if self._src.sub_rows is None:
-      return JsObjects.JsObjects.get("{rows: %s, columns: %s}" % (self._src.rows.dom.content, self._src.columns.dom.content))
-    return JsObjects.JsObjects.get("{rows: %s, columns: %s, sub_rows: %s}" % (self._src.rows.dom.content, self._src.columns.dom.content, self._src.sub_rows.dom.content))
+      return JsObjects.JsObjects.get(
+        "{rows: %s, columns: %s}" % (self._src.rows.dom.content, self._src.columns.dom.content))
+    return JsObjects.JsObjects.get(
+      "{rows: %s, columns: %s, sub_rows: %s}" % (
+        self._src.rows.dom.content,
+        self._src.columns.dom.content,
+        self._src.sub_rows.dom.content))
 
-  def clear(self):
+  def clear(self, profile=None):
     """
     Description:
     ------------
     Clear all the items in the list.
+
+    Usage:
+    -----
+
+
+    Attributes:
+    ----------
+    :param profile: Boolean. Optional. Boolean | Dictionary. Optional. A flag to set the component performance storage.
     """
     if self._src.sub_rows is not None:
-      return JsUtils.jsConvertFncs([self._src.sub_rows.dom.clear(), self._src.rows.dom.clear(), self._src.columns.dom.clear()], toStr=True)
+      return JsUtils.jsConvertFncs([
+        self._src.sub_rows.dom.clear(), self._src.rows.dom.clear(),
+        self._src.columns.dom.clear()], toStr=True, profile=profile)
 
-    return JsUtils.jsConvertFncs([self._src.rows.dom.clear(), self._src.columns.dom.clear()], toStr=True)
+    return JsUtils.jsConvertFncs([
+      self._src.rows.dom.clear(), self._src.columns.dom.clear()], toStr=True, profile=profile)
 
 
 class JsHtmlColumns(JsHtml.JsHtml):
@@ -72,11 +88,14 @@ class JsHtmlColumns(JsHtml.JsHtml):
     ------------
     Add a new item to the list.
 
+    Usage:
+    -----
+
     Attributes:
     ----------
     :param item: String. The Item to be added to the list.
-    :param unique: Boolean. optional. Only add the item if it is not already in the list.
-    :param draggable: Boolean. Optional. Set the new entry as draggable
+    :param unique: Boolean. Optional. Only add the item if it is not already in the list.
+    :param draggable: Boolean. Optional. Set the new entry as draggable.
     """
     if hasattr(item, 'dom'):
       item = item.dom.content
@@ -109,14 +128,16 @@ class JsHtmlColumns(JsHtml.JsHtml):
                 var x = document.createElement("input");
                 x.setAttribute("type", "text");
                 x.setAttribute("value", event.srcElement.innerText);
-                document.body.appendChild(x); var initColor = event.srcElement.style.color; event.srcElement.style.color = 'green';
+                document.body.appendChild(x); var initColor = event.srcElement.style.color; 
+                event.srcElement.style.color = 'green';
                 x.select(); setTimeout(function(){ event.srcElement.style.color = initColor}, 1000)
                 document.execCommand("copy"); x.remove();
               }
             });
             if (%(draggable)s){
               text.setAttribute('draggable', true);
-              text.addEventListener('dragstart', function(event){event.dataTransfer.setData("text", event.target.innerHTML)} )
+              text.addEventListener('dragstart', function(event){
+                event.dataTransfer.setData("text", event.target.innerHTML)})
             }
             var div = document.createElement("div"); div.appendChild(text);
             var span = document.createElement("span"); span.innerHTML = '&#10006';  div.appendChild(span);
@@ -157,7 +178,12 @@ class JsHtmlColumns(JsHtml.JsHtml):
     Description:
     ------------
 
-    :param label:
+    Usage:
+    -----
+
+    Attributes:
+    ----------
+    :param label: String. Optional. The processing message.
     """
     return JsObjects.JsVoid("%s.innerHTML = '<i style=\"margin-right:5px\" class=\"fas fa-spinner fa-spin\"></i>%s'" % (self._src.dom.varName, label))
 
@@ -169,7 +195,15 @@ class JsHtmlTask(JsHtmlNetwork.JsHtmlDropFiles):
     Description:
     ------------
     Not available for a task object as the data will be directly returned and there is not need to
-    perform some string transformation before loading
+    perform some string transformation before loading.
+
+    Usage:
+    -----
+
+    Attributes:
+    ----------
+    :param delimiter:
+    :param format:
     """
     raise Exception("Not available use load instead")
 
@@ -178,6 +212,11 @@ class JsHtmlTask(JsHtmlNetwork.JsHtmlDropFiles):
     Description:
     ------------
 
+    Usage:
+    -----
+
+    Attributes:
+    ----------
     :param jsData:
     """
     return JsObjects.JsVoid('''window['%s_data'] = %s; %s

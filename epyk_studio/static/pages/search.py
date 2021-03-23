@@ -6,7 +6,6 @@ from epyk.core.data import events
 
 # Create a basic report object
 page = Report()
-
 nav_bar(page, "Search")
 
 title = page.ui.title("Components search")
@@ -16,10 +15,10 @@ page.ui.chips([
 
 ])
 
-search = page.ui.inputs.search(htmlCode='input')
+search = page.ui.inputs.search(html_code='input')
 search.style.standard()
 
-pills = page.ui.panels.pills(htmlCode="category")
+pills = page.ui.panels.pills(html_code="category")
 pills.style.css.padding_bottom = 5
 pills.style.css.padding_top = 5
 pills.style.standard()
@@ -49,6 +48,5 @@ button.click([
 search.enter(button.dom.events.trigger("click"))
 
 add_code(page)
-
 dis = page.ui.banners.disclaimer()
 dis.style.css.margin_top = 20

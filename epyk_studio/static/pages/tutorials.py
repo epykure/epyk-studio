@@ -5,8 +5,9 @@ from epyk_studio.static.pages import add_code, nav_bar
 
 # Create a basic report object
 page = Report()
-
 nav_bar(page, 'Tutorials')
+
+page.ui.contents()
 
 t1 = page.ui.title("How to start?")
 
@@ -21,6 +22,7 @@ All those use cases are available in the [Github](https://github.com/epykure/epy
 ''', options={"markdown": True})
 
 st1 = page.ui.titles.section("1. Display data in dynamic charts")
+c1 = page.studio.shop.rating(3, label="Complexity")
 
 ps1 = page.ui.texts.paragraph('''
 This report will use external JavaScript data and link it to ChartJs containers wrapped with Python.
@@ -31,9 +33,12 @@ Epyk is wrapping the most popular Framework some **ChartJs**, C3, Billboard, NVD
 ''', options={"markdown": True})
 
 st2 = page.ui.titles.section("2. Display data in dynamic tables")
+c2 = page.studio.shop.rating(4, label="Complexity")
 
 
 st3 = page.ui.titles.section("3. Display static HTML texts / Blogs")
+c3 = page.studio.shop.rating(1, label="Complexity")
+
 
 ps3 = page.ui.texts.paragraph('''
 
@@ -41,7 +46,7 @@ More details on static web page will be available in the web site templates sect
 ''')
 
 box = page.studio.containers.box()
-box.extend([t1, p, st1, ps1, st2, st3, ps3])
+box.extend([t1, p, st1, c1, ps1, st2, c2, st3, c3, ps3])
 box.style.standard()
 
 dis = page.ui.banners.disclaimer()

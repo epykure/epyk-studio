@@ -12,10 +12,16 @@ DEBUG = True
 
 def set_app(port, local, debug):
   """
+  Description:
+  ------------
+  Entry point to start the local app used by the run command in the CLI.
+  This will then run the start method to start the internal Tornado server.
 
-  :param port:
-  :param local:
-  :param debug:
+  Attributes:
+  ----------
+  :param port: Integer. The port for the server.
+  :param local: String. The URL / hostname.
+  :param debug: Boolean. Flag to set the app in debug mode
   """
   global PORT
   global LOCALHOST
@@ -29,14 +35,14 @@ def set_app(port, local, debug):
 
 def start():
   """
-
+  Description:
+  ------------
+  Start the local server.
   """
   if sys.platform == 'win32' and hasattr(asyncio, 'WindowsSelectorEventLoopPolicy'):
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
-  address = '127.0.0.1'
-  if not LOCALHOST:
-    address = socket.gethostbyname(socket.gethostname())
+  address = socket.gethostbyname(socket.gethostname()) if not LOCALHOST else '127.0.0.1'
   print("Server started at: %s:%s" % (address, PORT))
   print("Project path: %s" % os.getcwd())
   app = epyk_studio.core.cli.Server.make_app(os.getcwd(), debug=DEBUG)

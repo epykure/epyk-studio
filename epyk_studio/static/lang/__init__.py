@@ -6,7 +6,24 @@ from epyk_studio.static.lang import fr
 import os
 
 
-def get_lang(lang="uk"):
+def get_alias(lang="eng"):
+  """
+  Description:
+  ------------
+  Return the current alias used for the lang.
+  This could allow to display different pages (markdown pages) in the documentation section.
+
+  TODO: Improve this section.
+
+  Attributes:
+  ----------
+  :param lang: String. Optional. The alias to be used
+  """
+  lang = os.environ.get('LANG') or lang or 'eng'
+  return lang.lower()
+
+
+def get_lang(lang="eng"):
   """
   Description:
   ------------
@@ -15,10 +32,9 @@ def get_lang(lang="uk"):
 
   Attributes:
   ----------
-  :param lang:
+  :param lang: String. Optional. The alias to be used.
   """
-  lang = os.environ.get('LANG') or lang or 'uk'
-  lang = lang.lower()
+  lang = get_alias(lang)
   if lang == 'fr':
     return fr
 

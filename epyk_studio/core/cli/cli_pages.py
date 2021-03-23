@@ -16,9 +16,9 @@ def __write_page(path, name, template):
 
   Attributes:
   ----------
-  :param path:
-  :param name:
-  :param template:
+  :param path: String. The python path.
+  :param name: String. The script name.
+  :param template: String. The template name.
   """
   project_path = path or os.getcwd()
   sys.path.append(project_path)
@@ -40,7 +40,7 @@ def new_parsers(subparser):
   """
   Description:
   ------------
-  Paser for the new CLI
+  Paser for the new CLI.
 
   Attributes:
   ----------
@@ -574,12 +574,12 @@ def home():
   for r in os.listdir(report_path):
     if r.endswith(".py") and r != '__init__.py':
       link = page.ui.link(r, url="/script/%s" % r[:-3])
-      link.style.display = 'block'
+      link.style.css.display = 'block'
       r_col.add(link)
   for v in os.listdir(view_path):
     if v.endswith(".html"):
       link = page.ui.link(v, url="/view/%s" % v[:-5])
-      link.style.display = 'block'
+      link.style.css.display = 'block'
       v_col.add(link)
   page.ui.row([r_col, v_col], position="top", options={"responsive": False})
   return page.outs.html()
