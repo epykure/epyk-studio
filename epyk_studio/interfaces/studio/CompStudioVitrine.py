@@ -244,7 +244,7 @@ class Vitrine:
     hr = self.page.ui.layouts.hr(
       count, width=width, height=height, align=None, options=options, profile=profile)
     hr.style.css.padding = "0 20%"
-    hr.hr.style.css.border_top = "%spx double %s" % (size, self.page.theme.colors[5])
+    hr.hr.style.css.border_top = "%spx double %s" % (size, self.page.theme.notch())
     return hr
 
   def youtube(self, link, width=(100, '%'), height=(None, 'px'), html_code=None, profile=None, options=None):

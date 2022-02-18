@@ -5,7 +5,6 @@ import locale
 import datetime
 
 from epyk.core import html
-from epyk.core.css import Defaults as defaultsCss
 from epyk.core.css.themes import ThemeRed
 from epyk_studio.lang import get_lang
 
@@ -131,7 +130,7 @@ class Event:
     container.icon.style.css.position = "absolute"
     container.icon.icon.style.css.vertical_align = "top"
     container.icon.style.css.left = 5
-    container.icon.icon.style.css.color = self.page.theme.colors[5]
+    container.icon.icon.style.css.color = self.page.theme.notch()
     container.add(container.icon)
     return container
 
@@ -156,7 +155,7 @@ class Event:
     """
     hr = self.page.ui.layouts.hr()
     hr.style.css.padding = "0 20%"
-    hr.hr.style.css.border_color = self.page.theme.colors[5]
+    hr.hr.style.css.border_color = self.page.theme.notch()
     hr.hr.style.css.border_width = size
     return hr
 
@@ -379,10 +378,10 @@ class Event:
     container = self.page.ui.div(width=width, height=height, options=options, profile=profile)
     icon = self.page.ui.icons.awesome(icon, profile=profile)
     icon.icon.style.css.font_factor(0)
-    icon.icon.style.css.color = self.page.theme.colors[5]
+    icon.icon.style.css.color = self.page.theme.notch()
     container.add(icon)
     link = self.page.ui.link(number, "tel:+1-303-499-7111", profile=profile)
-    link.style.css.color = self.page.theme.colors[5]
+    link.style.css.color = self.page.theme.notch()
     container.add(link)
     return container
 
@@ -546,12 +545,12 @@ class Wedding(Event):
       data = self.page.ui.div(data, width=("auto", ""), profile=profile)
       data.style.css.display = "inline-block"
       data.style.css.text_align = align
-      data.style.css.font_size = defaultsCss.font(size_notch)
+      data.style.css.font_size = self.page.body.style.globals.font.normal(size_notch)
     div.add(data)
     div.style.css.background_color = background or self.page.theme.colors[3]
     div.style.css.padding = "20px 15px"
     div.style.css.margin = "auto"
-    div.style.css.font_size = defaultsCss.font(size_notch)
+    div.style.css.font_size = self.page.body.style.globals.font.normal(size_notch)
     div.style.css.color = self.page.theme.greys[-1]
     div.style.css.top = 0
     return div
@@ -587,7 +586,7 @@ class Wedding(Event):
       dflt_options.update(options)
     html_title = html.HtmlTags.HtmlGeneric(
       self.page, "div", text, width, height, html_code, tooltip, dflt_options, profile)
-    html_title.style.css.font_size = defaultsCss.font(12)
+    html_title.style.css.font_size = self.page.body.style.globals.font.normal(12)
     html_title.style.css.text_align = 'left'
     html_title.style.css.margin_top = 10
     html_title.style.css.color = self.page.theme.colors[-1]
@@ -665,7 +664,7 @@ class Wedding(Event):
     component = self.page.ui.div(align=align, width=width, height=height, options=options, profile=profile)
     icon = self.page.ui.icons.awesome(icon)
     icon.icon.style.css.font_factor(-3)
-    icon.icon.style.css.color = self.page.theme.colors[5]
+    icon.icon.style.css.color = self.page.theme.notch()
     component.add(icon)
     if delta_time.days == 0:
       if date_time_obj.day != current.day:
@@ -784,7 +783,7 @@ class Wedding(Event):
     component = self.page.ui.div(align=align, width=width, height=height, options=options, profile=profile)
     icon = self.page.ui.icons.awesome(icon, profile=profile)
     icon.icon.style.css.font_factor(2)
-    icon.icon.style.css.color = self.page.theme.colors[5]
+    icon.icon.style.css.color = self.page.theme.notch()
     component.add(icon)
     return component
 

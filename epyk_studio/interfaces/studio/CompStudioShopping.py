@@ -3,7 +3,6 @@
 
 import os
 
-from epyk.core.css import Defaults as defaultsCss
 from epyk.core.css.themes import ThemeBlue
 from epyk_studio.lang import get_lang
 
@@ -145,19 +144,19 @@ class Shopping:
         if len(split_price) > 1:
           div.price = self.page.ui.texts.number(
             split_price[0], options={"type_number": 'number'}, width=(None, "px"), profile=profile)
-          div.price.style.css.font_size = defaultsCss.font(options.get("font_factor", 10))
+          div.price.style.css.font_size = self.page.body.style.globals.font.normal(options.get("font_factor", 10))
           price_with_dec = self.page.ui.tags.sup(
             "%s%s" % (self.page.py.encode_html(currency), split_price[1]), width=(None, "px"), profile=profile)
-          price_with_dec.style.css.font_size = defaultsCss.font(options.get("font_factor", 10)/2)
+          price_with_dec.style.css.font_size = self.page.body.style.globals.font.normal(options.get("font_factor", 10)/2)
         else:
           div.price = self.page.ui.texts.number(
             split_price[0], options={"type_number": 'number'}, width=(None, "px"), profile=profile)
-          div.price.style.css.font_size = defaultsCss.font(options.get("font_factor", 10))
+          div.price.style.css.font_size = self.page.body.style.globals.font.normal(options.get("font_factor", 10))
           price_with_dec = self.page.ui.tags.sup(
             "%s00" % self.page.py.encode_html(currency), width=(None, "px"), profile=profile)
-          price_with_dec.style.css.font_size = defaultsCss.font(options.get("font_factor", 10)/2)
+          price_with_dec.style.css.font_size = self.page.body.style.globals.font.normal(options.get("font_factor", 10)/2)
         div.add(self.page.ui.div([div.price, price_with_dec], align=align, profile=profile))
-        div.style.css.color = self.page.theme.colors[5]
+        div.style.css.color = self.page.theme.notch()
       else:
         div.price = price
         div.add(div.price)
@@ -200,17 +199,17 @@ class Shopping:
       if len(split_price) > 1:
         div.price = self.page.ui.texts.number(
           split_price[0], options={"type_number": 'number'}, width=(None, "px"), profile=profile)
-        div.price.style.css.font_size = defaultsCss.font(10)
+        div.price.style.css.font_size = self.page.body.style.globals.font.normal(10)
         price_with_dec = self.page.ui.tags.sup(
           "%s%s" % (self.page.py.encode_html(currency), split_price[1]), width=(None, "px"), profile=profile)
-        price_with_dec.style.css.font_size = defaultsCss.font(4)
+        price_with_dec.style.css.font_size = self.page.body.style.globals.font.normal(4)
       else:
         div.price = self.page.ui.texts.number(
           split_price[0], options={"type_number": 'number'}, width=(None, "px"), profile=profile)
-        div.price.style.css.font_size = defaultsCss.font(10)
+        div.price.style.css.font_size = self.page.body.style.globals.font.normal(10)
         price_with_dec = self.page.ui.tags.sup(
           "%s00" % self.page.py.encode_html(currency), width=(None, "px"), profile=profile)
-        price_with_dec.style.css.font_size = defaultsCss.font(4)
+        price_with_dec.style.css.font_size = self.page.body.style.globals.font.normal(4)
       div.add(self.page.ui.div([div.price, price_with_dec], profile=profile,))
     else:
       div.price = price
@@ -744,7 +743,7 @@ class Shopping:
       container.title.style.css.display = "inline-block"
       container.title.style.css.margin_top = 0
       container.title.style.css.font_weight = 'bold'
-      container.title.style.css.font_size = defaultsCss.font(5)
+      container.title.style.css.font_size = self.page.body.style.globals.font.normal(5)
     else:
       container.title = title
     if url is not None:
@@ -823,7 +822,7 @@ class Shopping:
       {"margin": '15px auto 5px'}))
     vim = self.page.ui.vignets.image(
       content=ool, align=align, width=width, height=height, options=options, render='col', profile=profile)
-    vim.style.css.shadow_box()
+    vim.style.configs.shadow()
     vim.style.css.padding_top = 160
     vim.style.css.background_url(image, size="100% 150px", background_position="top")
     vim.style.css.margin_top = 10

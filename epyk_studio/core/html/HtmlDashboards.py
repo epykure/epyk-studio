@@ -4,7 +4,6 @@
 from epyk.core.html import Html
 from epyk.core.html import HtmlList
 from epyk.core.html import Defaults as defaultHtml
-from epyk.core.css import Defaults as defaultCss
 from epyk.core.js import JsUtils
 
 from epyk_studio.core.js.html import JsHtmlDashboard
@@ -14,8 +13,8 @@ from epyk_studio.core.html.options import OptDashboards
 class Pivots(Html.Html):
   name = 'Dashboard Pivots'
 
-  def __init__(self, report, width, height, html_code, options, profile):
-    super(Pivots, self).__init__(report, [], html_code=html_code, css_attrs={"width": width, "height": height},
+  def __init__(self, page, width, height, html_code, options, profile):
+    super(Pivots, self).__init__(page, [], html_code=html_code, css_attrs={"width": width, "height": height},
                                  profile=profile, options=options)
     self.container = self.page.ui.row(position="top", options={"responsive": False})
     self.container.options.managed = False
@@ -34,10 +33,10 @@ class Pivots(Html.Html):
     :rtype: JsHtmlDashboard.JsHtmlPivot
     """
     if self._dom is None:
-      self._dom = JsHtmlDashboard.JsHtmlPivot(self, report=self.page)
+      self._dom = JsHtmlDashboard.JsHtmlPivot(self, page=self.page)
     return self._dom
 
-  def items_style(self, style):
+  def items_style(self, style_type):
     """
     Description:
     ------------
@@ -48,9 +47,9 @@ class Pivots(Html.Html):
 
     Attributes:
     ----------
-    :param style. String. Mandatory. The alias of the style to apply.
+    :param style_type. String. Mandatory. The alias of the style to apply.
     """
-    if style == "bullets":
+    if style_type == "bullets":
       bullter_style = {"display": 'inline-block', 'padding': '0 5px', 'margin-right': '2px',
                        'background': self.page.theme.greys[2], 'border-radius': '10px',
                        'border': '1px solid %s' % self.page.theme.greys[2]}
@@ -80,21 +79,26 @@ class Pivots(Html.Html):
       self.columns.drop()
     if self.sub_rows is not None:
       self.container.add([
-        self.page.ui.text("Rows <i style='font-size:%s'>(unique field)</i>" % defaultCss.font(-3)), self.rows,
         self.page.ui.text(
-          "Sub Rows <i style='font-size:%s'>(unique field)</i>" % defaultCss.font(-3)), self.sub_rows])
+          "Rows <i style='font-size:%s'>(unique field)</i>" % self.page.body.style.globals.font.normal(-3)), self.rows,
+        self.page.ui.text(
+          "Sub Rows <i style='font-size:%s'>(unique field)</i>" % self.page.body.style.globals.font.normal(-3)),
+        self.sub_rows])
     else:
       if self.rows.options.max == 1:
         self.container.add([
-          self.page.ui.text("Rows <i style='font-size:%s'>(unique field)</i>" % defaultCss.font(-3)), self.rows])
+          self.page.ui.text(
+            "Rows <i style='font-size:%s'>(unique field)</i>" % self.page.body.style.globals.font.normal(-3)), self.rows])
       else:
         self.container.add([
-          self.page.ui.text("Rows <i style='font-size:%s'>(multiple field)</i>" % defaultCss.font(-3)), self.rows])
+          self.page.ui.text(
+            "Rows <i style='font-size:%s'>(multiple field)</i>" % self.page.body.style.globals.font.normal(-3)), self.rows])
     self.container.add([
-      self._report.ui.text("Values <i style='font-size:%s'>(multiple fields)</i>" % defaultCss.font(-3)), self.columns])
+      self.page.ui.text(
+        "Values <i style='font-size:%s'>(multiple fields)</i>" % self.page.body.style.globals.font.normal(-3)), self.columns])
     html = [h.html() for h in self._vals]
     return "<div %s>%s%s</div>" % (
-      self.get_attrs(pyClassNames=self.style.get_classes()), self.container.html(), "".join(html))
+      self.get_attrs(css_class_names=self.style.get_classes()), self.container.html(), "".join(html))
 
 
 class Columns(HtmlList.List):
@@ -115,7 +119,7 @@ class Columns(HtmlList.List):
     :rtype: JsHtmlDashboard.JsHtmlColumns
     """
     if self._dom is None:
-      self._dom = JsHtmlDashboard.JsHtmlColumns(self, report=self.page)
+      self._dom = JsHtmlDashboard.JsHtmlColumns(self, page=self.page)
     return self._dom
 
   def fixed(self, top, right, z_index=200, tooltip="List of columns in the data source"):
@@ -134,7 +138,7 @@ class Columns(HtmlList.List):
     :param z_index: Integer. Optional. The CSS Z-index property.
     :param tooltip: String. Optional. The tooltip value.
     """
-    self.anchor = self._report.ui.icon("fas fa-chevron-right")
+    self.anchor = self.page.ui.icon("fas fa-chevron-right")
     self.anchor.style.css.position = "fixed"
     self.anchor.style.css.cursor = "pointer"
     self.anchor.style.css.top = top + 10
@@ -146,7 +150,7 @@ class Columns(HtmlList.List):
       self.dom.toggle()
     ])
     self.style.css.overflow = "auto"
-    self.style.css.background = self._report.theme.colors[0]
+    self.style.css.background = self.page.theme.colors[0]
     self.style.css.max_height = "calc(100vh - %spx)" % top
     self.style.css.fixed(top=top, right=right, transform=False)
     self.style.css.z_index = z_index
@@ -157,25 +161,25 @@ class Task(Html.Html):
   name = 'Dashboard Task'
   _option_cls = OptDashboards.OptionTask
 
-  def __init__(self, report, text, width, height, html_code, options, profile):
+  def __init__(self, page, text, width, height, html_code, options, profile):
     super(Task, self).__init__(
-      report, [], html_code=html_code, profile=profile, options=options, css_attrs={"width": width, "height": height})
-    self.icon = self._report.ui.icon(self.options.icon, htmlCode="%s_icon" % self.htmlCode)
+      page, [], html_code=html_code, profile=profile, options=options, css_attrs={"width": width, "height": height})
+    self.icon = self.page.ui.icon(self.options.icon, htmlCode="%s_icon" % self.htmlCode)
     self.icon.style.css.margin_right = 5
     self.icon.style.css.font_factor(3)
     self.icon.style.css.color = self.options.color
     self.icon.options.managed = False
-    self.text = self._report.ui.text(text, htmlCode="%s_text" % self.htmlCode)
+    self.text = self.page.ui.text(text, htmlCode="%s_text" % self.htmlCode)
     self.text.options.managed = False
     self.text.style.css.vertical_align = "middle"
     self.text.style.css.line_height = defaultHtml.LINE_HEIGHT
     self.add(self.icon)
     self.add(self.text)
     self._jsStyles['colors'] = {
-      "COMPLETED": self._report.theme.success[1],
-      "RUNNING": self._report.theme.warning[1],
-      "WAITING": self._report.theme.greys[5],
-      "FAILED": self._report.theme.danger[1]}
+      "COMPLETED": self.page.theme.success[1],
+      "RUNNING": self.page.theme.warning[1],
+      "WAITING": self.page.theme.greys[5],
+      "FAILED": self.page.theme.danger[1]}
 
   _js__builder__ = ''' 
       if(typeof data === 'string'){
@@ -210,7 +214,7 @@ class Task(Html.Html):
     :rtype: JsHtmlDashboard.JsHtmlTask
     """
     if self._dom is None:
-      self._dom = JsHtmlDashboard.JsHtmlTask(self, report=self._report)
+      self._dom = JsHtmlDashboard.JsHtmlTask(self, page=self.page)
     return self._dom
 
   @property
@@ -265,5 +269,5 @@ class Task(Html.Html):
 
   def __str__(self):
     return "<div %s>%s%s</div>" % (
-      self.get_attrs(pyClassNames=self.style.get_classes()), self.icon.html(), self.text.html())
+      self.get_attrs(css_class_names=self.style.get_classes()), self.icon.html(), self.text.html())
 

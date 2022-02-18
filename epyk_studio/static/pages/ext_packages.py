@@ -46,7 +46,8 @@ link.style.standard()
 title = page.ui.title("All packages available")
 title.style.standard()
 
-records = [{"pkg": pkg, "vr": dtl[0]['version'], "get": "<button class='cssbuttonbasic' style='padding:0 5px;line-height:15px!IMPORTANT' onclick='(function(){var xhttp = new XMLHttpRequest(); xhttp.open(\"GET\", \"/get/packages?p=%s\", true); xhttp.send()})()'>get</button>" % pkg} for pkg, dtl in Imports.ImportManager(page).show(all=True).items()]
+records = [{"pkg": pkg, "vr": dtl[0]['version'],
+            "get": "<button class='cssbuttonbasic' style='padding:0 5px;line-height:15px!IMPORTANT' onclick='(function(){var xhttp = new XMLHttpRequest(); xhttp.open(\"GET\", \"/get/packages?p=%s\", true); xhttp.send()})()'>get</button>" % pkg} for pkg, dtl in Imports.ImportManager(page).show(all=True).items()]
 tb = page.ui.table(records, cols=['pkg'], rows=['vr', 'get'])
 tb.get_column("get").formatters.html()
 tb.style.standard()

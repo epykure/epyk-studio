@@ -96,8 +96,8 @@ class Dashboard(CompFields.Fields, CompFields.Timelines, CompCharts.Graphs):
       button.style.css.margin_left = 10
     container.button = button
     container.clear = self.page.ui.icon("fas fa-times")
-    container.clear.style.color = self.page.theme.danger[1]
-    container.clear.style.margin_left = 20
+    container.clear.style.css.color = self.page.theme.danger[1]
+    container.clear.style.css.margin_left = 20
     container.clear.tooltip("Clear all filters")
     container.add(self.page.ui.div([container.select, container.input, container.button, container.clear]))
     container.filters = self.page.ui.panels.filters(

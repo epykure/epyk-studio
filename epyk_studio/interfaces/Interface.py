@@ -21,7 +21,6 @@ from epyk_studio.interfaces.studio.components import CompStudioChips
 from epyk_studio.interfaces.studio.components import CompStudioContainers
 
 from epyk.interfaces import Interface
-from epyk.core.css import Defaults as Defaults_css
 from epyk.core.html import Defaults as Defaults_html
 from epyk.core.css import themes
 from epyk_studio.lang import get_lang, REGISTERED_LANGS
@@ -71,7 +70,7 @@ class Studio(Interface.Components):
     # Delete the items on the backend side
     del self.page.components[component.htmlCode]
     component = self.page.ui.div()
-    component.style.css.line_height = Defaults_css.font(25)
+    component.style.css.line_height = self.page.body.style.globals.font.normal(25)
     component.style.css.border = "1px solid %s" % self.page.theme.greys[3]
     component.style.css.border_radius = 10
     component.style.css.margin = "5px 0"
@@ -80,7 +79,7 @@ class Studio(Interface.Components):
     icon.icon.style.css.font_factor(10)
     icon.icon.style.css.vertical_align = None
     icon.icon.style.css.color = self.page.theme.greys[5]
-    icon.icon.style.css.line_height = Defaults_css.font(25)
+    icon.icon.style.css.line_height = self.page.body.style.globals.font.normal(25)
     component.add(icon)
     component.text = self.page.ui.text("Event Locked")
     component.text.style.css.font_factor(8)
@@ -128,7 +127,7 @@ class Studio(Interface.Components):
     # Delete the items on the backend side
     del self.page.components[component.htmlCode]
     component = self.page.ui.div(options=options, profile=profile)
-    component.style.css.line_height = Defaults_css.font(25)
+    component.style.css.line_height = self.page.body.style.globals.font.normal(25)
     component.style.css.border = "1px solid %s" % self.page.theme.greys[3]
     component.style.css.border_radius = 10
     component.style.css.margin = "5px 0"
@@ -137,7 +136,7 @@ class Studio(Interface.Components):
     icon.icon.style.css.font_factor(10)
     icon.icon.style.css.vertical_align = None
     icon.icon.style.css.color = self.page.theme.greys[5]
-    icon.icon.style.css.line_height = Defaults_css.font(25)
+    icon.icon.style.css.line_height = self.page.body.style.globals.font.normal(25)
     component.add(icon)
     component.text = self.page.ui.text("Not available", options=options, profile=profile)
     component.text.style.css.font_factor(8)
@@ -705,14 +704,15 @@ class Studio(Interface.Components):
     :param profile:
     """
     values = themes.REGISTERED_THEMES
-    dftl_options = {'empty_selected': False, 'button-bg': False}
+    dftl_options = {'empty_selected': False, 'button-bg': False, "dark": False}
     if options is not None:
       dftl_options.update(options)
     dftl_options["width"] = width[0]
     selected = os.environ.get("THEME") or selected or values[0]['value']
     mod_name, class_name = selected.split(".")
     theme = getattr(getattr(themes, mod_name), class_name)
-    self.page.theme = theme()
+    self.page.theme = theme(index=int(dftl_options.get("base_color_index", 5)))
+    self.page.theme.dark = dftl_options["dark"]
     select = self.page.ui.select(
       values, width=width, selected=selected, options=dftl_options, height=height, html_code="theme", profile=profile)
     self.page.body.style.css.background = self.page.theme.greys[0]

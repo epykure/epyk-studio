@@ -12,7 +12,7 @@ class JsClipboard(JsHtml.JsHtml):
   def content(self):
     return JsObjects.JsObjects.get("(event.clipboardData || window.clipboardData).getData('text')")
 
-  def store(self, jsData=None):
+  def store(self, data=None):
     """
     Description:
     ------------
@@ -22,14 +22,14 @@ class JsClipboard(JsHtml.JsHtml):
 
     Attributes:
     ----------
-    :param jsData:
+    :param data:
     """
-    if jsData is None:
+    if data is None:
       return JsObjects.JsVoid(
         "window['%s'] = (event.clipboardData || window.clipboardData).getData('text')" % self.code)
 
-    JsUtils.jsConvertData(jsData, None)
-    return JsObjects.JsVoid("window['%s'] = %s" % (self.code, jsData))
+    JsUtils.jsConvertData(data, None)
+    return JsObjects.JsVoid("window['%s'] = %s" % (self.code, data))
 
   def clear(self):
     """
@@ -54,7 +54,7 @@ class JsClipboard(JsHtml.JsHtml):
     -----
 
     """
-    return "%s_data" % self._src.htmlCode
+    return "%s_data" % self.component.htmlCode
 
   @property
   def data(self):

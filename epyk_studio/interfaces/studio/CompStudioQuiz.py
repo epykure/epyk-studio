@@ -301,7 +301,7 @@ class Quiz:
     """
     hr = self.page.ui.layouts.hr()
     hr.style.css.padding = "0 20%"
-    hr.hr.style.css.border_color = self.page.theme.colors[5]
+    hr.hr.style.css.border_color = self.page.theme.notch()
     hr.hr.style.css.border_width = size
     return hr
 

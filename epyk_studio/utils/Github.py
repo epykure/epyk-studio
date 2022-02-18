@@ -1,8 +1,11 @@
 
 import urllib.request
+import urllib.error
 import json
 import logging
 import os
+
+from epyk_studio.utils import sys_files
 
 
 class GitHub:
@@ -33,10 +36,11 @@ class GitHub:
     :param tempFolder: String. Optional. The sub folder.
     """
     try:
-      with urllib.request.urlopen('https://api.github.com/repos/%s/%s/git/trees/master?recursive=1' % (self.user, self.project)) as response:
+      with urllib.request.urlopen('%s/repos/%s/%s/git/trees/master?recursive=1' % (
+        sys_files.GITHUB_PATHS["api"], self.user, self.project)) as response:
         result = json.loads(response.read())
         if tempFolder is not None:
-          temp_file = os.path.join(tempFolder, "git_tree_template.json")
+          temp_file = os.path.join(tempFolder, sys_files.STUDIO_FILES["git_tree"]['file'])
           with open(temp_file, "w") as fp:
             json.dump(result, fp)
         return result
@@ -44,7 +48,7 @@ class GitHub:
     except urllib.error.HTTPError as err:
       logging.warning("Github API error - %s" % err)
       if tempFolder is not None:
-        temp_file = os.path.join(tempFolder, "git_tree_template.json")
+        temp_file = os.path.join(tempFolder, sys_files.STUDIO_FILES["git_tree"]['file'])
         with open(temp_file, "r") as fp:
           return json.loads(fp.read())
       else:
@@ -63,7 +67,8 @@ class GitHub:
 
       https://docs.github.com/en/rest
     """
-    with urllib.request.urlopen('https://api.github.com/repos/%s/%s' % (self.user, self.project)) as response:
+    with urllib.request.urlopen(
+      '%s/repos/%s/%s' % (sys_files.GITHUB_PATHS["api"], self.user, self.project)) as response:
       return json.loads(response.read())
 
   def get_file_path(self, path, branch='master'):
@@ -79,7 +84,7 @@ class GitHub:
     :param path: String. The project path.
     :param branch: String. Optional. The branch name. Default master.
     """
-    return "https://raw.githubusercontent.com/%s/%s/%s/%s" % (self.user, self.project, branch, path)
+    return "%s/%s/%s/%s/%s" % (sys_files.GITHUB_PATHS["raw_content"], self.user, self.project, branch, path)
 
   def get_file_content(self, path, branch='master'):
     """
@@ -114,7 +119,7 @@ class GitHub:
     ----------
     :param path: String. The project path.
     """
-    return "https://github.com/%s/%s/blob/master/%s?raw=true" % (self.user, self.project, path)
+    return "%s/%s/%s/blob/master/%s?raw=true" % (sys_files.GITHUB_PATHS["website"], self.user, self.project, path)
 
   @property
   def path(self):
@@ -127,7 +132,7 @@ class GitHub:
     -----
 
     """
-    return "https://github.com/%s/%s" % (self.user, self.project)
+    return "%s/%s/%s" % (sys_files.GITHUB_PATHS["website"], self.user, self.project)
 
   @property
   def main(self):
@@ -140,4 +145,4 @@ class GitHub:
     -----
 
     """
-    return "https://github.com/%s/%s/tree/master" % (self.user, self.project)
+    return "%s/%s/%s/tree/master" % (sys_files.GITHUB_PATHS["website"], self.user, self.project)

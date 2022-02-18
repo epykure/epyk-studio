@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from epyk.core.css import Defaults as defaultCss
 from epyk.core.css import Colors
 
 
@@ -49,7 +48,8 @@ class StudioChips:
     for i, rec in enumerate(records):
       tab_width = width
       if 'text' in rec:
-        icon_comp = self.page.ui.icon(rec['icon'], profile=profile).css({"font-size": defaultCss.font(4)})
+        icon_comp = self.page.ui.icon(rec['icon'], profile=profile).css({
+          "font-size": self.page.body.style.globals.font.normal(4)})
         icon_comp.style.css.margin_left = 0
         icon_comp.style.css.margin_right = 10
         text = rec['text']
@@ -63,7 +63,8 @@ class StudioChips:
         icon = self.page.ui.div([icon_comp, text], profile=profile)
       else:
         icon = self.page.ui.div(self.page.ui.icon(rec['icon'], profile=profile).css(
-          {"display": 'block', "width": '100%', "font-size": defaultCss.font(4)}), width=width, profile=profile)
+          {"display": 'block', "width": '100%', "font-size": self.page.body.style.globals.font.normal(4)}),
+          width=width, profile=profile)
         icon.attr["data-value"] = rec['icon']
       icon.style.css.text_align = "center"
       icon.options.managed = False
@@ -200,23 +201,24 @@ class StudioChips:
           rec['image'], path=rec.get('path'), width=dflt_options["image_width"],
           height=dflt_options["image_width"], profile=profile).css(
           {"display": 'block', 'margin-left': '5px', 'margin-right': '5px', 'border-radius': '%spx' % radius,
-           "font-size": defaultCss.font(4)})
+           "font-size": self.page.body.style.globals.font.normal(4)})
         text = rec['text']
         if inline:
           img.style.css.display = "inline-block"
           tab_width = (width[0] * 2, width[1])
-          text = self.page.ui.text(rec['text'], width=(100, "%"), profile=profile)
+          text = self.page.ui.text(rec['text'], width=("auto", ""), profile=profile)
           text.style.css.bold()
           text.style.css.text_align = "center"
           text.style.css.padding_right = "5px"
           text.style.css.display = "inline-block"
-        icon = self.page.ui.div([img, text], width=width, profile=profile)
+        icon = self.page.ui.div([img, text], width=(None, 'px'), profile=profile)
       else:
         icon = self.page.ui.div(
           self.page.ui.img(
             rec['image'], path=rec.get('path'), width=dflt_options["image_width"],
             height=dflt_options["image_width"]).css(
-            {'border-radius': '%spx' % radius, "font-size": defaultCss.font(4)}), profile=profile)
+            {'border-radius': '%spx' % radius, "font-size": self.page.body.style.globals.font.normal(4)}),
+          profile=profile)
         icon.attr["data-value"] = rec['image']
       icon.style.css.text_align = "center"
       icon.options.managed = False

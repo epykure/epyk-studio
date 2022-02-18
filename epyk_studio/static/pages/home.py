@@ -5,6 +5,7 @@ import json
 from epyk_studio.core.Page import Report
 from epyk_studio.static.pages import add_code, nav_bar
 from epyk_studio.static import lang
+from epyk_studio.utils import sys_files
 
 
 # Create a basic report object
@@ -50,6 +51,12 @@ pg = page.ui.texts.paragraph(lang.get_lang().TEXT_3)
 pg.style.css.margin = "10px 20% 0 20%"
 pg.style.css.width = "60%"
 
+i1 = page.ui.icons.awesome("fas fa-history", text="Check out the latest changes in the Studio")
+i1.style.css.margin = "10px 20% 0 20%"
+i1.style.css.width = "60%"
+i1.style.css.color = page.theme.notch()
+i1.goto("/docs?r=CHANGELOG")
+
 get_started = page.ui.buttons.large(lang.get_lang().TEXT_4)
 get_started.style.css.margin_right = 10
 get_started.goto("/project", target="_self")
@@ -80,7 +87,7 @@ menu = page.ui.menus.bar([
     #{"text": "Databases", 'url': '/databases'},
   ]},
   {"value": "Links", 'children': [
-    {"text": "Examples", 'url': "https://github.com/epykure/epyk-templates"},
+    {"text": "Examples", 'url': "%s/epykure/epyk-templates" % sys_files.GITHUB_PATHS["website"]},
     {"text": "Tutorials", 'url': "http://www.epyk-studio.com/tutorials"},
     {"text": "Notebooks", 'url': "https://nbviewer.jupyter.org/github/epykure/epyk-templates-notebooks/blob/master/index.ipynb"},
     {"text": "Studio", 'url': "http://www.epyk-studio.com/"}
@@ -90,9 +97,9 @@ menu = page.ui.menus.bar([
     #{"text": "Analytics", 'url': '/analytics'}, # local report
     #{"text": "Publish"}, # local report
     #{"text": "Link to App"}, # local report
-    {"text": "Community", 'url': 'https://github.com/epykure/epyk-studio'}, # local report
-    {"text": "Share issues (Studio)", 'url': 'https://github.com/epykure/epyk-studio/issues'}, # local report
-    {"text": "Share issues (Core)", 'url': 'https://github.com/epykure/epyk-ui/issues'} # local report
+    {"text": "Community", 'url': '%s/epykure/epyk-studio' % sys_files.GITHUB_PATHS["website"]},
+    {"text": "Share issues (Studio)", 'url': '%s/epykure/epyk-studio/issues' % sys_files.GITHUB_PATHS["website"]},
+    {"text": "Share issues (Core)", 'url': '%s/epykure/epyk-ui/issues' % sys_files.GITHUB_PATHS["website"]}
   ]},
 ], options={"responsive": False})
 menu.style.css.margin = "10px auto"
@@ -101,19 +108,26 @@ menu.style.css.margin = "10px auto"
 blog_button = page.ui.buttons.large("Start", align="center")
 blog_button.goto("/code_editor", target="_self")
 
-vignet1 = page.ui.vignets.vignet("Thousand of components available", '''
+vignet1 = page.ui.vignets.vignet("Hundreds of components available", '''
 Fully documented on the Python side based on the JavaScript documentation available online. Links available to find out more on JavaScript concepts and gradually improve your UI knowledge
 ''', width=("auto", ""))
 vignet1.style.css.margin = "0 20%"
 vignet1.style.css.width = "60%"
 
+vignet2 = page.ui.vignets.vignet("Thousand of combinations", '''
+Mix components and configuration to generate unique websites or dashboards.
+Predefined [themes](/themes) are also available to speed up the implementation.
+''', options={"markdown": True})
+vignet2.style.css.margin_top = 15
+vignet2.style.css.margin = "0 20%"
+vignet2.style.css.width = "60%"
 
 t1 = page.ui.titles.title("For everything", align="center")
 t1.style.css.color = page.theme.colors[-1]
 t1.style.css.margin_bottom = 0
 t1.style.css.margin_top = 15
 
-ics = page.studio.gallery.icons([
+ics = page.ui.icons.gallery([
   {"icon": "far fa-chart-bar", "text": 'Charts'},
   {"icon": "fas fa-brain", "text": 'IA / ML'},
   {"icon": "fas fa-square-root-alt", "text": 'Maths'},
@@ -169,19 +183,24 @@ vignet.image.style.css.height = "300px"
 blog = page.ui.banners.text(vignet, align="left")
 blog.style.css.padding = 0
 
-st1 = page.ui.titles.subtitle("Compatible with", align="center")
-st1.style.css.color = page.theme.colors[-1]
+
 power = page.ui.rich.powered(True)
 power.style.css.margins(left=(20, '%'), right=(20, '%'))
 power.style.css.width = "60%"
 power.style.css.margin_bottom = "10px"
 
-add_code(page)
+st1 = page.ui.titles.title("Compatible with %s external packages" % len(power.components), align="center")
+st1.style.css.color = page.theme.colors[-1]
+st1.style.css.margin_top = 25
+st1.style.css.margin_bottom = 15
+power.move()
 
+add_code(page)
 page.ui.banners.disclaimer()
 
 
 def add_inputs(inputs):
-  temps_path = os.path.join(inputs["current_path"], "temps", "run_history.json")
+  temps_path = os.path.join(
+    inputs["current_path"], sys_files.STUDIO_FILES["history"]["path"], sys_files.STUDIO_FILES["history"]["file"])
   with open(temps_path) as fp:
     script_shortcut.input.options.source = json.load(fp)

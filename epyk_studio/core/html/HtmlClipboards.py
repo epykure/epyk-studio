@@ -11,20 +11,20 @@ class Clipboard(Html.Html):
   requirements = ('font-awesome',)
   name = 'Clipboard'
 
-  def __init__(self, report, icon, text, tooltip, width, height, html_code, options, profile):
-    super(Clipboard, self).__init__(report, '', html_code=html_code, profile=profile, options=options,
+  def __init__(self, page, icon, text, tooltip, width, height, html_code, options, profile):
+    super(Clipboard, self).__init__(page, '', html_code=html_code, profile=profile, options=options,
                                     css_attrs={"width": width, 'height': height})
-    self.icon = report.ui.icon(icon, html_code="%s_icon" % self.htmlCode)
+    self.icon = page.ui.icon(icon, html_code="%s_icon" % self.htmlCode)
     self.icon.options.managed = False
     self.icon.style.add_classes.icon.selected()
     self.icon.style.css.remove("color")
     self.icon.style.css.font_factor(5)
     self.tooltip(tooltip)
-    self.text = report.ui.text(text, width=(100, '%'), html_code="%s_text" % self.htmlCode)
+    self.text = page.ui.text(text, width=(100, '%'), html_code="%s_text" % self.htmlCode)
     self.text.style.css.text_align = "right"
     self.text.style.css.italic()
     self.text.options.managed = False
-    self.input = report.ui.input(width=(width[0] - 30, 'px'))
+    self.input = page.ui.input(width=(width[0] - 30, 'px'))
     self.input.style.css.remove("background", set_none=True)
     self.input.style.css.font_size = 10
     self.input.style.css.float = "left"
@@ -110,20 +110,20 @@ class Clipboard(Html.Html):
     :rtype: JsHtmlClipboard.JsClipboard
     """
     if self._dom is None:
-      self._dom = JsHtmlClipboard.JsClipboard(self, report=self._report)
+      self._dom = JsHtmlClipboard.JsClipboard(self, page=self.page)
     return self._dom
 
   def __str__(self):
     return "<div %s><div style='display:inline-block'>%s%s</div>%s</div>" % (
-      self.get_attrs(pyClassNames=self.style.get_classes()), self.icon.html(), self.input.html(), self.text.html())
+      self.get_attrs(css_class_names=self.style.get_classes()), self.icon.html(), self.input.html(), self.text.html())
 
 
 class ConfigEditor(HtmlImage.Icon):
   requirements = ('font-awesome',)
   name = 'Configuration'
 
-  def __init__(self, report, value, data, width, height, color, tooltip, options, html_code, profile):
-    super(ConfigEditor, self).__init__(report, value, width, height, color, tooltip, options, html_code, profile)
+  def __init__(self, page, value, data, width, height, color, tooltip, options, html_code, profile):
+    super(ConfigEditor, self).__init__(page, value, width, height, color, tooltip, options, html_code, profile)
     self.varName = data or "window['page_config']"
     self.components = []
 
@@ -188,12 +188,12 @@ class DataExplorer(Html.Html):
   requirements = ('font-awesome',)
   name = 'Explorer'
 
-  def __init__(self, report, width, height, html_code, options, profile):
-    super(DataExplorer, self).__init__(report, '', html_code=html_code, profile=profile, options=options,
+  def __init__(self, page, width, height, html_code, options, profile):
+    super(DataExplorer, self).__init__(page, '', html_code=html_code, profile=profile, options=options,
                                        css_attrs={"width": width, 'height': height})
 
   _js__builder__ = '''
       '''
 
   def __str__(self):
-    return "<div %s></div>" % self.get_attrs(pyClassNames=self.style.get_classes())
+    return "<div %s></div>" % self.get_attrs(css_class_names=self.style.get_classes())

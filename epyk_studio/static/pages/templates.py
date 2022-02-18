@@ -3,6 +3,7 @@
 from epyk_studio.core.Page import Report
 from epyk_studio.static.pages import add_code, nav_bar
 from epyk_studio.utils import git
+from epyk_studio.utils import sys_files
 
 import os
 import json
@@ -57,11 +58,7 @@ add_code(page)
 
 
 def add_inputs(inputs):
-  tmps_folder = os.path.join(inputs['current_path'], "temps")
-  if not os.path.exists(tmps_folder):
-    os.mkdir(tmps_folder)
-
-  config_folders = os.path.join(tmps_folder, "my_folders.json")
+  config_folders = os.path.join(sys_files.STUDIO_FILES["history"]["path"], "my_folders.json")
   my_folders = {}
   if os.path.exists(config_folders):
     with open(config_folders) as fp:

@@ -1,8 +1,9 @@
 
 import inspect
+import os
 
 
-def nav_bar(page, name, title=None):
+def nav_bar(page, name, title=None, dark=False):
   """
   Description:
   ------------
@@ -13,12 +14,13 @@ def nav_bar(page, name, title=None):
   :param page: Report. The page object.
   :param name: String. The current page title.
   :param title. String. Optional.
+  :param dark. Boolean. Optional.
   """
   if title is not None:
     page.headers.title(title)
   nav = page.ui.navbar(title=name)
-
-  select_themes = page.studio.themes(selected="ThemeRed.Red")
+  select_themes = page.studio.themes(selected=os.environ.get("THEME", "Theme.ThemeDefault"), options={
+    "dark": os.environ.get("DARK_MODE", dark) == 'Y', "base_color_index": os.environ.get("BASE_COLOR_INDEX", 5)})
   select_themes.attr["data-background"] = page.theme.colors[0]
   nav.set_theme()
 
@@ -38,6 +40,7 @@ def nav_bar(page, name, title=None):
   nav._right.style.css.padding_right = 60
   page.ui.banners.corner("Beta", position="top")
   nav.logo.goto("/", target="_self")
+  page.skins.set(os.environ.get("SKIN", ""))
   return nav
 
 
@@ -59,19 +62,16 @@ def add_code(page, doc_only=False):
   doc_link = page.ui.icon("fas fa-book-reader")
   doc_link.style.css.fixed(bottom=20 if doc_only else 60, right=20)
   doc_link.goto("/docs")
-  doc_link.style.add_classes.div.border_hover()
-  doc_link.style.css.border_radius = 15
-  doc_link.style.css.padding = 8
+  doc_link.style.configs.rounded_icons()
   doc_link.style.css.background = page.theme.colors[0]
 
   if not doc_only:
     # Add shortcut to see the source code of the page
     code = page.ui.icon("fas fa-code")
     code.style.css.fixed(bottom=20, right=20)
+    code.style.css.z_index = 10
     code.goto("/code?script=%s" % inspect.getmodule(frm[0]).__name__.split(".")[-1], target="_self")
-    code.style.add_classes.div.border_hover()
-    code.style.css.border_radius = 15
-    code.style.css.padding = 8
+    code.style.configs.rounded_icons()
     code.style.css.background = page.theme.greys[0]
     return code
 

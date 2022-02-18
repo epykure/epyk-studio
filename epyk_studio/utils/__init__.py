@@ -1,5 +1,5 @@
 
-from epyk_studio.utils import Github
+from epyk_studio.utils import github
 
 
 def git(username, project):
@@ -10,4 +10,4 @@ def git(username, project):
 
   :return:
   """
-  return Github.GitHub(username, project)
+  return github.GitHub(username, project)

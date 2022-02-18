@@ -1,6 +1,9 @@
 
+import os
+
 from epyk_studio.core.Page import Report
 from epyk_studio.static.pages import add_code, nav_bar
+from epyk_studio.utils import sys_files
 from epyk.core.data import events
 
 
@@ -13,7 +16,7 @@ t1 = page.ui.title("Quick start")
 p = page.ui.texts.paragraph('''
 Create your first dashboards without having anything installed.
 
-Ideal for Manager or Product owners eagger to illustrate the renderer of the final web template quickly.
+Ideal for Manager or Product owners eager to illustrate the renderer of the final web template quickly.
 This will ensure a perfect understanding and a good basis to start the implementation.
 ''')
 
@@ -24,7 +27,7 @@ components = {
   'Title': "page.ui.title('This is a title')",
   'Paragraph': "page.ui.texts.paragraph('This is a paragraph')",
   'Link': "page.ui.link('google', 'www.google.com')",
-  'Image': "page.ui.img('https://raw.githubusercontent.com/epykure/epyk-ui/master/epyk/static/images/epyklogo.ico', height=(50, 'px'))",
+  'Image': "page.ui.img('%s/epykure/epyk-ui/master/epyk/static/images/epyklogo.ico', height=(50, 'px'))" % sys_files.GITHUB_PATHS["api"],
   'Delimiter': "page.ui.layouts.hr()",
   'New Line': "page.ui.layouts.br()",
   'Button': "page.ui.buttons.large('Button')",
@@ -74,17 +77,31 @@ redo_last_cange.style.margin_left = 15
 rpt_classpath = page.ui.input(placeholder="extra classpath for this report", html_code="rpt_classpath")
 rpt_classpath.style.css.text_align = "left"
 rpt_classpath.style.css.padding_left = 5
-rpt_link = page.ui.rich.search_input(placeholder="put the link to the report, e.g: https://raw.githubusercontent.com/epykure/epyk-templates/master/locals/texts/editor.py", html_code="rpt_path")
+rpt_link = page.ui.rich.search_input(
+  placeholder="put the link to the report, e.g: %s/epykure/epyk-templates/master/locals/texts/editor.py" % sys_files.GITHUB_PATHS["api"], html_code="rpt_path")
 rpt_page = page.ui.links.colored("Full page")
 
-ext_rpt = page.ui.panels.sliding([rpt_classpath, rpt_link, rpt_page], "External report")
+rpt_save = page.ui.icon("fas fa-save", tooltip="Save file")
+rpt_save.style.css.margin_right = 10
+rpt_square = page.ui.icon("fas fa-share-square", tooltip="Open in new page")
+
+rpt_filename = page.ui.inputs.left(placeholder="extra classpath for this report", html_code="rpt_name", width=(150, "px"))
+rpt_filename.style.css.margin_right = 10
+rpt_filename.style.css.background = None
+rpt_filename.style.css.border = None
+rpt_filename.style.css.border_radius = 0
+rpt_filename.style.css.border_bottom = "1px solid %s" % page.theme.colors[-1]
+
+ext_rpt = page.ui.panels.sliding([rpt_classpath, rpt_link], "External report")
 ext_rpt.options.expanded = False
 
 tabs.add_panel("Editor", page.ui.col([
+  ext_rpt,
   page.ui.div([rem_last_cange, redo_last_cange]).css({"margin-top": '10px'}),
   editor]), selected=True)
-tabs.add_panel("Web", [ext_rpt, page.ui.div(iframe)])
+tabs.add_panel("Web", [page.ui.div([rpt_filename, rpt_save, rpt_square]), page.ui.div(iframe)])
 
+rpt_save.click(page.js.post("/code", components=[rpt_filename, editor]))
 rem_last_cange.click([editor.js.undo()])
 redo_last_cange.click([editor.js.redo()])
 
@@ -118,7 +135,6 @@ rpt_link.enter([
     rpt_page.dom.css({"display": 'inline-block'})
   ])
 ])
-# C:\TestStudio\Studio\ui\reports\tmpl_2.py
 
 rpt_link.input.change([rpt_page.dom.css({"display": 'none'})])
 
@@ -144,7 +160,17 @@ box.style.standard()
 
 add_code(page)
 
-
 dis = page.ui.banners.disclaimer()
 dis.style.css.margin_top = 20
+
+
+def add_inputs(inputs):
+  i = 0
+  while True:
+    next_script = os.path.join(inputs["current_path"], sys_files.STUDIO_FILES["sandbox"]["path"], "new_page_%s.py" % i)
+    if not os.path.exists(next_script):
+      rpt_filename.value("new_page_%s.py" % i)
+      break
+
+    i += 1
 

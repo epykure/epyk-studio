@@ -5,7 +5,6 @@ import datetime
 import locale
 import os
 
-from epyk.core.css import Defaults as defaultCss
 from epyk.core.css.themes import ThemeBlue
 from epyk_studio.lang import get_lang
 from epyk.core.html import Html
@@ -24,8 +23,8 @@ class Blog:
     This will add a template to the body in order to have a header, template and footer.
     """
     self.page.theme = ThemeBlue.Blue()
-    defaultCss.Font.size = 16
-    defaultCss.Font.header_size = defaultCss.Font.size + 4
+    self.page.body.style.globals.font._size = 16
+    self.page.body.style.globals.font.header_size = 20
     self.page.body.add_template({"margin": '0 10%'})
 
   def delimiter(self, size=5, count=1, width=(100, '%'), height=(None, 'px'), options=None, profile=None):
@@ -67,7 +66,7 @@ class Blog:
     hr = self.page.ui.layouts.hr(
       count, width=width, height=height, align=None, options=options, profile=profile)
     hr.style.css.padding = "0 20%"
-    hr.hr.style.css.border_top = "%spx double %s" % (size, self.page.theme.colors[5])
+    hr.hr.style.css.border_top = "%spx double %s" % (size, self.page.theme.notch())
     return hr
 
   def title(self, text, html_code=None, width=(100, '%'), height=(None, 'px'), options=None, profile=None):
@@ -578,7 +577,7 @@ class Blog:
     component = self.page.ui.div(align=align, width=width, height=height, options=options, profile=profile)
     icon = self.page.ui.icons.awesome(icon)
     icon.icon.style.css.font_factor(-3)
-    icon.icon.style.css.color = self.page.theme.colors[5]
+    icon.icon.style.css.color = self.page.theme.notch()
     component.add(icon)
     if delta_time.days == 0:
       if date_time_obj.day != current.day:
@@ -1530,172 +1529,3 @@ class Gallery(Blog):
         hr.style.css.width = "calc(100% - 10px)"
         rows.append(self.page.ui.col([div, hr]))
     return self.page.ui.list(rows, width=width, height=height, options=options, profile=profile)
-
-  def icons(self, icons=None, columns=6, width=(None, '%'), height=('auto', ''), options=None, profile=None):
-    """
-    Description:
-    ------------
-    Mosaic of pictures.
-
-    :tags:
-    :categories:
-
-    Usage:
-    -----
-
-    Related Pages:
-
-    Underlying HTML Objects:
-
-    Templates:
-
-    Attributes:
-    ----------
-    :param icons: List. Optional. The list with the pictures.
-    :param columns: Integer. Optional. The number of column for the mosaic component.
-    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit.
-    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit.
-    :param options: Dictionary. Optional. Specific Python options available for this component.
-    :param profile: Boolean | Dictionary. Optional. A flag to set the component performance storage.
-    """
-    dflt_options = {}
-    if options is not None:
-      dflt_options.update(options)
-    grid = self.page.ui.grid(width=width, height=height, options=dflt_options, profile=profile)
-    grid.style.css.margin_top = 20
-    grid.style.css.overflow = 'hidden'
-    grid.style.css.margin_bottom = 20
-    row = self.page.ui.row(options=dflt_options)
-    grid.icons = []
-    grid.texts = {}
-    for i, icon in enumerate(icons):
-      if dflt_options.get("max") is not None and len(grid.icons) > dflt_options.get("max"):
-        break
-
-      if i % columns == 0:
-        grid.add(row)
-        row = self.page.ui.row(options=dflt_options)
-      text = None
-      if not hasattr(icon, 'options'):
-        if isinstance(icon, dict):
-          if 'html_code' not in icon:
-            icon["html_code"] = "%s_%s" % (grid.htmlCode, i)
-          if 'align' not in icon:
-            icon['align'] = "center"
-          if "text" in icon:
-            text = self.page.ui.text(icon["text"], options=dflt_options)
-            text.style.css.bold()
-            text.style.css.white_space = "nowrap"
-            grid.texts[i] = text
-            del icon["text"]
-
-          icon = self.page.ui.icon(**icon)
-        else:
-          icon = self.page.ui.icon(icon, html_code="%s_%s" % (grid.htmlCode, i), align="center")
-        icon.style.css.font_factor(15)
-        icon.style.css.text_align = "center"
-        grid.icons.append(icon)
-      if text is not None:
-        text.style.css.display = "inline-block"
-        text.style.css.width = "100%"
-        text.style.css.text_align = "center"
-        row.add(self.page.ui.col([icon, text], align="center", options=dflt_options))
-      else:
-        row.add(icon)
-      row.attr["class"].add("mt-3")
-      icon.parent = row[-1]
-    if len(row):
-      for i in range(columns - len(row)):
-        row.add(self.page.ui.text("&nbsp;"))
-      row.attr["class"].add("mt-3")
-      grid.add(row)
-    grid.style.css.color = self.page.theme.greys[6]
-    grid.style.css.padding_top = 5
-    grid.style.css.padding_bottom = 5
-    return grid
-
-  def images(self, images=None, columns=6, width=(None, '%'), height=('auto', ''), options=None, profile=None):
-    """
-    Description:
-    ------------
-    Mosaic of pictures.
-
-    :tags:
-    :categories:
-
-    Usage:
-    -----
-
-    Related Pages:
-
-    Underlying HTML Objects:
-
-    Templates:
-
-    Attributes:
-    ----------
-    :param images: List. Optional. The list with the pictures.
-    :param columns: Integer. Optional. The number of column for the mosaic component.
-    :param width: Tuple. Optional. A tuple with the integer for the component width and its unit.
-    :param height: Tuple. Optional. A tuple with the integer for the component height and its unit.
-    :param options: Dictionary. Optional. Specific Python options available for this component.
-    :param profile: Boolean | Dictionary. Optional. A flag to set the component performance storage.
-    """
-    dflt_options = {}
-    if options is not None:
-      dflt_options.update(options)
-    grid = self.page.ui.grid(width=width, height=height, options=dflt_options, profile=profile)
-    grid.style.css.margin_top = 20
-    grid.style.css.overflow = 'hidden'
-    grid.style.css.margin_bottom = 20
-    row = self.page.ui.row(options=dflt_options)
-    grid.images = []
-    grid.texts = {}
-    for i, image in enumerate(images):
-      if dflt_options.get("max") is not None and len(grid.images) > dflt_options.get("max"):
-        break
-
-      if i % columns == 0:
-        grid.add(row)
-        row = self.page.ui.row(options=dflt_options)
-      text = None
-      if not hasattr(image, 'options'):
-        if isinstance(image, dict):
-          if 'htmlCode' not in image:
-            image["htmlCode"] = "%s_%s" % (grid.htmlCode, i)
-          if 'align' not in image:
-            image['align'] = "center"
-          if "text" in image:
-            text = self.page.ui.text(image["text"], options=dflt_options)
-            text.style.css.bold()
-            text.style.css.white_space = "nowrap"
-            grid.texts[i] = text
-            del image["text"]
-
-          image = self.page.ui.img(**image)
-        else:
-          image = self.page.ui.img(image, html_code="%s_%s" % (grid.htmlCode, i), align="center")
-        image.style.css.font_factor(15)
-        image.style.add_classes.div.border_hover()
-        image.style.css.text_align = "center"
-        grid.images.append(image)
-      if text is not None:
-        text.style.css.display = "inline-block"
-        text.style.css.width = "100%"
-        text.style.css.text_align = "center"
-        row.add(self.page.ui.col([image, text], align="center", options=dflt_options))
-      else:
-        row.add(image)
-      row.attr["class"].add("mt-3")
-      for r in row:
-        r.attr["class"].add("px-1")
-      image.parent = row[-1]
-    if len(row):
-      for i in range(columns - len(row)):
-        row.add(self.page.ui.text("&nbsp;"))
-      for r in row:
-        r.attr["class"].add("px-1")
-      row.attr["class"].add("mt-3")
-      grid.add(row)
-    grid.style.css.color = self.page.theme.greys[6]
-    return grid

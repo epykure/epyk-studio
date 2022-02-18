@@ -7,7 +7,7 @@ page = Report()
 nav_bar(page, 'Local Templates')
 
 icon = page.web.bs.icons.danger()
-icon.style.css.invisble()
+icon.style.css.invisible()
 
 mode_switch = page.ui.fields.toggle({"off": 'hidden', "on": "visible"}, is_on=True, label="", html_code="switch")
 mode_switch.input.click([
